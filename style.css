@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Fira Code', monospace;
-    background: linear-gradient(-45deg, #020617, #0f172a, #1e1b4b, #020617);
+    background: linear-gradient(-45deg, #1e293b, #334155, #1e1b4b, #0f172a);
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
 }
@@ -13,7 +13,6 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* SISTEMA DE VENTANAS */
 .window {
     position: absolute;
     background: rgba(13, 17, 23, 0.95);
@@ -36,48 +35,26 @@ body {
     cursor: grab;
 }
 
-/* OCULTAR SCROLLBAR CELULAR */
-.hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-.hide-scrollbar::-webkit-scrollbar {
-    display: none;
-}
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
 
-/* ICONOS ESCRITORIO */
 .icon-btn { @apply flex flex-col items-center w-24 group transition-transform active:scale-95; }
 .icon-bg { @apply w-16 h-16 rounded-2xl flex items-center justify-center border shadow-xl transition-all group-hover:bg-opacity-20; }
 .icon-btn span { @apply mt-2 text-xs font-bold text-white drop-shadow-lg; }
 
-/* CONTACTOS Y LOGS */
 .contact-card {
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 14px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 11px;
-    font-weight: 800;
-    color: #cbd5e1;
-    transition: all 0.2s;
+    @apply bg-slate-800/60 border border-white/10 p-4 rounded-xl flex items-center gap-3 text-[11px] font-black text-slate-300 transition-all hover:translate-y-[-2px] hover:bg-blue-600/20 hover:text-white;
 }
-.contact-card:hover { transform: translateY(-2px); background: rgba(59, 130, 246, 0.2); color: white; }
 
 .log-entry {
-    background: rgba(30, 41, 59, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 1rem;
-    border-radius: 1.25rem;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #f8fafc;
-    display: flex;
-    justify-content: space-between;
+    @apply bg-slate-900/80 border border-white/10 p-4 rounded-2xl font-bold text-sm text-white flex justify-between animate-in fade-in slide-in-from-bottom-2;
 }
 
-.pay-method-btn {
-    @apply flex flex-col items-center p-6 border-2 border-slate-100 rounded-2xl hover:border-orange-500 hover:bg-orange-50 transition-all;
+/* TIENDA: INPUTS Y BOTONES */
+.payment-input {
+    @apply w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 outline-none transition-all;
 }
+.pay-option {
+    @apply flex flex-col items-center p-4 border-2 border-slate-100 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer bg-white text-center;
+}
+.pay-option.active { @apply border-blue-600 bg-blue-50; }
