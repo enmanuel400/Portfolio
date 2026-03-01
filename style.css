@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Fira Code', monospace;
-    background: linear-gradient(-45deg, #020617, #1e1b4b, #312e81, #020617);
+    background: linear-gradient(-45deg, #020617, #0f172a, #1e1b4b, #020617);
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
 }
@@ -13,21 +13,22 @@ body {
     100% { background-position: 0% 50%; }
 }
 
+/* SISTEMA DE VENTANAS */
 .window {
     position: absolute;
     background: rgba(13, 17, 23, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(25px);
+    backdrop-filter: blur(20px);
     display: none;
     flex-direction: column;
+    overflow: hidden;
 }
-
 .window.active { display: flex; }
 
 .window-header {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.03);
     padding: 14px 20px;
     display: flex;
     align-items: center;
@@ -35,35 +36,48 @@ body {
     cursor: grab;
 }
 
-.terminal-body {
-    padding: 24px;
-    font-size: 1.15rem;
-    line-height: 1.7;
-    color: #e2e8f0;
+/* OCULTAR SCROLLBAR CELULAR */
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
 }
 
-#mobile-window { background: transparent !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; }
+/* ICONOS ESCRITORIO */
+.icon-btn { @apply flex flex-col items-center w-24 group transition-transform active:scale-95; }
+.icon-bg { @apply w-16 h-16 rounded-2xl flex items-center justify-center border shadow-xl transition-all group-hover:bg-opacity-20; }
+.icon-btn span { @apply mt-2 text-xs font-bold text-white drop-shadow-lg; }
 
-.font-sans { font-family: 'Inter', sans-serif; }
+/* CONTACTOS Y LOGS */
+.contact-card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 14px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #cbd5e1;
+    transition: all 0.2s;
+}
+.contact-card:hover { transform: translateY(-2px); background: rgba(59, 130, 246, 0.2); color: white; }
 
-/* Nueva clase para logs de alto contraste */
 .log-entry {
-    background: rgba(30, 41, 59, 0.7);
+    background: rgba(30, 41, 59, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1rem;
     border-radius: 1.25rem;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 700;
     color: #f8fafc;
     display: flex;
     justify-content: space-between;
-    animation: slideIn 0.3s ease-out;
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.pay-method-btn {
+    @apply flex flex-col items-center p-6 border-2 border-slate-100 rounded-2xl hover:border-orange-500 hover:bg-orange-50 transition-all;
 }
-
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
