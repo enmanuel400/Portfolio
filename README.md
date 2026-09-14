@@ -1,17 +1,18 @@
-# Portfolio de Proyectos
+# Portfolio de proyectos
 
-Una colección de experiencias digitales enfocadas en diseño, producto, UX y desarrollo frontend con soluciones funcionales y visualmente sólidas.
+Un conjunto de experiencias digitales creadas con enfoque en producto, diseño, experiencia de usuario y desarrollo frontend.
 
-## About
+## Overview
 
-Este repositorio reúne varios proyectos desarrollados con la intención de explorar distintos enfoques del diseño digital y la ingeniería de interfaces. Cada trabajo responde a una necesidad distinta: presentar una marca, vender soluciones, monitorear sistemas o ofrecer un espacio de trabajo personal.
+Este repositorio reúne una selección de proyectos orientados a resolver problemas reales con interfaces claras, visuales modernas y soluciones funcionales. La intención es mostrar una visión integral del trabajo: desde presentaciones visuales y landing pages hasta dashboards técnicos y espacios de trabajo personal.
 
-## Objetivo
+## Qué construyo
 
-- mostrar habilidades en diseño web y experiencia de usuario
-- validar pensamiento de producto y ejecución técnica
-- crear prototipos funcionales con enfoque visual y práctico
-- presentar un portfolio diverso y coherente con distintos tipos de soluciones
+- interfaces premium y funcionales
+- experiencias web con foco en claridad y conversión
+- prototipos de productos digitales con identidad visual propia
+- dashboards y herramientas útiles para análisis y monitoreo
+- soluciones con una fuerte sensibilidad por UX y diseño de producto
 
 ## Stack principal
 
@@ -26,59 +27,45 @@ Este repositorio reúne varios proyectos desarrollados con la intención de expl
 - Chart.js
 - psutil
 
-## Proyectos incluidos
+## Proyectos destacados
 
-### 1. Desktop
+### Desktop
+Presentación del portfolio como un escritorio digital interactivo.
 
-Una experiencia tipo escritorio que funciona como presentación visual del portfolio.
-
-- Propósito: impulsar la identidad del portafolio mediante una navegación inmersiva
-- Público: clientes, recruiters y colaboradores
+- Propósito: crear una experiencia memorable y diferenciada para mostrar trabajos, redes y contacto
+- Público: recruiters, clientes y colaboradores
 - Tecnologías: HTML, CSS, JavaScript
 
-### 2. Mercium Shop
+### Mercium Shop
+Landing page comercial orientada a ventas y servicios digitales.
 
-Landing page comercial para servicios y soluciones digitales.
-
-- Propósito: vender propuestas, captar leads y comunicar valor de marca
-- Público: negocios, startups y empresas
+- Propósito: comunicar valor, presentar soluciones y captar leads
+- Público: startups, negocios y marcas
 - Tecnologías: HTML, Tailwind CSS, JavaScript
 
-### 3. Sysdash
+### Sysdash
+Dashboard técnico para monitoreo del rendimiento del sistema.
 
-Dashboard de monitoreo del sistema con métricas de rendimiento en tiempo real.
-
-- Propósito: visualizar consumo de CPU, memoria, disco, red y procesos activos
+- Propósito: visualizar CPU, RAM, disco, red y procesos activos en tiempo real
 - Público: desarrolladores y usuarios técnicos
 - Tecnologías: Python, FastAPI, psutil, JavaScript, Chart.js
 
-### 4. Vellum
+### Vellum
+Workspace visual para organizar ideas, notas y contenido personal.
 
-Espacio personal para ideas, notas y contenido visual.
-
-- Propósito: crear un entorno de trabajo ordenado y creativo
+- Propósito: crear un entorno de trabajo más ordenado, claro y productivo
 - Público: estudiantes, creadores y profesionales
 - Tecnologías: Vite, Electron, HTML, CSS, JavaScript
 
 ## Estructura del repositorio
 
-- `Desktop/` — presentación visual del portfolio
-- `mercium-shop/` — landing page comercial
-- `sysdash/` — dashboard técnico de monitoreo
-- `vellum/` — workspace visual de trabajo personal
+- Desktop/ — interfaz tipo escritorio del portfolio
+- mercium-shop/ — landing page comercial
+- sysdash/ — dashboard de monitoreo del sistema
+- vellum/ — espacio personal de trabajo visual
+- assets/screenshots/ — capturas de cada proyecto
 
-## Valor del portfolio
-
-El conjunto refleja una visión integral del desarrollo digital:
-
-- diseño moderno y estratégico
-- interfaces con enfoque UX
-- productos funcionales y útiles
-- exploración de soluciones reales con tecnologías actuales
-
-## Capturas del portfolio
-
-Estas son las vistas principales de cada proyecto, listas para mostrar el estado actual del trabajo.
+## Vista previa del portfolio
 
 ![Desktop](assets/screenshots/desktop.png)
 
@@ -88,10 +75,24 @@ Estas son las vistas principales de cada proyecto, listas para mostrar el estado
 
 ![Vellum](assets/screenshots/vellum.png)
 
-## Cómo explorar
+## Cómo explorar el repositorio
 
-Cada proyecto puede abrirse de forma directa desde su archivo HTML o ejecutarse según su entorno específico, dependiendo del caso.
+Cada proyecto puede abrirse directamente desde su archivo HTML o ejecutarse según su entorno específico:
+
+- Desktop: abrir en navegador
+- Mercium Shop: abrir en navegador
+- Sysdash: iniciar la API backend y abrir la interfaz frontend
+- Vellum: ejecutar con Vite o Electron
+
+## Valor del portfolio
+
+Este conjunto refleja una forma de trabajar centrada en:
+
+- diseño moderno y estratégico
+- interfaces con enfoque en UX
+- productos funcionales y útiles
+- exploración realista de soluciones digitales actuales
 
 ## Resumen
 
-Este portfolio busca presentar una mezcla de creatividad, visión técnica y capacidad para materializar productos digitales con valor real.
+El portafolio presenta una mezcla de creatividad, ejecución técnica y capacidad para convertir ideas en experiencias digitales con valor real.
