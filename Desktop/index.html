@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Desktop</title>
+    </head>
+    <body>
+        <main class="desktop-shell">
+            <div class="ambient-grid"></div>
+            <div class="aurora aurora-one"></div>
+            <div class="aurora aurora-two"></div>
+
+            <header class="topbar">
+                <div class="brand-mark">
+                    <span class="brand-dot"></span> enmanuelOS <span class="brand-version">v.01</span>
+                </div>
+                <div class="workspace-label">ESPACIO DE TRABAJO / PRINCIPAL</div>
+                <div class="system-status">
+                    <span class="status-pulse"></span><span id="systemStatus">sistema listo</span
+                    ><span class="status-divider"></span><span id="live-clock"></span>
+                </div>
+            </header>
+
+            <section class="desktop-area" aria-label="Escritorio">
+                <div class="desktop-copy">
+                    <p class="eyebrow">PORTFOLIO DIGITAL</p>
+                    <h1>Un escritorio para<br /><em>ideas en movimiento.</em></h1>
+                    <p class="desktop-intro">
+                        Explora mi trabajo como si hubieras encendido mi estación de desarrollo.
+                    </p>
+                </div>
+
+                <div class="desktop-icons" aria-label="Aplicaciones">
+                    <button class="desktop-icon" data-open="winProyectos">
+                        <span class="icon-glyph icon-folder"></span><strong>Proyectos</strong><small>directorio</small>
+                    </button>
+                    <button class="desktop-icon" data-open="winTerm">
+                        <span class="icon-glyph icon-terminal">&gt;_</span><strong>Terminal</strong
+                        ><small>consola</small>
+                    </button>
+                    <button class="desktop-icon" data-open="winContactos">
+                        <span class="icon-glyph icon-contact">@</span><strong>Contactos</strong
+                        ><small>conexiones</small>
+                    </button>
+                    <button class="desktop-icon" data-open="winBrowser">
+                        <span class="icon-glyph icon-browser">◌</span><strong>Browser</strong
+                        ><small>github space</small>
+                    </button>
+                </div>
+
+                <div class="system-widget">
+                    <div class="widget-label">SESIÓN ACTIVA <span>●</span></div>
+                    <div class="widget-time" id="widgetTime">00:00</div>
+                    <div class="widget-meta"><span>LOCAL / VE</span><span id="widgetDate">-- ---</span></div>
+                    <div class="widget-bar"><span></span></div>
+                </div>
+
+                <div class="scroll-hint"><span></span> selecciona una aplicación para comenzar</div>
+            </section>
+
+            <nav class="dock" aria-label="Barra de aplicaciones">
+                <div class="dock-apps">
+                    <button class="dock-button home-button" id="homeButton" title="Mostrar escritorio">
+                        <span>⌂</span>
+                    </button>
+                    <span class="dock-divider"></span>
+                    <button class="dock-button" data-open="winTerm" title="Abrir Terminal">
+                        <span class="dock-glyph">&gt;_</span><i data-indicator="winTerm"></i>
+                    </button>
+                    <button class="dock-button" data-open="winProyectos" title="Abrir Proyectos">
+                        <span class="dock-glyph folder-glyph"></span><i data-indicator="winProyectos"></i>
+                    </button>
+                    <button class="dock-button" data-open="winBrowser" title="Abrir Browser">
+                        <span class="dock-glyph browser-glyph">◌</span><i data-indicator="winBrowser"></i>
+                    </button>
+                    <button class="dock-button" data-open="winContactos" title="Abrir Contactos">
+                        <span class="dock-glyph">@</span><i data-indicator="winContactos"></i>
+                    </button>
+                </div>
+                <div class="dock-tray">
+                    <span class="tray-signal"></span><span>WI-FI</span><span class="tray-battery">▰</span
+                    ><span>100%</span><button id="powerButton" title="Cerrar sesión">↗</button>
+                </div>
+            </nav>
+
+            <div class="windows hidden" id="winProyectos">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span class="title-icon folder-glyph"></span> Proyectos <small>/home/enmanuel/projects</small>
+                    </div>
+                    <div class="window-actions">
+                        <button class="window-minimize" title="Minimizar">−</button
+                        ><button class="btnClose" data-target="winProyectos" title="Cerrar">×</button>
+                    </div>
+                </div>
+                <div class="win-body win-proyectos">
+                    <div class="window-intro">
+                        <span class="section-kicker">DIRECTORIO DESTACADO</span>
+                        <h2>Construido con intención.</h2>
+                        <p>
+                            Una selección de experimentos, interfaces y sistemas que convierten problemas complejos en
+                            experiencias claras.
+                        </p>
+                    </div>
+                    <div class="project-list">
+                        <a href="../mercium-shop/index.html" class="project-row"
+                            ><span class="project-index">01</span
+                            ><span><strong>Mercium</strong><small>e-commerce experimental</small></span
+                            ><span class="project-arrow">↗</span></a
+                        >
+                        <a href="../sysdash/frontend/index.html" class="project-row"
+                            ><span class="project-index">02</span
+                            ><span><strong>Sysdash</strong><small>panel de operaciones</small></span
+                            ><span class="project-arrow">↗</span></a
+                        >
+                        <a href="../vellum/src/index.html" class="project-row"
+                            ><span class="project-index">03</span
+                            ><span><strong>Vellum</strong><small>workspace de escritorio</small></span
+                            ><span class="project-arrow">↗</span></a
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="windows hidden" id="winContactos">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span class="title-icon contact-glyph">@</span> Contactos <small>canales abiertos</small>
+                    </div>
+                    <div class="window-actions">
+                        <button class="window-minimize" title="Minimizar">−</button
+                        ><button class="btnClose" data-target="winContactos" title="Cerrar">×</button>
+                    </div>
+                </div>
+                <div class="win-body win-contactos">
+                    <div class="window-intro">
+                        <span class="section-kicker">CONEXIONES</span>
+                        <h2>Hablemos de lo próximo.</h2>
+                        <p>
+                            Estoy disponible para colaboraciones, productos digitales y conversaciones con buen
+                            criterio.
+                        </p>
+                    </div>
+                    <div class="contacto-grid">
+                        <a href="https://github.com/enmanuel400" target="_blank" class="contacto-card"
+                            ><span>GH</span><strong>GitHub</strong><small>código y repositorios</small></a
+                        ><a href="https://linkedin.com/in/tu-usuario" target="_blank" class="contacto-card"
+                            ><span>in</span><strong>LinkedIn</strong><small>perfil profesional</small></a
+                        ><a href="mailto:enmanuelpirela400@gmail.com" class="contacto-card"
+                            ><span>@</span><strong>Gmail</strong><small>enmanuelpirela400</small></a
+                        ><a href="https://wa.me/+584246585219" target="_blank" class="contacto-card"
+                            ><span>WA</span><strong>WhatsApp</strong><small>mensaje directo</small></a
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="windows hidden" id="winTerm">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span class="title-icon terminal-glyph">&gt;_</span> Terminal <small>guest@enmanuelOS: ~</small>
+                    </div>
+                    <div class="window-actions">
+                        <button class="window-minimize" title="Minimizar">−</button
+                        ><button class="btnClose" data-target="winTerm" title="Cerrar">×</button>
+                    </div>
+                </div>
+                <div class="win-body win-term">
+                    <div class="term-toolbar"><span></span><span>bash / sesión interactiva</span><span>●</span></div>
+                    <div class="term-history">
+                        <p class="term-welcome">
+                            enmanuelOS terminal [versión 1.0]<br />Escribe <strong>help</strong> para ver los comandos
+                            disponibles.
+                        </p>
+                    </div>
+                    <div class="term-cont">
+                        <span>guest@enmanuelOS:~$</span
+                        ><input type="text" id="input-key" autocomplete="off" aria-label="Comando de terminal" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="windows hidden" id="winBrowser">
+                <div class="browser-header">
+                    <div class="window-title">
+                        <span class="title-icon browser-glyph">◌</span> Browser <small>github space</small>
+                    </div>
+                    <div class="browser-controls">
+                        <button class="browser-btn" id="browserBack" title="Atrás">‹</button
+                        ><button class="browser-btn" id="browserForward" title="Adelante">›</button
+                        ><button class="browser-btn" id="browserReload" title="Recargar">↻</button>
+                    </div>
+                    <input
+                        type="text"
+                        class="browser-url"
+                        id="browserUrlInput"
+                        value="github.com/enmanuel400"
+                        aria-label="Dirección web"
+                    />
+                    <div class="window-actions">
+                        <button class="btnClose" data-target="winBrowser" title="Cerrar">×</button>
+                    </div>
+                </div>
+                <div class="win-browser-body" id="githubAppContainer">
+                    <div class="github-loading">Conectando con GitHub<span>...</span></div>
+                </div>
+            </div>
+        </main>
+        <div class="toast" id="toast" role="status"></div>
+        <script src="app.js"></script>
+    </body>
+</html>

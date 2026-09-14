@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>System Dashboard</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    </head>
+    <body class="bg-[#0f172a] text-slate-100 font-mono min-p-8 flex items-center justify-center min-h-screen">
+        <div class="w-full max-w-6xl bg-[#1e293b] border border-slate-800 rounded-xl p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
+                <h1 class="text-lg font-bold tracking-wider text-emerald-400">
+                    SYS_DASHBOARD // <span id="os-label" class="text-slate-400">Loading...</span>
+                </h1>
+                <span class="inline-block w-3 h-3 rounded-full bg-emerald-500 animate-pulse" id="status-dot"></span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+                <!-- CPU Card -->
+                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
+                    <p class="text-xs text-slate-400 mb-1">CPU USAGE</p>
+                    <p id="cpu-val" class="text-2xl font-bold text-cyan-400">0%</p>
+                </div>
+                <!-- Memory Card -->
+                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
+                    <p class="text-xs text-slate-400 mb-1">RAM USAGE</p>
+                    <p id="ram-val" class="text-2xl font-bold text-indigo-400">0%</p>
+                </div>
+                <!-- Disk Card -->
+                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
+                    <p class="text-xs text-slate-400 mb-1">DISK USAGE</p>
+                    <p id="disk-val" class="text-2xl font-bold text-amber-400">0%</p>
+                </div>
+                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
+                    <p class="text-xs text-slate-400 mb-1">DOWNLOAD</p>
+                    <p id="download-val" class="text-2xl font-bold text-emerald-400">0 B/s</p>
+                </div>
+                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
+                    <p class="text-xs text-slate-400 mb-1">UPLOAD</p>
+                    <p id="upload-val" class="text-2xl font-bold text-orange-400">0 B/s</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
+                    <div class="flex justify-between mb-3">
+                        <h2 class="text-sm font-bold">CPU / RAM · ÚLTIMOS MINUTOS</h2>
+                        <span id="uptime" class="text-xs text-slate-400">Uptime: --</span>
+                    </div>
+                    <canvas id="history-chart" height="150"></canvas>
+                </div>
+                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
+                    <h2 class="text-sm font-bold mb-3">SISTEMA Y TEMPERATURA</h2>
+                    <p id="system-version" class="text-xs text-slate-300 break-words mb-2">Cargando sistema...</p>
+                    <p id="boot-time" class="text-xs text-slate-400 mb-3">Arranque: --</p>
+                    <div id="temperatures" class="grid grid-cols-2 gap-2 text-xs"></div>
+                </div>
+            </div>
+
+            <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800 mb-6">
+                <div class="flex flex-wrap justify-between items-center gap-3 mb-3">
+                    <h2 class="text-sm font-bold">PROCESOS ACTIVOS</h2>
+                    <label class="text-xs text-slate-400"
+                        >Ordenar por
+                        <select
+                            id="process-sort"
+                            class="bg-slate-800 text-slate-100 border border-slate-600 rounded px-2 py-1 ml-1"
+                        >
+                            <option value="cpu">CPU</option>
+                            <option value="memory">RAM</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left">
+                        <thead class="text-slate-400 border-b border-slate-700">
+                            <tr>
+                                <th class="py-2">PID</th>
+                                <th>Proceso</th>
+                                <th>Usuario</th>
+                                <th>CPU</th>
+                                <th>RAM</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="process-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- System Actions -->
+            <div class="border-t border-slate-700 pt-4 flex gap-3">
+                <button
+                    onclick="triggerClean()"
+                    class="bg-slate-800 hover:bg-slate-700 text-xs px-4 py-2 rounded border border-slate-600 transition-all cursor-pointer"
+                >
+                    Limpiar Caché de Sistema
+                </button>
+            </div>
+            <p id="action-msg" class="text-xs text-slate-400 mt-3"></p>
+            <p id="process-msg" class="text-xs text-slate-400 mt-3"></p>
+        </div>
+
+        <script>
+            const API_URL = "http://127.0.0.1:8000";
+            const history = { labels: [], cpu: [], ram: [] };
+            const chart = new Chart(document.getElementById("history-chart"), {
+                type: "line",
+                data: {
+                    labels: history.labels,
+                    datasets: [
+                        { label: "CPU %", data: history.cpu, borderColor: "#22d3ee", tension: 0.35, pointRadius: 0 },
+                        { label: "RAM %", data: history.ram, borderColor: "#818cf8", tension: 0.35, pointRadius: 0 },
+                    ],
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    scales: {
+                        y: { min: 0, max: 100, ticks: { color: "#94a3b8" } },
+                        x: { ticks: { color: "#94a3b8", maxTicksLimit: 6 } },
+                    },
+                    plugins: { legend: { labels: { color: "#cbd5e1" } } },
+                },
+            });
+
+            function formatRate(value) {
+                const units = ["B/s", "KB/s", "MB/s", "GB/s"];
+                let amount = value,
+                    unit = 0;
+                while (amount >= 1024 && unit < units.length - 1) {
+                    amount /= 1024;
+                    unit++;
+                }
+                return `${amount.toFixed(unit ? 1 : 0)} ${units[unit]}`;
+            }
+
+            function formatUptime(seconds) {
+                const days = Math.floor(seconds / 86400),
+                    hours = Math.floor((seconds % 86400) / 3600),
+                    minutes = Math.floor((seconds % 3600) / 60);
+                return `${days}d ${hours}h ${minutes}m`;
+            }
+
+            async function fetchMetrics() {
+                try {
+                    const res = await fetch(`${API_URL}/api/metrics`);
+                    const data = await res.json();
+
+                    document.getElementById("os-label").innerText = data.os;
+                    document.getElementById("cpu-val").innerText = `${data.cpu}%`;
+                    document.getElementById("ram-val").innerText = `${data.memory.percent}%`;
+                    document.getElementById("disk-val").innerText = `${data.disk.percent}%`;
+                    document.getElementById("download-val").innerText = formatRate(
+                        data.network.download_bytes_per_second,
+                    );
+                    document.getElementById("upload-val").innerText = formatRate(data.network.upload_bytes_per_second);
+                    document.getElementById("system-version").innerText = `${data.hostname} · ${data.os_version}`;
+                    document.getElementById("uptime").innerText = `Uptime: ${formatUptime(data.uptime_seconds)}`;
+                    document.getElementById("boot-time").innerText =
+                        `Arranque: ${new Date(data.boot_time).toLocaleString()}`;
+                    document.getElementById("temperatures").innerHTML = data.temperatures.length
+                        ? data.temperatures
+                              .map(
+                                  item =>
+                                      `<div class="border border-slate-700 rounded p-2"><span class="text-slate-400">${item.label}</span><br><strong class="text-rose-300">${item.current.toFixed(1)} °C</strong></div>`,
+                              )
+                              .join("")
+                        : `<span class="text-slate-500 col-span-2">Sensores no disponibles</span>`;
+                    history.labels.push(new Date().toLocaleTimeString());
+                    history.cpu.push(data.cpu);
+                    history.ram.push(data.memory.percent);
+                    if (history.labels.length > 60) {
+                        history.labels.shift();
+                        history.cpu.shift();
+                        history.ram.shift();
+                    }
+                    chart.update();
+                } catch (err) {
+                    console.error("Error al conectar con la API", err);
+                }
+            }
+
+            async function fetchProcesses() {
+                const sortBy = document.getElementById("process-sort").value;
+                try {
+                    const res = await fetch(`${API_URL}/api/processes?sort_by=${sortBy}&limit=10`);
+                    const data = await res.json();
+                    document.getElementById("process-table").innerHTML = data.processes
+                        .map(
+                            process =>
+                                `<tr class="border-b border-slate-800"><td class="py-2">${process.pid}</td><td>${process.name}</td><td>${process.username}</td><td>${process.cpu_percent.toFixed(1)}%</td><td>${process.memory_percent.toFixed(1)}%</td><td><button onclick="terminateProcess(${process.pid})" class="text-rose-300 hover:text-rose-200">Terminar</button></td></tr>`,
+                        )
+                        .join("");
+                } catch (err) {
+                    document.getElementById("process-msg").innerText = "No se pudieron cargar los procesos.";
+                }
+            }
+
+            async function terminateProcess(pid) {
+                if (!window.confirm(`¿Terminar el proceso ${pid}?`)) return;
+                const msgEl = document.getElementById("process-msg");
+                try {
+                    const res = await fetch(`${API_URL}/api/processes/${pid}/terminate`, { method: "POST" });
+                    const data = await res.json();
+                    msgEl.innerText = data.message || data.detail || "Operación completada.";
+                    fetchProcesses();
+                } catch (err) {
+                    msgEl.innerText = "Error al terminar el proceso.";
+                }
+            }
+
+            async function triggerClean() {
+                const msgEl = document.getElementById("action-msg");
+                msgEl.innerText = "Ejecutando limpieza...";
+                try {
+                    const res = await fetch(`${API_URL}/api/clean/cache`, { method: "POST" });
+                    const data = await res.json();
+                    msgEl.innerText = data.message || "Operación completada.";
+                } catch (err) {
+                    msgEl.innerText = "Error al ejecutar la acción.";
+                }
+            }
+
+            // Actualizar métricas cada 2 segundos
+            setInterval(fetchMetrics, 2000);
+            setInterval(fetchProcesses, 5000);
+            document.getElementById("process-sort").addEventListener("change", fetchProcesses);
+            fetchMetrics();
+            fetchProcesses();
+        </script>
+    </body>
+</html>

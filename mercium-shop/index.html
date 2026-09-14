@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mercium-Shop | Soluciones digitales</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap");
+            body {
+                font-family: "Plus Jakarta Sans", sans-serif;
+            }
+        </style>
+    </head>
+    <body class="bg-[#07090e] text-slate-100 min-h-screen selection:bg-cyan-500 selection:text-slate-950">
+        <!-- Navbar Flotante Glassmorphism -->
+        <header
+            class="fixed top-4 inset-x-4 max-w-6xl mx-auto bg-[#0f172a]/60 backdrop-blur-md border border-slate-800/80 rounded-2xl px-6 py-4 flex justify-between items-center z-50 shadow-2xl"
+        >
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span
+                    class="font-extrabold tracking-wider text-sm bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent"
+                    >Mercium-Shop</span
+                >
+            </div>
+            <nav class="hidden md:flex gap-6 text-xs text-slate-400 font-medium">
+                <a href="#productos" class="hover:text-cyan-400 transition-colors">Soluciones</a>
+                <a href="#confianza" class="hover:text-cyan-400 transition-colors">Por qué Mercium</a>
+                <a href="#contacto" class="hover:text-cyan-400 transition-colors">Contacto</a>
+            </nav>
+            <button
+                onclick="toggleCart()"
+                class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/20"
+            >
+                <span>Carrito</span>
+                <span
+                    id="cart-count"
+                    class="bg-slate-950 text-cyan-400 w-5 h-5 rounded-full flex items-center justify-center text-[10px]"
+                    >0</span
+                >
+            </button>
+        </header>
+
+        <!-- Hero Inmersivo -->
+        <section class="max-w-6xl mx-auto px-6 pt-36 pb-20 text-center relative">
+            <div class="absolute inset-0 -z-10 flex items-center justify-center">
+                <div class="w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px]"></div>
+                <div class="w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[100px]"></div>
+            </div>
+            <span
+                class="inline-block text-[10px] uppercase tracking-widest bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-3 py-1 rounded-full mb-6 font-semibold"
+                >E-Commerce & High-Performance Web</span
+            >
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 max-w-3xl mx-auto leading-tight">
+                Diseños que
+                <span class="bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent"
+                    >cautivan</span
+                >, plataformas que venden.
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base max-w-xl mx-auto mb-10 font-light">
+                Creamos experiencias digitales únicas para negocios que rechazan lo ordinario y buscan destacar en el
+                mercado digital.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3 text-[11px] text-slate-400 mb-8">
+                <span class="border border-slate-800 bg-slate-900/60 rounded-full px-3 py-1.5"
+                    >✦ Presupuesto claro</span
+                >
+                <span class="border border-slate-800 bg-slate-900/60 rounded-full px-3 py-1.5"
+                    >◷ Entrega desde 7 días</span
+                >
+                <span class="border border-slate-800 bg-slate-900/60 rounded-full px-3 py-1.5">⌁ Soporte incluido</span>
+            </div>
+            <a
+                href="#productos"
+                class="inline-block bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold px-8 py-3.5 rounded-xl transition-all shadow-xl"
+            >
+                Explorar Catálogo Visual ↓
+            </a>
+        </section>
+
+        <!-- Catálogo Estilo Bento Grid -->
+        <section id="productos" class="max-w-6xl mx-auto px-6 py-12">
+            <div class="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-6 mb-8">
+                <div>
+                    <p class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">Catálogo Activo</p>
+                    <h2 class="text-2xl font-bold">Soluciones Disponibles</h2>
+                    <p id="results-count" class="text-xs text-slate-500 mt-2"></p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <label class="relative">
+                        <span class="sr-only">Buscar soluciones</span>
+                        <input
+                            id="search-input"
+                            type="search"
+                            placeholder="Buscar solución..."
+                            class="w-full sm:w-56 bg-[#111827] border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-slate-500 outline-none focus:border-cyan-400 transition-colors"
+                        />
+                    </label>
+                    <select
+                        id="sort-select"
+                        class="bg-[#111827] border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-300 outline-none focus:border-cyan-400"
+                    >
+                        <option value="featured">Ordenar: destacados</option>
+                        <option value="low">Precio: menor a mayor</option>
+                        <option value="high">Precio: mayor a menor</option>
+                        <option value="name">Nombre: A-Z</option>
+                    </select>
+                </div>
+                <div class="flex gap-2 bg-[#1e293b]/50 p-1.5 rounded-xl border border-slate-800 self-start lg:self-end">
+                    <button
+                        data-filter="all"
+                        onclick="filterProducts('all', this)"
+                        class="px-3 py-1.5 rounded-lg text-xs bg-cyan-500 text-slate-950 font-bold transition-all cursor-pointer filter-btn"
+                    >
+                        Todos
+                    </button>
+                    <button
+                        data-filter="ecommerce"
+                        onclick="filterProducts('ecommerce', this)"
+                        class="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white transition-all cursor-pointer filter-btn"
+                    >
+                        Tiendas
+                    </button>
+                    <button
+                        data-filter="custom"
+                        onclick="filterProducts('custom', this)"
+                        class="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white transition-all cursor-pointer filter-btn"
+                    >
+                        Sistemas
+                    </button>
+                </div>
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Inyectado por JS -->
+            </div>
+        </section>
+
+        <!-- Carrito Desplegable (Drawer) -->
+        <div
+            id="cart-overlay"
+            onclick="toggleCart()"
+            class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity z-40"
+        ></div>
+        <div
+            id="cart-drawer"
+            class="fixed inset-y-0 right-0 w-full md:w-96 bg-[#0f172a] border-l border-slate-800 p-6 shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col justify-between"
+        >
+            <div>
+                <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
+                    <h3 class="font-bold text-sm tracking-wide">Tu Selección Actual</h3>
+                    <button onclick="toggleCart()" class="text-slate-400 hover:text-white text-lg">✕</button>
+                </div>
+                <div id="cart-items" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                    <!-- Items -->
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-4">
+                <div class="flex justify-between mb-4 text-sm font-bold">
+                    <span class="text-slate-400">Total Estimado:</span>
+                    <span id="cart-total" class="text-cyan-400 text-lg">$0 USD</span>
+                </div>
+                <button
+                    onclick="checkout()"
+                    class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs transition-all cursor-pointer shadow-lg shadow-cyan-500/20"
+                >
+                    Iniciar Proyecto / Comprar
+                </button>
+            </div>
+        </div>
+
+        <div
+            id="checkout-modal"
+            class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm"
+        >
+            <div
+                class="w-full max-w-lg bg-[#0f172a] border border-slate-700 rounded-2xl shadow-2xl p-6 md:p-8 max-h-[90vh] overflow-y-auto"
+            >
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <p class="text-cyan-400 text-[10px] font-bold uppercase tracking-widest mb-2">Paso final</p>
+                        <h3 class="text-xl font-bold">Cuéntanos sobre tu proyecto</h3>
+                    </div>
+                    <button
+                        onclick="closeCheckout()"
+                        class="text-slate-400 hover:text-white text-xl"
+                        aria-label="Cerrar checkout"
+                    >
+                        ✕
+                    </button>
+                </div>
+                <div id="checkout-summary" class="bg-[#111827] border border-slate-800 rounded-xl p-4 mb-5"></div>
+                <form id="checkout-form" class="space-y-4">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <label class="text-xs text-slate-400"
+                            >Nombre<input
+                                name="name"
+                                required
+                                class="mt-2 w-full bg-[#07090e] border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-cyan-400"
+                        /></label>
+                        <label class="text-xs text-slate-400"
+                            >Email<input
+                                name="email"
+                                type="email"
+                                required
+                                class="mt-2 w-full bg-[#07090e] border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-cyan-400"
+                        /></label>
+                    </div>
+                    <label class="block text-xs text-slate-400"
+                        >Cuéntanos brevemente qué necesitas<textarea
+                            name="brief"
+                            rows="3"
+                            required
+                            class="mt-2 w-full bg-[#07090e] border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-cyan-400"
+                        ></textarea>
+                    </label>
+                    <button
+                        type="submit"
+                        class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs transition-colors"
+                    >
+                        Solicitar presupuesto
+                    </button>
+                    <p class="text-[10px] text-slate-500 text-center">
+                        No se realizará ningún cobro. Recibirás una respuesta en menos de 24 horas.
+                    </p>
+                </form>
+                <div id="checkout-success" class="hidden text-center py-6">
+                    <div class="text-3xl text-cyan-400 mb-3">✓</div>
+                    <h4 class="font-bold mb-2">Solicitud recibida</h4>
+                    <p class="text-xs text-slate-400">Gracias. Revisaremos tu idea y te contactaremos muy pronto.</p>
+                    <button
+                        onclick="closeCheckout()"
+                        class="mt-5 border border-slate-700 hover:border-cyan-400 text-xs font-semibold px-5 py-2.5 rounded-lg"
+                    >
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información de contacto y contexto del proyecto -->
+        <section id="confianza" class="max-w-6xl mx-auto px-6 pt-20 pb-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="border-l-2 border-cyan-400 pl-5">
+                    <p class="text-2xl font-bold">+40</p>
+                    <p class="text-xs text-slate-500 mt-1">proyectos conceptuales diseñados</p>
+                </div>
+                <div class="border-l-2 border-cyan-400 pl-5">
+                    <p class="text-2xl font-bold">7-21 días</p>
+                    <p class="text-xs text-slate-500 mt-1">tiempo estimado de entrega</p>
+                </div>
+                <div class="border-l-2 border-cyan-400 pl-5">
+                    <p class="text-2xl font-bold">100%</p>
+                    <p class="text-xs text-slate-500 mt-1">acompañamiento personalizado</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="max-w-6xl mx-auto px-6 pt-12 pb-24 border-t border-slate-800/80">
+            <div class="max-w-2xl mb-10">
+                <p class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-3">Contacto y contexto</p>
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
+                    Tu idea puede convertirse en una experiencia.
+                </h2>
+                <p class="text-slate-400 text-sm md:text-base leading-relaxed">
+                    Soy una persona apasionada por transformar conceptos en páginas atractivas, claras y funcionales.
+                    Este espacio muestra cómo una idea puede tomar forma con una identidad visual propia y una
+                    experiencia pensada para las personas que la van a utilizar.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="bg-[#111827] border border-slate-800 rounded-2xl p-6">
+                    <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Quién soy</span>
+                    <h3 class="text-lg font-bold mt-3 mb-2">Diseño con intención</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Creo interfaces digitales que combinan estética, estructura y una navegación sencilla para que
+                        cada proyecto comunique algo propio.
+                    </p>
+                </div>
+                <div class="bg-[#111827] border border-slate-800 rounded-2xl p-6">
+                    <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Para quién</span>
+                    <h3 class="text-lg font-bold mt-3 mb-2">Ideas que buscan destacar</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Para emprendedores, marcas y negocios que necesitan convertir una visión, un producto o un
+                        servicio en una presencia web atractiva.
+                    </p>
+                </div>
+                <div class="bg-[#111827] border border-slate-800 rounded-2xl p-6">
+                    <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Nota del proyecto</span>
+                    <h3 class="text-lg font-bold mt-3 mb-2">Una demo, no una tienda real</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Mercium-Shop es un maquetado simple creado para demostrar cómo puedo convertir las ideas de un
+                        cliente en páginas web atractivas, no una tienda con productos o pagos reales.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-cyan-500/5 border border-cyan-500/20 rounded-2xl p-6 md:p-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                    <div>
+                        <p class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-2">Hablemos</p>
+                        <h3 class="text-xl font-bold mb-2">¿Tienes una idea para tu próximo proyecto?</h3>
+                        <p class="text-xs text-slate-400">Escríbeme y cuéntame qué tienes en mente.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 text-xs font-semibold">
+                        <a
+                            href="mailto:enmanuelpirela400@gmail.com"
+                            class="border border-slate-700 hover:border-cyan-400 hover:text-cyan-400 rounded-xl px-4 py-3 transition-colors"
+                        >
+                            enmanuelpirela400@gmail.com
+                        </a>
+                        <a
+                            href="https://wa.me/584246585219"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 rounded-xl px-4 py-3 transition-colors"
+                        >
+                            WhatsApp: +58 0424 658 5219
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            const products = [
+                {
+                    id: 1,
+                    name: "Nexus E-Commerce",
+                    category: "ecommerce",
+                    price: 350,
+                    tag: "Más Vendido",
+                    desc: "Tienda online de alta gama con pasarela de pagos integrada, animaciones fluidas y panel de control administrativo.",
+                    gradient: "from-cyan-500/10 to-blue-500/10",
+                },
+                {
+                    id: 2,
+                    name: "System Dashboard Pro",
+                    category: "custom",
+                    price: 220,
+                    tag: "Alta Demanda",
+                    desc: "Monitoreo en tiempo real, métricas avanzadas y control multiplataforma optimizado para servidores o negocios.",
+                    gradient: "from-indigo-500/10 to-purple-500/10",
+                },
+                {
+                    id: 3,
+                    name: "Immersive Landing",
+                    category: "ecommerce",
+                    price: 180,
+                    tag: "Entrega Rápida",
+                    desc: "Página de aterrizaje minimalista con estética futurista diseñada exclusivamente para elevar conversiones y ventas.",
+                    gradient: "from-purple-500/10 to-pink-500/10",
+                },
+                {
+                    id: 4,
+                    name: "Aurora Marketplace",
+                    category: "ecommerce",
+                    price: 480,
+                    tag: "Nuevo",
+                    desc: "Marketplace escalable para múltiples vendedores, con gestión de inventario, perfiles de tienda y checkout optimizado.",
+                    gradient: "from-emerald-500/10 to-cyan-500/10",
+                },
+                {
+                    id: 5,
+                    name: "Conversion Lab",
+                    category: "ecommerce",
+                    price: 260,
+                    tag: "Optimización",
+                    desc: "Sistema de páginas de campaña preparado para experimentar con ofertas, formularios y recorridos de conversión medibles.",
+                    gradient: "from-amber-500/10 to-orange-500/10",
+                },
+                {
+                    id: 6,
+                    name: "Atlas Booking",
+                    category: "ecommerce",
+                    price: 390,
+                    tag: "Popular",
+                    desc: "Plataforma de reservas con disponibilidad en tiempo real, recordatorios automáticos y experiencia de compra sin fricción.",
+                    gradient: "from-sky-500/10 to-indigo-500/10",
+                },
+                {
+                    id: 7,
+                    name: "Pulse CRM",
+                    category: "custom",
+                    price: 320,
+                    tag: "Productividad",
+                    desc: "CRM ligero para centralizar contactos, oportunidades y seguimientos con una interfaz clara para equipos comerciales.",
+                    gradient: "from-rose-500/10 to-orange-500/10",
+                },
+                {
+                    id: 8,
+                    name: "Signal Analytics",
+                    category: "custom",
+                    price: 290,
+                    tag: "Datos Claros",
+                    desc: "Panel analítico con indicadores clave, filtros dinámicos y reportes visuales para tomar decisiones con más contexto.",
+                    gradient: "from-violet-500/10 to-fuchsia-500/10",
+                },
+                {
+                    id: 9,
+                    name: "Orbit Client Portal",
+                    category: "custom",
+                    price: 410,
+                    tag: "Premium",
+                    desc: "Portal privado para compartir avances, archivos y aprobaciones en un espacio elegante diseñado para tus clientes.",
+                    gradient: "from-teal-500/10 to-blue-500/10",
+                },
+            ];
+
+            let activeFilter = "all";
+            let cart = JSON.parse(localStorage.getItem("mercium-cart") || "[]");
+
+            function formatPrice(price) {
+                return new Intl.NumberFormat("en-US").format(price);
+            }
+
+            function renderProducts() {
+                const grid = document.getElementById("product-grid");
+                grid.innerHTML = "";
+                const search = document.getElementById("search-input").value.trim().toLowerCase();
+                const sort = document.getElementById("sort-select").value;
+                let filtered =
+                    activeFilter === "all" ? [...products] : products.filter(p => p.category === activeFilter);
+                filtered = filtered.filter(p => `${p.name} ${p.desc} ${p.tag}`.toLowerCase().includes(search));
+                filtered.sort((a, b) => {
+                    if (sort === "low") return a.price - b.price;
+                    if (sort === "high") return b.price - a.price;
+                    if (sort === "name") return a.name.localeCompare(b.name);
+                    return a.id - b.id;
+                });
+                document.getElementById("results-count").innerText =
+                    `${filtered.length} ${filtered.length === 1 ? "solución encontrada" : "soluciones encontradas"}`;
+
+                if (!filtered.length) {
+                    grid.innerHTML = `<div class="md:col-span-3 border border-dashed border-slate-700 rounded-2xl p-12 text-center"><p class="text-lg font-bold mb-2">No encontramos esa solución</p><p class="text-xs text-slate-500">Prueba otra búsqueda o cambia la categoría.</p></div>`;
+                    return;
+                }
+
+                filtered.forEach(p => {
+                    grid.innerHTML += `
+                    <div class="group relative bg-[#111827] border border-slate-800 hover:border-cyan-500/50 rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br ${p.gradient} opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-[10px] bg-slate-800 text-cyan-400 px-3 py-1 rounded-full font-bold uppercase tracking-wider">${p.tag}</span>
+                                <span class="text-xs text-slate-500 font-mono">#0${p.id}</span>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 group-hover:text-cyan-400 transition-colors">${p.name}</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed mb-6">${p.desc}</p>
+                        </div>
+                        <div class="flex justify-between items-center border-t border-slate-800/80 pt-4 relative z-10">
+                            <div>
+                                <p class="text-[10px] text-slate-500 uppercase">Inversión</p>
+                                <span class="text-xl font-extrabold text-cyan-400">$${formatPrice(p.price)} <span class="text-xs text-slate-400 font-normal">USD</span></span>
+                            </div>
+                            <button onclick="addToCart(${p.id})" class="bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl border border-slate-700 transition-all cursor-pointer">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </div>
+                `;
+                });
+            }
+
+            function filterProducts(cat, button) {
+                activeFilter = cat;
+                document.querySelectorAll(".filter-btn").forEach(btn => {
+                    btn.classList.remove("bg-cyan-500", "text-slate-950", "font-bold");
+                    btn.classList.add("text-slate-400");
+                });
+                button.classList.add("bg-cyan-500", "text-slate-950", "font-bold");
+                button.classList.remove("text-slate-400");
+                renderProducts();
+            }
+
+            function addToCart(id) {
+                const existing = cart.find(item => item.id === id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({ id, quantity: 1 });
+                }
+                updateCartUI();
+                openCart();
+            }
+
+            function updateCartUI() {
+                localStorage.setItem("mercium-cart", JSON.stringify(cart));
+                const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+                document.getElementById("cart-count").innerText = itemCount;
+                const container = document.getElementById("cart-items");
+                container.innerHTML = "";
+
+                let total = 0;
+                if (!cart.length) {
+                    container.innerHTML = `<div class="text-center py-12"><p class="text-2xl mb-3">🛒</p><p class="text-sm font-bold">Tu carrito está vacío</p><p class="text-xs text-slate-500 mt-2">Añade una solución para comenzar.</p></div>`;
+                }
+                cart.forEach(item => {
+                    const product = products.find(p => p.id === item.id);
+                    if (!product) return;
+                    total += product.price * item.quantity;
+                    container.innerHTML += `
+                    <div class="bg-[#111827] p-3.5 rounded-xl border border-slate-800">
+                        <div class="flex justify-between gap-3">
+                            <div><p class="font-bold text-xs">${product.name}</p><p class="text-cyan-400 text-xs font-mono font-bold">$${formatPrice(product.price)} USD</p></div>
+                            <button onclick="removeFromCart(${product.id})" class="text-slate-500 hover:text-rose-400 text-xs">Eliminar</button>
+                        </div>
+                        <div class="flex items-center gap-3 mt-3">
+                            <button onclick="changeQuantity(${product.id}, -1)" class="w-7 h-7 rounded-md border border-slate-700 text-slate-300 hover:border-cyan-400">−</button>
+                            <span class="text-xs font-bold w-4 text-center">${item.quantity}</span>
+                            <button onclick="changeQuantity(${product.id}, 1)" class="w-7 h-7 rounded-md border border-slate-700 text-slate-300 hover:border-cyan-400">+</button>
+                            <span class="text-xs text-slate-500 ml-auto">$${formatPrice(product.price * item.quantity)}</span>
+                        </div>
+                    </div>
+                `;
+                });
+                document.getElementById("cart-total").innerText = `$${formatPrice(total)} USD`;
+            }
+
+            function changeQuantity(id, amount) {
+                const item = cart.find(entry => entry.id === id);
+                if (!item) return;
+                item.quantity += amount;
+                if (item.quantity <= 0) removeFromCart(id);
+                else updateCartUI();
+            }
+
+            function removeFromCart(id) {
+                cart = cart.filter(item => item.id !== id);
+                updateCartUI();
+            }
+
+            function toggleCart() {
+                const drawer = document.getElementById("cart-drawer");
+                const overlay = document.getElementById("cart-overlay");
+                const isClosed = drawer.classList.contains("translate-x-full");
+                drawer.classList.toggle("translate-x-full", !isClosed);
+                overlay.classList.toggle("opacity-0", !isClosed);
+                overlay.classList.toggle("pointer-events-none", !isClosed);
+            }
+
+            function openCart() {
+                const drawer = document.getElementById("cart-drawer");
+                if (drawer.classList.contains("translate-x-full")) toggleCart();
+            }
+
+            function closeCheckout() {
+                document.getElementById("checkout-modal").classList.add("hidden");
+                document.getElementById("checkout-modal").classList.remove("flex");
+                document.getElementById("checkout-form").classList.remove("hidden");
+                document.getElementById("checkout-success").classList.add("hidden");
+            }
+
+            function checkout() {
+                if (cart.length === 0) {
+                    openCart();
+                    return;
+                }
+                const total = cart.reduce((sum, item) => {
+                    const product = products.find(p => p.id === item.id);
+                    return sum + product.price * item.quantity;
+                }, 0);
+                document.getElementById("checkout-summary").innerHTML =
+                    `<div class="flex justify-between text-xs text-slate-400"><span>${cart.reduce((sum, item) => sum + item.quantity, 0)} servicio(s) seleccionado(s)</span><strong class="text-cyan-400 text-sm">$${formatPrice(total)} USD</strong></div>`;
+                document.getElementById("checkout-modal").classList.remove("hidden");
+                document.getElementById("checkout-modal").classList.add("flex");
+                const drawer = document.getElementById("cart-drawer");
+                if (!drawer.classList.contains("translate-x-full")) toggleCart();
+            }
+
+            document.getElementById("search-input").addEventListener("input", renderProducts);
+            document.getElementById("sort-select").addEventListener("change", renderProducts);
+            document.getElementById("checkout-form").addEventListener("submit", event => {
+                event.preventDefault();
+                document.getElementById("checkout-form").classList.add("hidden");
+                document.getElementById("checkout-success").classList.remove("hidden");
+                cart = [];
+                updateCartUI();
+            });
+            renderProducts();
+            updateCartUI();
+        </script>
+    </body>
+</html>
