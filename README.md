@@ -27,6 +27,15 @@ Un conjunto de experiencias digitales creadas con enfoque en producto, diseño, 
 
 Este repositorio reúne una selección de proyectos orientados a resolver problemas reales con interfaces claras, visuales modernas y soluciones funcionales. La intención es mostrar una visión integral del trabajo: desde presentaciones visuales y landing pages hasta dashboards técnicos y espacios de trabajo personal.
 
+Cada proyecto refleja una forma distinta de pensar en producto, diseño y experiencia digital: comunicar valor, monitorear rendimiento, organizar ideas o presentar una identidad más memorable.
+
+## Estado del portfolio
+
+- Desktop: disponible en vivo en Netlify
+- Mercium Shop: disponible en vivo en Netlify
+- Sysdash: disponible como proyecto local con backend Python y frontend visual
+- Vellum: proyecto desktop local orientado a productividad visual
+
 ## Qué construyo
 
 - interfaces premium y funcionales
