@@ -1,0 +1,18 @@
+# Node / frontend
+node_modules/
+dist/
+.vite/
+*.log
+
+# Build artifacts and large binaries
+vellum/release/
+vellum/dist/
+vellum/node_modules/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+
+# Local env files
+.env
+.env.*
