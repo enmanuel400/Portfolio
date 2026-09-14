@@ -39,6 +39,10 @@ Desktop es una presentación visual del portfolio que simula un entorno de siste
 
 ![Desktop Preview](../assets/screenshots/desktop.png)
 
+## Demo en vivo
+
+https://portfolio-desktop-enmanuel.netlify.app
+
 ## Cómo ejecutarlo
 
 Abre el archivo `index.html` en el navegador.

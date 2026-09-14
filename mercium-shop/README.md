@@ -38,6 +38,10 @@ Mercium Shop es una vitrina digital diseñada para mostrar servicios, paquetes y
 
 ![Mercium Shop Preview](../assets/screenshots/mercium-shop.png)
 
+## Demo en vivo
+
+https://portfolio-mercium-shop-enmanuel.netlify.app
+
 ## Cómo ejecutarlo
 
 Abre el archivo `index.html` en el navegador.
