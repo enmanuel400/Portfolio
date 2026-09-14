@@ -105,6 +105,11 @@ Workspace visual para organizar ideas, notas y contenido personal.
 
 ## Cómo explorar el repositorio
 
+- Ver demo del portfolio: https://portfolio-desktop-enmanuel.netlify.app
+- Ver catálogo comercial: https://portfolio-mercium-shop-enmanuel.netlify.app
+- Leer documentación de Sysdash: https://github.com/enmanuel400/Portfolio/blob/master/sysdash/README.md
+- Leer documentación de Vellum: https://github.com/enmanuel400/Portfolio/blob/master/vellum/README.md
+
 Cada proyecto puede abrirse directamente desde su archivo HTML o ejecutarse según su entorno específico:
 
 - Desktop: abrir en navegador
