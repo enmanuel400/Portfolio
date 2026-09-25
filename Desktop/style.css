@@ -1141,11 +1141,17 @@ body {
 .win-term {
     display: flex;
     flex-direction: column;
-    min-height: 380px;
+    height: 420px;
+    max-height: calc(100vh - 202px);
     padding: 0;
     color: var(--mint);
     background: #060f0d;
     font-family: var(--mono);
+}
+
+.maximized .win-term {
+    height: calc(100vh - 187px);
+    max-height: none;
 }
 
 .term-toolbar {
@@ -1829,6 +1835,11 @@ body {
 
     .kata-body {
         max-height: calc(100vh - 160px);
+    }
+
+    .win-term {
+        height: calc(100vh - 166px);
+        max-height: none;
     }
 
     .browser-header {
