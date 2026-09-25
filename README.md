@@ -4,9 +4,9 @@
 
 <img src="assets/screenshots/desktop.png" alt="Portfolio preview" width="900" />
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Desktop-00D4FF?style=for-the-badge&logo=netlify)](https://portfolio-desktop-enmanuel.netlify.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Desktop-00D4FF?style=for-the-badge&logo=netlify)](https://trazoos.netlify.app)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Portfolio-181717?style=for-the-badge&logo=github)](https://github.com/enmanuel400/Portfolio)
-[![Mercium Shop](https://img.shields.io/badge/Mercium%20Shop-Live-8B5CF6?style=for-the-badge&logo=shopify)](https://portfolio-mercium-shop-enmanuel.netlify.app)
+[![Mercium Shop](https://img.shields.io/badge/Mercium%20Shop-Live-8B5CF6?style=for-the-badge&logo=shopify)](https://mercium-shop.netlify.app)
 
 </div>
 
@@ -99,15 +99,15 @@ Workspace visual para organizar ideas, notas y contenido personal.
 
 ## Enlaces en vivo
 
-- Desktop: https://portfolio-desktop-enmanuel.netlify.app
-- Mercium Shop: https://portfolio-mercium-shop-enmanuel.netlify.app
+- Desktop: https://trazoos.netlify.app
+- Mercium Shop: https://mercium-shop.netlify.app
 - Sysdash: requiere ejecución local (backend Python + frontend local)
 - Vellum: app desktop local / no pública como sitio web
 
 ## Cómo explorar el repositorio
 
-- Ver demo del portfolio: https://portfolio-desktop-enmanuel.netlify.app
-- Ver catálogo comercial: https://portfolio-mercium-shop-enmanuel.netlify.app
+- Ver demo del portfolio: https://trazoos.netlify.app
+- Ver catálogo comercial: https://mercium-shop.netlify.app
 - Leer documentación de Sysdash: https://github.com/enmanuel400/Portfolio/blob/master/sysdash/README.md
 - Leer documentación de Vellum: https://github.com/enmanuel400/Portfolio/blob/master/vellum/README.md
 - Explorar el navegador kata (presentado dentro de Desktop): https://github.com/enmanuel400/Kata

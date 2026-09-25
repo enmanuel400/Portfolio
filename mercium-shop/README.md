@@ -79,4 +79,4 @@ mercium-shop/
 
 ## Demo en vivo
 
-https://portfolio-mercium-shop-enmanuel.netlify.app
+https://mercium-shop.netlify.app

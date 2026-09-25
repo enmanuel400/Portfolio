@@ -63,7 +63,7 @@ Dentro del sistema se presenta **kata** — un navegador de escritorio construid
 
 ## Demo en vivo
 
-https://portfolio-desktop-enmanuel.netlify.app
+https://trazoos.netlify.app
 
 ## Cómo ejecutarlo
 
