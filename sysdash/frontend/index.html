@@ -1,234 +1,1084 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="dark">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>System Dashboard</title>
+        <meta name="theme-color" content="#0E1220" />
+        <meta
+            name="description"
+            content="Sysdash — monitor técnico del sistema en tiempo real: CPU, memoria, disco, red, procesos y servicios."
+        />
+        <title>Sysdash · Telemetría del sistema</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+        <!-- Restaurar el tema guardado antes del primer paint (por defecto: oscuro) -->
+        <script>
+            try {
+                if (localStorage.getItem("sysdash-theme") === "light") {
+                    document.documentElement.classList.remove("dark");
+                }
+            } catch (e) {}
+        </script>
+        <script>
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            paper: "var(--paper)",
+                            paper2: "var(--paper2)",
+                            ink: "var(--ink)",
+                            muted: "var(--muted)",
+                            motor: "var(--motor)",
+                            ok: "var(--ok)",
+                            warn: "var(--warn)",
+                            crit: "var(--crit)",
+                        },
+                        fontFamily: {
+                            sans: ['"Manrope"', "ui-sans-serif", "system-ui", "sans-serif"],
+                            display: ['"Space Grotesk"', "ui-sans-serif", "sans-serif"],
+                            mono: ['"Space Mono"', "ui-monospace", "monospace"],
+                        },
+                    },
+                },
+            };
+        </script>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap");
+
+            :root {
+                --paper: #efede6;
+                --paper2: #e6e3da;
+                --ink: #171a22;
+                --muted: #6a6f7d;
+                --motor: #2547f4;
+                --ok: #15803d;
+                --warn: #b45309;
+                --crit: #dc2626;
+                --panel: rgba(255, 255, 255, 0.62);
+                --line: rgba(23, 26, 34, 0.22);
+                --line-hi: rgba(23, 26, 34, 0.55);
+                --grid: rgba(37, 71, 244, 0.055);
+                --grid-hi: rgba(37, 71, 244, 0.1);
+                --dash: rgba(37, 71, 244, 0.32);
+                --plaque: rgba(37, 71, 244, 0.07);
+                --rule-line: rgba(23, 26, 34, 0.12);
+                --field: #efede6;
+                --overlay: rgba(23, 26, 34, 0.6);
+            }
+
+            /* Plano nocturno (tema oscuro por defecto) */
+            .dark {
+                --paper: #0e1220;
+                --paper2: #151a2b;
+                --ink: #e7eaf3;
+                --muted: #8e97ac;
+                --motor: #6d8cff;
+                --ok: #34d399;
+                --warn: #f5a623;
+                --crit: #ff6b6b;
+                --panel: rgba(21, 26, 43, 0.72);
+                --line: rgba(231, 234, 243, 0.16);
+                --line-hi: rgba(231, 234, 243, 0.45);
+                --grid: rgba(109, 140, 255, 0.06);
+                --grid-hi: rgba(109, 140, 255, 0.12);
+                --dash: rgba(109, 140, 255, 0.42);
+                --plaque: rgba(109, 140, 255, 0.12);
+                --rule-line: rgba(231, 234, 243, 0.15);
+                --field: #10141f;
+                --overlay: rgba(3, 5, 12, 0.72);
+            }
+
+            body {
+                font-family: "Manrope", sans-serif;
+                color: var(--ink);
+                background-color: var(--paper);
+                transition: background-color 0.25s ease, color 0.25s ease;
+            }
+
+            /* Papel de dibujo técnico (cuadrícula) */
+            .gp {
+                background-color: var(--paper);
+                background-image:
+                    linear-gradient(var(--grid) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+                background-size: 26px 26px;
+            }
+            .gp-strong {
+                background-color: var(--paper);
+                background-image:
+                    linear-gradient(var(--grid-hi) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--grid-hi) 1px, transparent 1px);
+                background-size: 26px 26px;
+            }
+
+            /* Panel con marco interno discontinuo (guía de plano) */
+            .panel {
+                position: relative;
+                background: var(--panel);
+                border: 1px solid var(--line);
+                box-shadow: 0 14px 30px -24px rgba(0, 0, 0, 0.5);
+            }
+            .panel::after {
+                content: "";
+                position: absolute;
+                inset: 6px;
+                border: 1px dashed var(--dash);
+                pointer-events: none;
+            }
+            .panel > * {
+                position: relative;
+            }
+
+            /* Sello técnico */
+            .stamp {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-family: "Space Mono", monospace;
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                border: 1px solid currentColor;
+                border-radius: 6px;
+                padding: 0.3rem 0.6rem;
+            }
+
+            /* Placa numerada tipo pieza mecánica */
+            .plaque {
+                display: inline-grid;
+                place-items: center;
+                width: 26px;
+                height: 26px;
+                border: 1px solid var(--line-hi);
+                font-family: "Space Mono", monospace;
+                font-size: 11px;
+                font-weight: 700;
+                color: var(--ink);
+                background: var(--plaque);
+            }
+
+            /* Barra de medición (regla de papel) */
+            .rule {
+                position: relative;
+                height: 10px;
+                border: 1px solid var(--line-hi);
+                background-image: repeating-linear-gradient(
+                    90deg,
+                    var(--rule-line) 0 1px,
+                    transparent 1px 10%
+                );
+            }
+            .rule > i {
+                position: absolute;
+                inset: 0 auto 0 0;
+                display: block;
+            }
+
+            /* Estado / indicador */
+            .dot {
+                width: 9px;
+                height: 9px;
+                border-radius: 9999px;
+                display: inline-block;
+                border: 1px solid rgba(128, 128, 128, 0.35);
+            }
+            .pulse-live {
+                animation: blink 1.6s ease-in-out infinite;
+            }
+            @keyframes blink {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.35; }
+            }
+
+            /* Barra superior translúcida + overlay de modal */
+            .glass {
+                background: color-mix(in srgb, var(--paper) 85%, transparent);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+            }
+            .overlay {
+                background: var(--overlay);
+                backdrop-filter: blur(2px);
+                -webkit-backdrop-filter: blur(2px);
+            }
+
+            /* Campos de formulario */
+            .field {
+                background: var(--field);
+                color: var(--ink);
+            }
+
+            .toast-in {
+                animation: slideup 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+            }
+            @keyframes slideup {
+                from { opacity: 0; transform: translateY(12px); }
+                to { opacity: 1; transform: none; }
+            }
+            .modal-in {
+                animation: fadein 0.25s ease both;
+            }
+            @keyframes fadein {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
+            th, td {
+                text-align: left;
+            }
+            ::-webkit-scrollbar {
+                width: 9px;
+                height: 9px;
+            }
+            ::-webkit-scrollbar-track {
+                background: var(--paper2);
+            }
+            ::-webkit-scrollbar-thumb {
+                background: color-mix(in srgb, var(--ink) 30%, transparent);
+                border: 2px solid var(--paper2);
+                border-radius: 99px;
+            }
+        </style>
     </head>
-    <body class="bg-[#0f172a] text-slate-100 font-mono min-p-8 flex items-center justify-center min-h-screen">
-        <div class="w-full max-w-6xl bg-[#1e293b] border border-slate-800 rounded-xl p-6 shadow-2xl">
-            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-                <h1 class="text-lg font-bold tracking-wider text-emerald-400">
-                    SYS_DASHBOARD // <span id="os-label" class="text-slate-400">Loading...</span>
-                </h1>
-                <span class="inline-block w-3 h-3 rounded-full bg-emerald-500 animate-pulse" id="status-dot"></span>
-            </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-                <!-- CPU Card -->
-                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
-                    <p class="text-xs text-slate-400 mb-1">CPU USAGE</p>
-                    <p id="cpu-val" class="text-2xl font-bold text-cyan-400">0%</p>
-                </div>
-                <!-- Memory Card -->
-                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
-                    <p class="text-xs text-slate-400 mb-1">RAM USAGE</p>
-                    <p id="ram-val" class="text-2xl font-bold text-indigo-400">0%</p>
-                </div>
-                <!-- Disk Card -->
-                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
-                    <p class="text-xs text-slate-400 mb-1">DISK USAGE</p>
-                    <p id="disk-val" class="text-2xl font-bold text-amber-400">0%</p>
-                </div>
-                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
-                    <p class="text-xs text-slate-400 mb-1">DOWNLOAD</p>
-                    <p id="download-val" class="text-2xl font-bold text-emerald-400">0 B/s</p>
-                </div>
-                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
-                    <p class="text-xs text-slate-400 mb-1">UPLOAD</p>
-                    <p id="upload-val" class="text-2xl font-bold text-orange-400">0 B/s</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
-                    <div class="flex justify-between mb-3">
-                        <h2 class="text-sm font-bold">CPU / RAM · ÚLTIMOS MINUTOS</h2>
-                        <span id="uptime" class="text-xs text-slate-400">Uptime: --</span>
-                    </div>
-                    <canvas id="history-chart" height="150"></canvas>
-                </div>
-                <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800">
-                    <h2 class="text-sm font-bold mb-3">SISTEMA Y TEMPERATURA</h2>
-                    <p id="system-version" class="text-xs text-slate-300 break-words mb-2">Cargando sistema...</p>
-                    <p id="boot-time" class="text-xs text-slate-400 mb-3">Arranque: --</p>
-                    <div id="temperatures" class="grid grid-cols-2 gap-2 text-xs"></div>
-                </div>
-            </div>
-
-            <div class="bg-[#0f172a] p-4 rounded-lg border border-slate-800 mb-6">
-                <div class="flex flex-wrap justify-between items-center gap-3 mb-3">
-                    <h2 class="text-sm font-bold">PROCESOS ACTIVOS</h2>
-                    <label class="text-xs text-slate-400"
-                        >Ordenar por
-                        <select
-                            id="process-sort"
-                            class="bg-slate-800 text-slate-100 border border-slate-600 rounded px-2 py-1 ml-1"
-                        >
-                            <option value="cpu">CPU</option>
-                            <option value="memory">RAM</option>
-                        </select>
-                    </label>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs text-left">
-                        <thead class="text-slate-400 border-b border-slate-700">
-                            <tr>
-                                <th class="py-2">PID</th>
-                                <th>Proceso</th>
-                                <th>Usuario</th>
-                                <th>CPU</th>
-                                <th>RAM</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="process-table"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- System Actions -->
-            <div class="border-t border-slate-700 pt-4 flex gap-3">
-                <button
-                    onclick="triggerClean()"
-                    class="bg-slate-800 hover:bg-slate-700 text-xs px-4 py-2 rounded border border-slate-600 transition-all cursor-pointer"
-                >
-                    Limpiar Caché de Sistema
-                </button>
-            </div>
-            <p id="action-msg" class="text-xs text-slate-400 mt-3"></p>
-            <p id="process-msg" class="text-xs text-slate-400 mt-3"></p>
+    <body class="gp text-ink min-h-screen">
+        <!-- Banner sin conexión -->
+        <div
+            id="offline-banner"
+            class="hidden fixed inset-x-0 top-0 z-[80] bg-crit text-white font-mono text-[11px] tracking-wider px-4 py-2.5 flex items-center justify-center gap-2"
+        >
+            <span class="dot bg-white"></span>
+            <span id="offline-msg">SIN CONEXIÓN CON LA API — reintentando…</span>
         </div>
 
+        <!-- ==================== BARRA SUPERIOR ==================== -->
+        <header class="sticky top-0 z-[60] glass border-b border-ink/20">
+            <div class="max-w-[1440px] mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 min-w-0">
+                    <span class="plaque">SD</span>
+                    <div class="leading-tight">
+                        <p class="font-display font-bold text-lg tracking-tight">
+                            SYSDASH<span class="text-motor">_</span>
+                        </p>
+                        <p id="machine-label" class="font-mono text-[10px] text-muted uppercase tracking-widest">
+                            telemetría del sistema
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+                    <span id="conn-stamp" class="stamp text-ok" title="Estado de conexión">
+                        <span id="conn-dot" class="dot bg-ok"></span>
+                        <span id="conn-text">CONECTANDO</span>
+                    </span>
+                    <span id="last-update" class="hidden sm:inline font-mono text-[10px] text-muted uppercase tracking-widest">--:--:--</span>
+                    <button
+                        onclick="refreshAll()"
+                        class="border border-ink/30 hover:border-ink hover:bg-ink hover:text-paper px-3 py-1.5 rounded font-mono text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
+                        title="Actualizar ahora"
+                    >
+                        ↻ Refrescar
+                    </button>
+                    <button
+                        id="theme-btn"
+                        onclick="toggleTheme()"
+                        class="border border-ink/30 hover:border-motor hover:text-motor px-3 py-1.5 rounded font-mono text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
+                        title="Cambiar de tema"
+                    >
+                        ☀ Tema claro
+                    </button>
+                    <button
+                        onclick="toggleHelp()"
+                        class="border border-ink/30 hover:border-motor hover:text-motor px-3 py-1.5 rounded font-mono text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
+                    >
+                        ¿Cómo usar?
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-[1440px] mx-auto px-4 md:px-6 py-6 grid gap-5">
+
+            <!-- ==================== KPIs ==================== -->
+            <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4" id="kpi-grid"></section>
+
+            <!-- ==================== HISTORIAL + NÚCLEOS + SISTEMA ==================== -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div class="panel rounded-lg p-5 lg:col-span-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                        <h2 class="font-display font-bold text-sm tracking-wide uppercase">
+                            <span class="text-motor">02 /</span> CPU · RAM — últimos 90 s
+                        </h2>
+                        <span class="font-mono text-[10px] text-muted uppercase tracking-widest">
+                            muestreo 2 s · máx 100%
+                        </span>
+                    </div>
+                    <div class="h-56">
+                        <canvas id="history-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-rows-2 gap-5">
+                    <div class="panel rounded-lg p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h2 class="font-display font-bold text-sm tracking-wide uppercase">
+                                <span class="text-motor">03 /</span> CPU por núcleo
+                            </h2>
+                            <span id="cores-count" class="font-mono text-[10px] text-muted"></span>
+                        </div>
+                        <div id="core-bars" class="space-y-1.5"></div>
+                    </div>
+                    <div class="panel rounded-lg p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h2 class="font-display font-bold text-sm tracking-wide uppercase">
+                                <span class="text-motor">04 /</span> Sistema
+                            </h2>
+                            <span id="proc-total" class="font-mono text-[10px] text-muted"></span>
+                        </div>
+                        <dl class="space-y-2 font-mono text-[11px]">
+                            <div class="flex justify-between gap-3"><dt class="text-muted uppercase tracking-wider">Equipo</dt><dd id="sys-hostname" class="font-bold text-right break-all">—</dd></div>
+                            <div class="flex justify-between gap-3"><dt class="text-muted uppercase tracking-wider">SO</dt><dd id="sys-os" class="text-right">—</dd></div>
+                            <div class="flex justify-between gap-3"><dt class="text-muted uppercase tracking-wider">Kernel</dt><dd id="sys-version" class="text-right break-all">—</dd></div>
+                            <div class="flex justify-between gap-3"><dt class="text-muted uppercase tracking-wider">Arranque</dt><dd id="sys-boot" class="text-right">—</dd></div>
+                            <div class="flex justify-between gap-3"><dt class="text-muted uppercase tracking-wider">Uptime</dt><dd id="sys-uptime" class="text-right font-bold">—</dd></div>
+                        </dl>
+                        <div id="sensors" class="mt-3 space-y-1"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== PROCESOS + SERVICIOS ==================== -->
+            <section class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+                <div class="panel rounded-lg p-5 xl:col-span-2">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <h2 class="font-display font-bold text-sm tracking-wide uppercase">
+                            <span class="text-motor">05 /</span> Procesos activos
+                        </h2>
+                        <div class="flex items-center gap-2">
+                            <label class="font-mono text-[10px] text-muted uppercase tracking-widest flex items-center gap-1.5">
+                                Orden
+                                <select
+                                    id="process-sort"
+                                    class="field border border-ink/30 rounded px-2 py-1 font-mono text-[11px]"
+                                >
+                                    <option value="cpu">CPU</option>
+                                    <option value="memory">RAM</option>
+                                </select>
+                            </label>
+                            <label class="font-mono text-[10px] text-muted uppercase tracking-widest flex items-center gap-1.5">
+                                Límite
+                                <select
+                                    id="process-limit"
+                                    class="field border border-ink/30 rounded px-2 py-1 font-mono text-[11px]"
+                                >
+                                    <option>10</option>
+                                    <option>15</option>
+                                    <option>20</option>
+                                    <option>25</option>
+                                </select>
+                            </label>
+                            <button
+                                id="process-pause"
+                                onclick="toggleProcessPause()"
+                                class="border border-ink/30 hover:border-ink px-2.5 py-1 rounded font-mono text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
+                            >
+                                ⏸ Pausar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs min-w-[560px]">
+                            <thead>
+                                <tr class="font-mono text-[10px] uppercase tracking-widest text-muted border-b-2 border-ink/40">
+                                    <th class="py-2 pr-2">PID</th>
+                                    <th class="py-2 pr-2">Proceso</th>
+                                    <th class="py-2 pr-2">Usuario</th>
+                                    <th class="py-2 pr-2 w-[110px]">CPU</th>
+                                    <th class="py-2 pr-2 w-[110px]">RAM</th>
+                                    <th class="py-2 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="process-table"></tbody>
+                        </table>
+                        <p id="process-empty" class="hidden font-mono text-[11px] text-muted py-6 text-center">
+                            Cargando procesos…
+                        </p>
+                    </div>
+                </div>
+
+                <div class="panel rounded-lg p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="font-display font-bold text-sm tracking-wide uppercase">
+                            <span class="text-motor">06 /</span> Servicios
+                        </h2>
+                        <button
+                            onclick="checkAllServices()"
+                            class="border border-ink/30 hover:border-ink px-2.5 py-1 rounded font-mono text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
+                        >
+                            ↻ Revisar
+                        </button>
+                    </div>
+                    <div id="service-list" class="space-y-1.5 mb-4"></div>
+                    <form
+                        id="service-form"
+                        class="flex gap-2 border-t border-dashed border-motor/40 pt-3"
+                        onsubmit="event.preventDefault(); checkService(manualServiceName())"
+                    >
+                        <input
+                            id="service-input"
+                            type="text"
+                            placeholder="nombre de servicio…"
+                            class="field flex-1 min-w-0 border border-ink/30 rounded px-2.5 py-1.5 text-xs outline-none focus:border-motor"
+                        />
+                        <button
+                            type="submit"
+                            class="border border-ink/30 hover:border-motor hover:text-motor px-3 py-1.5 rounded font-mono text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
+                        >
+                            Consultar
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ==================== ACCIONES + AYUDA ==================== -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div class="panel rounded-lg p-5">
+                    <h2 class="font-display font-bold text-sm tracking-wide uppercase mb-1">
+                        <span class="text-motor">07 /</span> Acciones del sistema
+                    </h2>
+                    <p class="text-muted text-[11px] leading-relaxed mb-4">
+                        Tareas de mantenimiento disponibles desde el panel. Requieren permisos de usuario y
+                        se muestran en la consola.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <button
+                            onclick="confirmClean()"
+                            class="border-2 border-ink bg-ink text-paper hover:bg-paper hover:text-ink px-5 py-2.5 rounded font-mono text-[11px] uppercase tracking-widest transition-colors cursor-pointer"
+                        >
+                            Limpiar logs (7 días)
+                        </button>
+                        <button
+                            onclick="refreshProcesses(true)"
+                            class="border border-ink/30 hover:border-ink px-5 py-2.5 rounded font-mono text-[11px] uppercase tracking-widest transition-colors cursor-pointer"
+                        >
+                            Recargar procesos
+                        </button>
+                    </div>
+                    <p id="action-msg" class="font-mono text-[11px] text-muted mt-4 min-h-[1rem]"></p>
+                </div>
+
+                <div id="help-panel" class="panel rounded-lg p-5 hidden">
+                    <h2 class="font-display font-bold text-sm tracking-wide uppercase mb-3">
+                        <span class="text-motor">08 /</span> ¿Cómo funciona?
+                    </h2>
+                    <ul class="space-y-2.5 text-[12px] leading-relaxed">
+                        <li class="flex gap-2">
+                            <span class="plaque scale-90 shrink-0">A</span>
+                            <span><strong class="font-bold">Métricas:</strong> CPU, RAM, disco y red se muestrean cada segundo y se actualizan cada 2 s en pantalla.</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="plaque scale-90 shrink-0">B</span>
+                            <span><strong class="font-bold">Procesos:</strong> ordena por CPU o RAM. "Terminar" solicita un cierre limpio (SIGTERM).</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="plaque scale-90 shrink-0">C</span>
+                            <span><strong class="font-bold">Servicios:</strong> consulta el estado de servicios del sistema (systemd en Linux, servicios en Windows).</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="plaque scale-90 shrink-0">D</span>
+                            <span><strong class="font-bold">Permisos:</strong> terminar procesos o limpiar logs puede requerir ejecutar el servidor con permisos de administrador.</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="plaque scale-90 shrink-0">E</span>
+                            <span><strong class="font-bold">Tema:</strong> alterna entre plano claro y plano nocturno con el botón de la barra superior. La elección se guarda.</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="plaque scale-90 shrink-0">F</span>
+                            <span><strong class="font-bold">Demo técnica:</strong> Sysdash es un proyecto de portafolio. No mueve archivos del usuario; solo lee métricas del sistema.</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <footer class="flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-dashed border-motor/40 pt-4 pb-8 font-mono text-[10px] text-muted uppercase tracking-widest">
+                <p>SYSDASH · Blueprint técnico</p>
+                <p>FastAPI + psutil + Chart.js <span class="text-motor">✦</span></p>
+            </footer>
+        </main>
+
+        <!-- ==================== MODAL DE CONFIRMACIÓN ==================== -->
+        <div
+            id="confirm-modal"
+            class="hidden fixed inset-0 z-[85] items-center justify-center p-4 overlay modal-in"
+            onclick="if (event.target === this) closeConfirm()"
+        >
+            <div class="w-full max-w-md bg-paper border-2 border-ink rounded-lg p-6 shadow-2xl">
+                <div class="flex items-start justify-between gap-4 mb-3">
+                    <span id="confirm-title" class="stamp text-ink">CONFIRMAR</span>
+                    <button onclick="closeConfirm()" class="border border-ink/40 hover:border-ink rounded px-2 cursor-pointer">✕</button>
+                </div>
+                <p id="confirm-body" class="text-sm leading-relaxed text-ink/85 mb-6"></p>
+                <div class="flex justify-end gap-3">
+                    <button
+                        onclick="closeConfirm()"
+                        class="border border-ink/40 hover:border-ink px-4 py-2.5 rounded font-mono text-[11px] uppercase tracking-widest transition-colors cursor-pointer"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        id="confirm-accept"
+                        class="border-2 border-ink bg-ink text-paper hover:bg-paper hover:text-ink px-4 py-2.5 rounded font-mono text-[11px] uppercase tracking-widest transition-colors cursor-pointer"
+                    >
+                        Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TOASTS ==================== -->
+        <div id="toasts" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[90] flex flex-col items-center gap-2 px-4 pointer-events-none w-full max-w-md"></div>
+
         <script>
-            const API_URL = "http://127.0.0.1:8000";
+            "use strict";
+
+            /* ---------------------------------- utilidades ---------------------------------- */
+            const $ = id => document.getElementById(id);
+
+            function formatRate(v) {
+                const units = ["B/s", "KB/s", "MB/s", "GB/s"];
+                let amount = v || 0, unit = 0;
+                while (amount >= 1024 && unit < units.length - 1) { amount /= 1024; unit++; }
+                return `${amount.toFixed(unit ? 1 : 0)} ${units[unit]}`;
+            }
+
+            function formatBytes(v) {
+                const units = ["B", "KB", "MB", "GB", "TB"];
+                let amount = v || 0, unit = 0;
+                while (amount >= 1024 && unit < units.length - 1) { amount /= 1024; unit++; }
+                return `${amount.toFixed(unit ? 1 : 0)} ${units[unit]}`;
+            }
+
+            function formatUptime(s) {
+                s = s || 0;
+                const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+                if (d > 0) return `${d}d ${h}h ${m}m`;
+                if (h > 0) return `${h}h ${m}m`;
+                return `${m}m`;
+            }
+
+            function level(p, warnAt = 75, critAt = 90) {
+                if (p >= critAt) return "crit";
+                if (p >= warnAt) return "warn";
+                return "ok";
+            }
+            // Colores vinculados al tema activo (variables CSS)
+            const LEVEL_COLOR = { ok: "var(--ok)", warn: "var(--warn)", crit: "var(--crit)" };
+
+            function esc(s) {
+                return String(s ?? "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            }
+
+            /* ---------------------------------- estado ---------------------------------- */
             const history = { labels: [], cpu: [], ram: [] };
-            const chart = new Chart(document.getElementById("history-chart"), {
+            let online = false;
+            let processPaused = false;
+            const SERVICES = ["nginx", "apache2", "mysql", "postgresql", "docker", "ssh", "cron", "ufw"];
+            let serviceCache = {};
+
+            /* ---------------------------------- tema ---------------------------------- */
+            const CHART_THEME = {
+                light: {
+                    cpu: "#2547F4", cpuFill: "rgba(37,71,244,0.08)",
+                    ram: "#B45309", ramFill: "rgba(180,83,9,0.06)",
+                    grid: "rgba(37,71,244,0.10)", border: "rgba(23,26,34,0.30)",
+                    ticks: "#6A6F7D", legend: "#171A22",
+                    tooltipBg: "#171A22", tooltipFg: "#EFEDE6",
+                },
+                dark: {
+                    cpu: "#6D8CFF", cpuFill: "rgba(109,140,255,0.15)",
+                    ram: "#F5A623", ramFill: "rgba(245,166,35,0.10)",
+                    grid: "rgba(109,140,255,0.14)", border: "rgba(231,234,243,0.28)",
+                    ticks: "#8E97AC", legend: "#E7EAF3",
+                    tooltipBg: "#E7EAF3", tooltipFg: "#0E1220",
+                },
+            };
+
+            function currentTheme() {
+                return document.documentElement.classList.contains("dark") ? "dark" : "light";
+            }
+
+            function applyChartTheme() {
+                const c = CHART_THEME[currentTheme()];
+                chart.data.datasets[0].borderColor = c.cpu;
+                chart.data.datasets[0].backgroundColor = c.cpuFill;
+                chart.data.datasets[1].borderColor = c.ram;
+                chart.data.datasets[1].backgroundColor = c.ramFill;
+                const y = chart.options.scales.y;
+                const x = chart.options.scales.x;
+                y.ticks.color = c.ticks;
+                x.ticks.color = c.ticks;
+                y.grid.color = c.grid;
+                x.grid.color = c.grid;
+                y.border.color = c.border;
+                x.border.color = c.border;
+                chart.options.plugins.legend.labels.color = c.legend;
+                chart.options.plugins.tooltip.backgroundColor = c.tooltipBg;
+                chart.options.plugins.tooltip.titleColor = c.tooltipFg;
+                chart.options.plugins.tooltip.bodyColor = c.tooltipFg;
+                chart.update();
+            }
+
+            function applyTheme(theme) {
+                document.documentElement.classList.toggle("dark", theme === "dark");
+                try { localStorage.setItem("sysdash-theme", theme); } catch (e) {}
+                const isDark = theme === "dark";
+                $("theme-btn").innerHTML = isDark ? "☀ Tema claro" : "☾ Tema oscuro";
+                $("theme-btn").title = isDark ? "Cambiar a tema claro" : "Cambiar a tema oscuro";
+                const meta = document.querySelector('meta[name="theme-color"]');
+                if (meta) meta.setAttribute("content", isDark ? "#0E1220" : "#EFEDE6");
+                applyChartTheme();
+            }
+
+            function toggleTheme() {
+                applyTheme(currentTheme() === "dark" ? "light" : "dark");
+                toast(`Tema ${currentTheme() === "dark" ? "nocturno" : "claro"} aplicado.`, "info");
+            }
+
+            /* ---------------------------------- gráfico ---------------------------------- */
+            const chart = new Chart($("history-chart"), {
                 type: "line",
                 data: {
                     labels: history.labels,
                     datasets: [
-                        { label: "CPU %", data: history.cpu, borderColor: "#22d3ee", tension: 0.35, pointRadius: 0 },
-                        { label: "RAM %", data: history.ram, borderColor: "#818cf8", tension: 0.35, pointRadius: 0 },
+                        {
+                            label: "CPU %",
+                            data: history.cpu,
+                            borderColor: "#2547F4",
+                            backgroundColor: "rgba(37,71,244,0.08)",
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 0,
+                            borderWidth: 2,
+                        },
+                        {
+                            label: "RAM %",
+                            data: history.ram,
+                            borderColor: "#B45309",
+                            backgroundColor: "rgba(180,83,9,0.06)",
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 0,
+                            borderWidth: 2,
+                        },
                     ],
                 },
                 options: {
                     animation: false,
                     responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: "index", intersect: false },
                     scales: {
-                        y: { min: 0, max: 100, ticks: { color: "#94a3b8" } },
-                        x: { ticks: { color: "#94a3b8", maxTicksLimit: 6 } },
+                        y: {
+                            min: 0,
+                            max: 100,
+                            border: { color: "rgba(23,26,34,0.3)", dash: [4, 4] },
+                            grid: { color: "rgba(37,71,244,0.10)" },
+                            ticks: { color: "#6A6F7D", font: { family: "Space Mono", size: 10 } },
+                        },
+                        x: {
+                            border: { color: "rgba(23,26,34,0.3)", dash: [4, 4] },
+                            grid: { color: "rgba(37,71,244,0.07)" },
+                            ticks: { color: "#6A6F7D", maxTicksLimit: 6, font: { family: "Space Mono", size: 10 } },
+                        },
                     },
-                    plugins: { legend: { labels: { color: "#cbd5e1" } } },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: "#171A22",
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                font: { family: "Space Mono", size: 11 },
+                            },
+                        },
+                        tooltip: {
+                            backgroundColor: "#171A22",
+                            titleColor: "#EFEDE6",
+                            bodyColor: "#EFEDE6",
+                            cornerRadius: 6,
+                            titleFont: { family: "Space Mono" },
+                            bodyFont: { family: "Space Mono", size: 11 },
+                        },
+                    },
                 },
             });
 
-            function formatRate(value) {
-                const units = ["B/s", "KB/s", "MB/s", "GB/s"];
-                let amount = value,
-                    unit = 0;
-                while (amount >= 1024 && unit < units.length - 1) {
-                    amount /= 1024;
-                    unit++;
+            /* ---------------------------------- KPIs ---------------------------------- */
+            function ruleBar(percent, dataset) {
+                const color = LEVEL_COLOR[level(percent, dataset.warn, dataset.crit)];
+                return `<div class="rule mt-2"><i style="width:${Math.min(100, percent).toFixed(0)}%;background:${color}"></i></div>`;
+            }
+
+            function kpiCard(plaque, label, value, unit, percent, dataset) {
+                const state = percent != null ? level(percent, dataset.warn, dataset.crit) : "";
+                return `
+                    <div class="panel rounded-lg p-4">
+                        <div class="flex items-start justify-between gap-2 mb-2">
+                            <span class="plaque">${plaque}</span>
+                            <span class="font-mono text-[9px] uppercase tracking-widest" style="color:${percent != null ? LEVEL_COLOR[state] : "inherit"}">${state.toUpperCase()}</span>
+                        </div>
+                        <p class="font-mono text-[9px] uppercase tracking-[0.2em] text-muted mb-1">${label}</p>
+                        <p class="font-display font-bold text-2xl leading-none tracking-tight">${value}<span class="text-[11px] text-muted font-sans font-medium ml-1">${unit}</span></p>
+                        ${percent != null ? ruleBar(percent, dataset) : ""}
+                    </div>`;
+            }
+
+            function renderKpis(d) {
+                const cards = [
+                    kpiCard("01", "CPU", d.cpu.toFixed(0), "%", d.cpu, { warn: 75, crit: 90 }),
+                    kpiCard("02", "Memoria", d.memory.percent.toFixed(0), "%", d.memory.percent, { warn: 85, crit: 95 }),
+                    kpiCard("03", "Disco", d.disk.percent.toFixed(0), "%", d.disk.percent, { warn: 85, crit: 92 }),
+                    kpiCard("04", "Swap", d.swap ? d.swap.percent.toFixed(0) : "–", "%", d.swap ? d.swap.percent : null, { warn: 70, crit: 90 }),
+                    kpiCard("05", "Descarga", formatRate(d.network.download_bytes_per_second), "", null, null),
+                    kpiCard("06", "Subida", formatRate(d.network.upload_bytes_per_second), "", null, null),
+                ];
+                $("kpi-grid").innerHTML = cards.join("");
+            }
+
+            /* ---------------------------------- núcleos ---------------------------------- */
+            function renderCores(d) {
+                $("cores-count").innerText = `${d.cpu_cores} núcleos`;
+                const cores = d.cpu_per_core || [];
+                $("core-bars").innerHTML = cores
+                    .map(
+                        (c, i) => `
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono text-[9px] text-muted w-9 uppercase">núcleo ${i}</span>
+                            <div class="rule flex-1"><i style="width:${Math.min(100, c).toFixed(0)}%;background:${LEVEL_COLOR[level(c)]}"></i></div>
+                            <span class="font-mono text-[10px] font-bold w-10 text-right">${c.toFixed(0)}%</span>
+                        </div>`
+                    )
+                    .join("");
+            }
+
+            /* ---------------------------------- sistema + sensores ---------------------------------- */
+            function tempLevel(cur, high, critical) {
+                if (critical && cur >= critical) return "crit";
+                if (high && cur >= high) return "crit";
+                if (high && cur >= high * 0.85) return "warn";
+                return "ok";
+            }
+
+            function renderSystem(d) {
+                $("machine-label").innerText = `telemetría de ${d.hostname || "sistema"}`;
+                $("sys-hostname").innerText = d.hostname || "—";
+                $("sys-os").innerText = d.os_name || d.os || "—";
+                $("sys-version").innerText = (d.os_version || "—").split(" #")[0];
+                $("sys-boot").innerText = new Date(d.boot_time).toLocaleString();
+                $("sys-uptime").innerText = formatUptime(d.uptime_seconds);
+                $("proc-total").innerText = `${d.total_processes ?? "—"} procesos`;
+
+                const sensors = d.temperatures || [];
+                $("sensors").innerHTML = sensors.length
+                    ? sensors
+                          .slice(0, 6)
+                          .map(s => {
+                              const lvl = tempLevel(s.current, s.high, s.critical);
+                              const color = LEVEL_COLOR[lvl];
+                              return `<div class="flex items-center justify-between gap-2 font-mono text-[10px]"><span class="uppercase tracking-wider text-muted truncate">${esc(s.label)}</span><span class="font-bold flex items-center gap-1.5 whitespace-nowrap" style="color:${color}"><span class="dot" style="background:${color}"></span>${s.current.toFixed(1)} °C</span></div>`;
+                          })
+                          .join("")
+                    : `<p class="font-mono text-[10px] text-muted">Sensores no disponibles</p>`;
+            }
+
+            /* ---------------------------------- procesos ---------------------------------- */
+            function cellBar(pct, plot) {
+                const color = LEVEL_COLOR[level(pct)];
+                return `<div class="flex items-center gap-2"><div class="rule flex-1" style="height:7px"><i style="width:${Math.min(100, pct).toFixed(1)}%;background:${color}"></i></div><span class="font-mono text-[10px] w-11 text-right">${pct.toFixed(1)}%</span></div>`;
+            }
+
+            async function refreshProcesses(force) {
+                if (processPaused && !force) return;
+                const sortBy = $("process-sort").value;
+                const limit = $("process-limit").value;
+                try {
+                    const res = await fetch(`/api/processes?sort_by=${sortBy}&limit=${limit}`);
+                    const data = await res.json();
+                    const rows = data.processes || [];
+                    $("process-empty").classList.toggle("hidden", rows.length > 0);
+                    $("process-table").innerHTML = rows
+                        .map(
+                            p => `
+                            <tr class="border-b border-ink/10 hover:bg-motor/5 transition-colors">
+                                <td class="py-2 pr-2 font-mono text-[11px]">${p.pid}</td>
+                                <td class="py-2 pr-2 font-semibold truncate max-w-[140px]">${esc(p.name)}</td>
+                                <td class="py-2 pr-2 text-muted truncate max-w-[100px]">${esc(p.username)}</td>
+                                <td class="py-2 pr-2">${cellBar(p.cpu_percent)}</td>
+                                <td class="py-2 pr-2">${cellBar(p.memory_percent)}</td>
+                                <td class="py-2 text-right">
+                                    <button onclick="askTerminate(${p.pid}, '${esc(p.name).replace(/'/g, "\\'")}')" class="border border-ink/30 hover:border-crit hover:text-crit rounded px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest transition-colors cursor-pointer">✕ Terminar</button>
+                                </td>
+                            </tr>`
+                        )
+                        .join("");
+                } catch (e) {
+                    $("process-table").innerHTML = "";
+                    $("process-empty").classList.remove("hidden");
+                    $("process-empty").innerText = "No se pudieron cargar los procesos.";
                 }
-                return `${amount.toFixed(unit ? 1 : 0)} ${units[unit]}`;
             }
 
-            function formatUptime(seconds) {
-                const days = Math.floor(seconds / 86400),
-                    hours = Math.floor((seconds % 86400) / 3600),
-                    minutes = Math.floor((seconds % 3600) / 60);
-                return `${days}d ${hours}h ${minutes}m`;
+            function toggleProcessPause() {
+                processPaused = !processPaused;
+                const btn = $("process-pause");
+                btn.innerText = processPaused ? "▶ Reanudar" : "⏸ Pausar";
+                if (!processPaused) refreshProcesses(true);
             }
 
+            function askTerminate(pid, name) {
+                showConfirm({
+                    title: `TERMINAR ${esc(name).toUpperCase()}`,
+                    body: `Se solicitará el cierre del proceso PID <strong>${pid}</strong> (${esc(name)}). Esta acción cierra la aplicación que lo ejecuta. ¿Continuar?`,
+                    acceptLabel: "Terminar",
+                    onAccept: () => terminateProcess(pid),
+                });
+            }
+
+            async function terminateProcess(pid) {
+                try {
+                    const res = await fetch(`/api/processes/${pid}/terminate`, { method: "POST" });
+                    const data = await res.json().catch(() => ({}));
+                    if (res.ok) {
+                        toast(`Proceso ${pid} terminado.`, "ok");
+                    } else {
+                        toast(data.detail || `Error al terminar ${pid}.`, "err");
+                    }
+                } catch (e) {
+                    toast(`Error al terminar ${pid}.`, "err");
+                }
+                refreshProcesses(true);
+            }
+
+            /* ---------------------------------- servicios ---------------------------------- */
+            function renderServices() {
+                $("service-list").innerHTML = SERVICES.map(
+                    s => `
+                    <div class="flex items-center justify-between gap-2 border border-ink/15 rounded px-2.5 py-1.5" data-svc="${s}">
+                        <span class="font-mono text-[11px] font-semibold">${s}</span>
+                        <span class="flex items-center gap-2">
+                            <span class="svc-badge font-mono text-[9px] uppercase tracking-widest text-muted">· · ·</span>
+                        </span>
+                    </div>`
+                ).join("");
+            }
+
+            function svcBadge(status) {
+                if (status === "active") return `<span class="svc-badge font-mono text-[9px] uppercase tracking-widest" style="color:var(--ok)">● activo</span>`;
+                if (status === "inactive") return `<span class="svc-badge font-mono text-[9px] uppercase tracking-widest" style="color:var(--warn)">○ inactivo</span>`;
+                if (status === "not_found") return `<span class="svc-badge font-mono text-[9px] uppercase tracking-widest text-muted">∅ no existe</span>`;
+                return `<span class="svc-badge font-mono text-[9px] uppercase tracking-widest" style="color:var(--crit)">! ${esc(status)}</span>`;
+            }
+
+            function setServiceBadge(name, status) {
+                const row = document.querySelector(`[data-svc="${name}"] .svc-badge`);
+                if (row) row.outerHTML = svcBadge(status);
+            }
+
+            async function checkService(name) {
+                const row = document.querySelector(`[data-svc="${name}"] .svc-badge`);
+                if (row) row.outerHTML = `<span class="svc-badge font-mono text-[9px] uppercase tracking-widest text-muted">· · ·</span>`;
+                try {
+                    const res = await fetch(`/api/services/${encodeURIComponent(name)}`);
+                    const data = await res.json();
+                    serviceCache[name] = data.status;
+                    setServiceBadge(name, data.status);
+                } catch (e) {
+                    if (row) row.outerHTML = `<span class="svc-badge font-mono text-[9px] uppercase tracking-widest" style="color:var(--crit)">! error</span>`;
+                }
+            }
+
+            async function checkAllServices() {
+                await Promise.all(SERVICES.map(checkService));
+            }
+
+            function manualServiceName() {
+                return $("service-input").value.trim().toLowerCase();
+            }
+
+            /* ---------------------------------- acciones ---------------------------------- */
+            function confirmClean() {
+                showConfirm({
+                    title: "LIMPIAR LOGS (7 DÍAS)",
+                    body: `Se ejecutará <strong>journalctl --vacuum-time=7d</strong> en Linux: se eliminan los logs de systemd anteriores a 7 días. En Windows la acción está adaptada y no elimina datos. ¿Continuar?`,
+                    acceptLabel: "Limpiar logs",
+                    onAccept: cleanCache,
+                });
+            }
+
+            async function cleanCache() {
+                const msg = $("action-msg");
+                msg.innerText = "Ejecutando limpieza…";
+                try {
+                    const res = await fetch("/api/clean/cache", { method: "POST" });
+                    const data = await res.json().catch(() => ({}));
+                    if (res.ok) {
+                        const text = data.message || "Operación completada.";
+                        msg.innerText = `✓ ${text}`;
+                        toast(text, "ok");
+                    } else {
+                        const text = data.detail || "Error al ejecutar la acción.";
+                        msg.innerText = `✗ ${text}`;
+                        toast(text, "err");
+                    }
+                } catch (e) {
+                    msg.innerText = "✗ Error al ejecutar la acción.";
+                    toast("Error de conexión con la API.", "err");
+                }
+            }
+
+            /* ---------------------------------- conexión ---------------------------------- */
+            function setOnline() {
+                online = true;
+                const stamp = $("conn-stamp");
+                stamp.classList.remove("text-ok", "text-crit");
+                stamp.classList.add("text-ok");
+                $("conn-dot").className = "dot bg-ok pulse-live";
+                $("conn-text").innerText = "EN VIVO";
+                $("offline-banner").classList.add("hidden");
+            }
+
+            function setOffline(message) {
+                online = false;
+                const stamp = $("conn-stamp");
+                stamp.classList.remove("text-ok", "text-crit");
+                stamp.classList.add("text-crit");
+                $("conn-dot").className = "dot bg-crit pulse-live";
+                $("conn-text").innerText = "SIN CONEXIÓN";
+                $("offline-msg").innerText = message || "SIN CONEXIÓN CON LA API — reintentando…";
+                $("offline-banner").classList.remove("hidden");
+            }
+
+            /* ---------------------------------- métricas ---------------------------------- */
             async function fetchMetrics() {
                 try {
-                    const res = await fetch(`${API_URL}/api/metrics`);
-                    const data = await res.json();
+                    const res = await fetch("/api/metrics");
+                    if (!res.ok) {
+                        if (res.status === 503) {
+                            setOffline("CONECTANDO — la API está muestreando datos iniciales…");
+                        } else {
+                            setOffline(`ERROR DE API (${res.status}) — reintentando…`);
+                        }
+                        return;
+                    }
+                    const d = await res.json();
 
-                    document.getElementById("os-label").innerText = data.os;
-                    document.getElementById("cpu-val").innerText = `${data.cpu}%`;
-                    document.getElementById("ram-val").innerText = `${data.memory.percent}%`;
-                    document.getElementById("disk-val").innerText = `${data.disk.percent}%`;
-                    document.getElementById("download-val").innerText = formatRate(
-                        data.network.download_bytes_per_second,
+                    // KPI + nota E/S de disco (una sola, con id)
+                    const oldNote = document.getElementById("io-note");
+                    if (oldNote) oldNote.remove();
+                    renderKpis(d);
+                    $("kpi-grid").insertAdjacentHTML(
+                        "afterend",
+                        `<p id="io-note" class="font-mono text-[10px] text-muted uppercase tracking-widest -mt-2">E/S disco ↓ ${formatRate(d.disk_io.read_bytes_per_second)} · ↑ ${formatRate(d.disk_io.write_bytes_per_second)} · libre ${formatBytes(d.disk.free)} de ${formatBytes(d.disk.total)}</p>`
                     );
-                    document.getElementById("upload-val").innerText = formatRate(data.network.upload_bytes_per_second);
-                    document.getElementById("system-version").innerText = `${data.hostname} · ${data.os_version}`;
-                    document.getElementById("uptime").innerText = `Uptime: ${formatUptime(data.uptime_seconds)}`;
-                    document.getElementById("boot-time").innerText =
-                        `Arranque: ${new Date(data.boot_time).toLocaleString()}`;
-                    document.getElementById("temperatures").innerHTML = data.temperatures.length
-                        ? data.temperatures
-                              .map(
-                                  item =>
-                                      `<div class="border border-slate-700 rounded p-2"><span class="text-slate-400">${item.label}</span><br><strong class="text-rose-300">${item.current.toFixed(1)} °C</strong></div>`,
-                              )
-                              .join("")
-                        : `<span class="text-slate-500 col-span-2">Sensores no disponibles</span>`;
+
+                    renderCores(d);
+                    renderSystem(d);
+                    setOnline();
+
+                    $("last-update").innerText = new Date(d.sampled_at).toLocaleTimeString();
+
                     history.labels.push(new Date().toLocaleTimeString());
-                    history.cpu.push(data.cpu);
-                    history.ram.push(data.memory.percent);
-                    if (history.labels.length > 60) {
+                    history.cpu.push(d.cpu);
+                    history.ram.push(d.memory.percent);
+                    if (history.labels.length > 45) {
                         history.labels.shift();
                         history.cpu.shift();
                         history.ram.shift();
                     }
                     chart.update();
-                } catch (err) {
-                    console.error("Error al conectar con la API", err);
+                } catch (e) {
+                    setOffline();
                 }
             }
 
-            async function fetchProcesses() {
-                const sortBy = document.getElementById("process-sort").value;
-                try {
-                    const res = await fetch(`${API_URL}/api/processes?sort_by=${sortBy}&limit=10`);
-                    const data = await res.json();
-                    document.getElementById("process-table").innerHTML = data.processes
-                        .map(
-                            process =>
-                                `<tr class="border-b border-slate-800"><td class="py-2">${process.pid}</td><td>${process.name}</td><td>${process.username}</td><td>${process.cpu_percent.toFixed(1)}%</td><td>${process.memory_percent.toFixed(1)}%</td><td><button onclick="terminateProcess(${process.pid})" class="text-rose-300 hover:text-rose-200">Terminar</button></td></tr>`,
-                        )
-                        .join("");
-                } catch (err) {
-                    document.getElementById("process-msg").innerText = "No se pudieron cargar los procesos.";
-                }
+            /* ---------------------------------- refrescar ---------------------------------- */
+            function refreshAll() {
+                fetchMetrics();
+                refreshProcesses(true);
+                checkAllServices();
+                toast("Actualizado.", "ok");
             }
 
-            async function terminateProcess(pid) {
-                if (!window.confirm(`¿Terminar el proceso ${pid}?`)) return;
-                const msgEl = document.getElementById("process-msg");
-                try {
-                    const res = await fetch(`${API_URL}/api/processes/${pid}/terminate`, { method: "POST" });
-                    const data = await res.json();
-                    msgEl.innerText = data.message || data.detail || "Operación completada.";
-                    fetchProcesses();
-                } catch (err) {
-                    msgEl.innerText = "Error al terminar el proceso.";
-                }
+            /* ---------------------------------- ayuda ---------------------------------- */
+            function toggleHelp() {
+                $("help-panel").classList.toggle("hidden");
             }
 
-            async function triggerClean() {
-                const msgEl = document.getElementById("action-msg");
-                msgEl.innerText = "Ejecutando limpieza...";
-                try {
-                    const res = await fetch(`${API_URL}/api/clean/cache`, { method: "POST" });
-                    const data = await res.json();
-                    msgEl.innerText = data.message || "Operación completada.";
-                } catch (err) {
-                    msgEl.innerText = "Error al ejecutar la acción.";
-                }
+            /* ---------------------------------- modal confirm ---------------------------------- */
+            let confirmAction = null;
+            function showConfirm({ title, body, acceptLabel, onAccept }) {
+                $("confirm-title").innerText = title || "CONFIRMAR";
+                $("confirm-body").innerHTML = body || "";
+                $("confirm-accept").innerText = acceptLabel || "Confirmar";
+                confirmAction = onAccept;
+                $("confirm-modal").classList.remove("hidden");
+                $("confirm-modal").classList.add("flex");
+            }
+            function closeConfirm() {
+                $("confirm-modal").classList.add("hidden");
+                $("confirm-modal").classList.remove("flex");
+                confirmAction = null;
+            }
+            $("confirm-accept").addEventListener("click", () => {
+                const action = confirmAction;
+                closeConfirm();
+                if (action) action();
+            });
+
+            /* ---------------------------------- toasts ---------------------------------- */
+            function toast(message, type = "info") {
+                const wrap = $("toasts");
+                const el = document.createElement("div");
+                const border = type === "ok" ? "border-l-ok" : type === "err" ? "border-l-crit" : "border-l-motor";
+                const icon = type === "ok" ? "✓" : type === "err" ? "✗" : "i";
+                el.className = `toast-in pointer-events-auto flex items-center gap-3 border-l-4 ${border} bg-paper border border-ink/20 rounded px-4 py-2.5 shadow-lg max-w-md w-full`;
+                el.innerHTML = `<span class="font-mono font-bold text-sm">${icon}</span><p class="text-xs font-semibold">${message}</p>`;
+                wrap.appendChild(el);
+                setTimeout(() => {
+                    el.style.opacity = "0";
+                    el.style.transition = "opacity .3s";
+                    setTimeout(() => el.remove(), 320);
+                }, 3200);
             }
 
-            // Actualizar métricas cada 2 segundos
+            /* ---------------------------------- eventos + init ---------------------------------- */
+            $("process-sort").addEventListener("change", () => refreshProcesses(true));
+            $("process-limit").addEventListener("change", () => refreshProcesses(true));
+            $("service-form").addEventListener("submit", e => {
+                e.preventDefault();
+                const name = manualServiceName();
+                if (!name) return;
+                SERVICES.push(name);
+                renderServices();
+                checkService(name);
+                $("service-input").value = "";
+            });
+
+            document.addEventListener("keydown", e => {
+                if (e.key === "Escape") {
+                    if (!$("confirm-modal").classList.contains("hidden")) closeConfirm();
+                }
+            });
+
+            // Tema por defecto: oscuro; se restaura lo guardado en 0 s.
+            const savedTheme = localStorage.getItem("sysdash-theme");
+            applyTheme(savedTheme === "light" ? "light" : "dark");
+
+            renderServices();
             setInterval(fetchMetrics, 2000);
-            setInterval(fetchProcesses, 5000);
-            document.getElementById("process-sort").addEventListener("change", fetchProcesses);
-            fetchMetrics();
-            fetchProcesses();
+            setInterval(refreshProcesses, 5000);
+            setInterval(checkAllServices, 30000);
+            refreshAll();
         </script>
     </body>
 </html>

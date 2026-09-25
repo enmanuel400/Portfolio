@@ -3,235 +3,1063 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Mercium-Shop | Soluciones digitales</title>
+        <meta
+            name="description"
+            content="Mercium — vitrina de soluciones digitales con identidad propia: tiendas, dashboards, marketplaces y portales diseñados para vender."
+        />
+        <title>Mercium · Soluciones digitales con identidad propia</title>
+
         <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            void: "#05060B",
+                            surface: "#0B0D14",
+                            raise: "#11131C",
+                            line: "rgba(255,255,255,0.08)",
+                            ink: "#F4F6FA",
+                            muted: "#9199AC",
+                            acid: "#D7F84A",
+                        },
+                        fontFamily: {
+                            sans: ['"Manrope"', "ui-sans-serif", "system-ui", "sans-serif"],
+                            display: ['"Space Grotesk"', '"Manrope"', "sans-serif"],
+                            mono: ['"Space Mono"', "ui-monospace", "monospace"],
+                            serif: ['"Instrument Serif"', "Georgia", "serif"],
+                        },
+                    },
+                },
+            };
+        </script>
         <style>
-            @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap");
+            @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap");
+
+            :root {
+                --void: #05060b;
+                --acid: #d7f84a;
+            }
+
+            html {
+                scroll-behavior: smooth;
+                overflow-x: hidden;
+            }
+
             body {
-                font-family: "Plus Jakarta Sans", sans-serif;
+                font-family: "Manrope", sans-serif;
+                background: var(--void);
+                color: #f4f6fa;
+                overflow-x: hidden;
+            }
+
+            /* ---------- Superficies metálicas ---------- */
+            .chrome {
+                background: linear-gradient(
+                    180deg,
+                    #ffffff 0%,
+                    #d3dae6 34%,
+                    #8b94a7 48%,
+                    #f2f5fa 56%,
+                    #aeb8ca 100%
+                );
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+            }
+            .chrome-soft {
+                background: linear-gradient(180deg, #e6eaf1 0%, #9aa4b6 55%, #c7cfdd 100%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+            }
+            .card-metal {
+                position: relative;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015) 40%),
+                    #0b0d14;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                    0 20px 50px -25px rgba(0, 0, 0, 0.7);
+            }
+            .card-metal::before {
+                /* brillo superior = reflejo de superficie líquida */
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 10%;
+                right: 10%;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            }
+
+            /* ---------- Texturas ---------- */
+            .noise {
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+                background-size: 180px 180px;
+            }
+            .dots {
+                background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+                background-size: 22px 22px;
+            }
+
+            /* ---------- Spotlight que sigue al cursor ---------- */
+            #spotlight {
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                z-index: 3;
+                background: radial-gradient(640px at var(--mx, 50%) var(--my, 30%), rgba(215, 248, 74, 0.055), transparent 70%);
+            }
+
+            /* ---------- Hero: gota de mercurio ---------- */
+            .blob {
+                width: 235px;
+                height: 235px;
+                position: relative;
+                border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+                background: radial-gradient(
+                        120% 120% at 32% 22%,
+                        rgba(255, 255, 255, 0.95),
+                        rgba(150, 160, 185, 0.55) 34%,
+                        rgba(58, 64, 82, 0.92) 58%,
+                        rgba(10, 12, 18, 0.98) 100%
+                    ),
+                    var(--void);
+                box-shadow:
+                    0 0 120px rgba(215, 248, 74, 0.16),
+                    inset -20px -28px 48px rgba(0, 0, 0, 0.55),
+                    inset 16px 18px 40px rgba(255, 255, 255, 0.3);
+                animation: morph 9s ease-in-out infinite;
+                will-change: border-radius, transform;
+            }
+            .blob::after {
+                content: "";
+                position: absolute;
+                top: 14%;
+                left: 18%;
+                right: 22%;
+                height: 32%;
+                border-radius: 50%;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), transparent);
+                filter: blur(7px);
+                opacity: 0.9;
+                animation: breathe 9s ease-in-out infinite;
+            }
+            @keyframes morph {
+                0%,
+                100% {
+                    border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+                    transform: translateY(0) rotate(0deg);
+                }
+                50% {
+                    border-radius: 44% 58% 40% 56% / 56% 44% 60% 40%;
+                    transform: translateY(-12px) rotate(4deg);
+                }
+            }
+            @keyframes breathe {
+                0%,
+                100% {
+                    opacity: 0.85;
+                }
+                50% {
+                    opacity: 0.5;
+                }
+            }
+            .float-slow {
+                animation: floaty 6s ease-in-out infinite;
+            }
+            .float-slower {
+                animation: floaty 8s ease-in-out infinite reverse;
+            }
+            @keyframes floaty {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+
+            /* ---------- Marquee ---------- */
+            .marquee {
+                overflow: hidden;
+                -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+                mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+            }
+            .marquee-track {
+                display: flex;
+                width: max-content;
+                animation: marquee 26s linear infinite;
+            }
+            .marquee:hover .marquee-track {
+                animation-play-state: paused;
+            }
+            @keyframes marquee {
+                to {
+                    transform: translateX(-50%);
+                }
+            }
+
+            /* ---------- Brillo barrido en tarjetas ---------- */
+            .shine::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(
+                    105deg,
+                    transparent 40%,
+                    rgba(255, 255, 255, 0.09) 50%,
+                    transparent 60%
+                );
+                transform: translateX(-120%);
+                transition: transform 0.8s ease;
+                pointer-events: none;
+            }
+            .shine:hover::after {
+                transform: translateX(120%);
+            }
+
+            /* ---------- Reveal on scroll ---------- */
+            .reveal {
+                opacity: 0;
+                transform: translateY(22px);
+                transition:
+                    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+            .reveal.in {
+                opacity: 1;
+                transform: none;
+            }
+
+            /* ---------- Scrollbar ---------- */
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+            ::-webkit-scrollbar-track {
+                background: #05060b;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #1d2130;
+                border-radius: 99px;
+                border: 2px solid #05060b;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: #2a2f42;
+            }
+
+            /* ---------- Mockups CSS de producto ---------- */
+            .mb-frame {
+                position: relative;
+                border-radius: 12px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                background:
+                    radial-gradient(120% 120% at 75% 0%, rgba(255, 255, 255, 0.05), transparent 55%),
+                    #090b12;
+                overflow: hidden;
+            }
+            .mb-bar {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                padding: 6px 9px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            }
+            .mb-dot {
+                width: 5px;
+                height: 5px;
+                border-radius: 9999px;
+                background: rgba(255, 255, 255, 0.18);
+            }
+            .mb-dot.r {
+                background: #f87171;
+            }
+            .mb-dot.y {
+                background: #facc15;
+            }
+            .mb-dot.g {
+                background: #4ade80;
+            }
+            .mb-url {
+                flex: 1;
+                max-width: 62%;
+                height: 9px;
+                border-radius: 9999px;
+                background: rgba(255, 255, 255, 0.07);
+                margin-left: 5px;
+            }
+            .mb-tile {
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.07);
+            }
+            .mb-line {
+                display: block;
+                height: 3.5px;
+                border-radius: 9999px;
+                background: rgba(255, 255, 255, 0.15);
+            }
+            .mb-chip {
+                font-size: 6px;
+                line-height: 1;
+                letter-spacing: 0.08em;
+                border: 1px solid rgba(255, 255, 255, 0.14);
+                border-radius: 9999px;
+                padding: 3px 6px;
+                color: rgba(255, 255, 255, 0.6);
+                white-space: nowrap;
+            }
+
+            /* ---------- Animaciones de modales ---------- */
+            .drawer-in {
+                transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+            .fade-in {
+                animation: fadeup 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+            }
+            .pop-in {
+                animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            }
+            @keyframes fadeup {
+                from {
+                    opacity: 0;
+                    transform: translateY(16px) scale(0.98);
+                }
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+            @keyframes pop {
+                from {
+                    opacity: 0;
+                    transform: scale(0.5);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            .toast-enter {
+                animation: toastin 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+            }
+            @keyframes toastin {
+                from {
+                    opacity: 0;
+                    transform: translateY(14px) scale(0.96);
+                }
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
             }
         </style>
     </head>
-    <body class="bg-[#07090e] text-slate-100 min-h-screen selection:bg-cyan-500 selection:text-slate-950">
-        <!-- Navbar Flotante Glassmorphism -->
+
+    <body class="bg-void text-ink min-h-screen selection:bg-acid selection:text-void antialiased">
+        <!-- Progreso de scroll -->
+        <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-acid z-[90] w-0"></div>
+
+        <!-- Grano de película -->
+        <div class="noise fixed inset-0 z-[80] pointer-events-none opacity-[0.05]"></div>
+
+        <!-- Spotlight que sigue el cursor -->
+        <div id="spotlight"></div>
+
+        <!-- ============ NAVBAR ============ -->
         <header
-            class="fixed top-4 inset-x-4 max-w-6xl mx-auto bg-[#0f172a]/60 backdrop-blur-md border border-slate-800/80 rounded-2xl px-6 py-4 flex justify-between items-center z-50 shadow-2xl"
+            id="navbar"
+            class="fixed top-3 inset-x-3 sm:inset-x-4 max-w-6xl mx-auto bg-void/55 backdrop-blur-xl border border-line rounded-2xl px-5 py-3.5 z-[70] transition-all duration-300"
         >
-            <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span
-                    class="font-extrabold tracking-wider text-sm bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent"
-                    >Mercium-Shop</span
-                >
+            <div class="flex items-center justify-between gap-4">
+                <a href="#inicio" class="flex items-center gap-2.5 group">
+                    <span
+                        class="w-9 h-9 rounded-xl grid place-items-center card-metal text-lg font-bold chrome group-hover:scale-105 transition-transform"
+                        >M</span
+                    >
+                    <span class="font-display font-bold tracking-tight text-sm">
+                        Mercium<span class="text-acid">.</span>
+                    </span>
+                </a>
+
+                <nav class="hidden md:flex items-center gap-7 text-[11px] font-medium text-muted">
+                    <a href="#catalogo" class="hover:text-ink transition-colors">Catálogo</a>
+                    <a href="#proceso" class="hover:text-ink transition-colors">Proceso</a>
+                    <a href="#confianza" class="hover:text-ink transition-colors">Feedback</a>
+                    <a href="#contacto" class="hover:text-ink transition-colors">Contacto</a>
+                </nav>
+
+                <div class="flex items-center gap-2.5">
+                    <button
+                        onclick="toggleCart()"
+                        class="relative flex items-center gap-2 bg-line/80 hover:bg-line text-ink font-display font-semibold px-3.5 py-2 rounded-xl text-[11px] transition-all cursor-pointer border border-white/5 hover:border-acid/50"
+                        aria-label="Abrir carrito"
+                    >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 7h12l1.5 13a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1L6 7Z" />
+                            <path d="M9 10V6a3 3 0 0 1 6 0v4" />
+                        </svg>
+                        <span class="hidden sm:inline">Carrito</span>
+                        <span
+                            id="cart-count"
+                            class="min-w-[18px] h-[18px] px-1 rounded-full bg-acid text-void text-[10px] font-bold grid place-items-center"
+                            >0</span
+                        >
+                    </button>
+                    <button
+                        id="menu-btn"
+                        onclick="toggleMobileMenu()"
+                        class="md:hidden w-9 h-9 grid place-items-center rounded-xl border border-white/10 text-muted hover:text-ink transition-colors"
+                        aria-label="Abrir menú"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 7h16M4 12h16M4 17h16" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <nav class="hidden md:flex gap-6 text-xs text-slate-400 font-medium">
-                <a href="#productos" class="hover:text-cyan-400 transition-colors">Soluciones</a>
-                <a href="#confianza" class="hover:text-cyan-400 transition-colors">Por qué Mercium</a>
-                <a href="#contacto" class="hover:text-cyan-400 transition-colors">Contacto</a>
-            </nav>
-            <button
-                onclick="toggleCart()"
-                class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/20"
-            >
-                <span>Carrito</span>
-                <span
-                    id="cart-count"
-                    class="bg-slate-950 text-cyan-400 w-5 h-5 rounded-full flex items-center justify-center text-[10px]"
-                    >0</span
-                >
-            </button>
         </header>
 
-        <!-- Hero Inmersivo -->
-        <section class="max-w-6xl mx-auto px-6 pt-36 pb-20 text-center relative">
-            <div class="absolute inset-0 -z-10 flex items-center justify-center">
-                <div class="w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px]"></div>
-                <div class="w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[100px]"></div>
-            </div>
-            <span
-                class="inline-block text-[10px] uppercase tracking-widest bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-3 py-1 rounded-full mb-6 font-semibold"
-                >E-Commerce & High-Performance Web</span
-            >
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 max-w-3xl mx-auto leading-tight">
-                Diseños que
-                <span class="bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent"
-                    >cautivan</span
-                >, plataformas que venden.
-            </h1>
-            <p class="text-slate-400 text-sm md:text-base max-w-xl mx-auto mb-10 font-light">
-                Creamos experiencias digitales únicas para negocios que rechazan lo ordinario y buscan destacar en el
-                mercado digital.
-            </p>
-            <div class="flex flex-wrap justify-center gap-3 text-[11px] text-slate-400 mb-8">
-                <span class="border border-slate-800 bg-slate-900/60 rounded-full px-3 py-1.5"
-                    >✦ Presupuesto claro</span
+        <!-- Menú móvil -->
+        <div
+            id="mobile-menu"
+            class="fixed inset-0 z-[75] bg-void/95 backdrop-blur-xl hidden flex-col justify-between p-8 md:hidden"
+        >
+            <div class="flex items-center justify-between">
+                <span class="font-display font-bold text-sm">Mercium<span class="text-acid">.</span></span>
+                <button
+                    onclick="toggleMobileMenu()"
+                    class="w-9 h-9 grid place-items-center rounded-xl border border-white/10 text-muted"
+                    aria-label="Cerrar menú"
                 >
-                <span class="border border-slate-800 bg-slate-900/60 rounded-full px-3 py-1.5"
-                    >◷ Entrega desde 7 días</span
-                >
-                <span class="border border-slate-800 bg-slate-900/60 rounded-full px-3 py-1.5">⌁ Soporte incluido</span>
+                    ✕
+                </button>
             </div>
-            <a
-                href="#productos"
-                class="inline-block bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold px-8 py-3.5 rounded-xl transition-all shadow-xl"
-            >
-                Explorar Catálogo Visual ↓
-            </a>
-        </section>
+            <nav class="flex flex-col gap-7 font-display text-3xl font-bold">
+                <a href="#catalogo" onclick="toggleMobileMenu()" class="hover:text-acid transition-colors">Catálogo</a>
+                <a href="#proceso" onclick="toggleMobileMenu()" class="hover:text-acid transition-colors">Proceso</a>
+                <a href="#confianza" onclick="toggleMobileMenu()" class="hover:text-acid transition-colors">Feedback</a>
+                <a href="#contacto" onclick="toggleMobileMenu()" class="hover:text-acid transition-colors">Contacto</a>
+            </nav>
+            <div class="flex flex-col gap-3">
+                <a
+                    href="https://wa.me/584246585219?text=Hola%20Enmanuel%2C%20vi%20tu%20vitrina%20Mercium%20y%20quiero%20hablar%20de%20un%20proyecto."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="bg-acid text-void font-display font-bold text-sm text-center rounded-xl px-5 py-3.5"
+                    >Hablar por WhatsApp</a
+                >
+                <p class="text-[10px] font-mono text-muted text-center uppercase tracking-widest">
+                    Mercium · demo conceptual
+                </p>
+            </div>
+        </div>
 
-        <!-- Catálogo Estilo Bento Grid -->
-        <section id="productos" class="max-w-6xl mx-auto px-6 py-12">
-            <div class="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-6 mb-8">
-                <div>
-                    <p class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">Catálogo Activo</p>
-                    <h2 class="text-2xl font-bold">Soluciones Disponibles</h2>
-                    <p id="results-count" class="text-xs text-slate-500 mt-2"></p>
+        <main id="inicio">
+            <!-- ============ HERO ============ -->
+            <section class="relative max-w-6xl mx-auto px-6 pt-36 md:pt-44 pb-16">
+                <div class="dots absolute inset-0 -z-20 opacity-40 [mask-image:radial-gradient(70%_60%_at_50%_0%,#000,transparent)]"></div>
+                <div class="absolute -top-32 -left-40 -z-10 w-[420px] h-[420px] rounded-full bg-acid/5 blur-[130px]"></div>
+                <div class="absolute top-20 -right-40 -z-10 w-[480px] h-[480px] rounded-full bg-indigo-500/5 blur-[130px]"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-14 items-center">
+                    <div>
+                        <span class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-acid border border-acid/25 bg-acid/5 rounded-full px-3.5 py-1.5 mb-7 fade-in">
+                            <span class="w-1.5 h-1.5 rounded-full bg-acid animate-pulse"></span>
+                            Mercium · vitrina de soluciones
+                        </span>
+
+                        <h1 class="font-display font-bold tracking-tight text-[2.6rem] leading-[1.05] md:text-6xl lg:text-[4.1rem] mb-7 fade-in">
+                            Diseños que
+                            <em class="font-serif italic font-normal text-acid">cautivan,</em><br />
+                            <span class="chrome">plataformas que venden.</span>
+                        </h1>
+
+                        <p class="text-muted text-sm md:text-base leading-relaxed max-w-xl mb-9 font-light fade-in">
+                            Mercium es una vitrina de soluciones digitales a la medida: tiendas, dashboards,
+                            marketplaces y portales con identidad propia para negocios que no se conforman con lo
+                            genérico. Esto es lo que puedo construir para ti.
+                        </p>
+
+                        <div class="flex flex-wrap gap-3.5 mb-9 fade-in">
+                            <a
+                                href="#catalogo"
+                                class="inline-flex items-center gap-2 bg-acid hover:bg-[#e6ff5c] text-void font-display font-bold text-[13px] px-7 py-3.5 rounded-xl transition-all hover:shadow-[0_0_40px_-8px_rgba(215,248,74,0.55)]"
+                            >
+                                Explorar catálogo
+                                <span aria-hidden="true">↓</span>
+                            </a>
+                            <a
+                                href="#proceso"
+                                class="inline-flex items-center gap-2 border border-line hover:border-white/25 text-ink/90 font-display font-semibold text-[13px] px-7 py-3.5 rounded-xl transition-all"
+                            >
+                                Cómo trabajo
+                            </a>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 font-mono text-[10px] text-muted fade-in">
+                            <span class="border border-line bg-white/[0.03] rounded-full px-3 py-1.5"
+                                >✦ Presupuesto claro</span
+                            >
+                            <span class="border border-line bg-white/[0.03] rounded-full px-3 py-1.5"
+                                >◷ Entrega desde 7 días</span
+                            >
+                            <span class="border border-line bg-white/[0.03] rounded-full px-3 py-1.5"
+                                >⌁ Soporte incluido</span
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Gota de mercurio -->
+                    <div class="relative hidden lg:flex items-center justify-center h-[420px]">
+                        <div class="blob"></div>
+                        <span
+                            class="absolute top-6 left-4 float-slow font-mono text-[10px] uppercase tracking-[0.18em] text-muted card-metal rounded-full px-3.5 py-2 border border-line"
+                            >UI / UX — pixel perfect</span
+                        >
+                        <span
+                            class="absolute top-14 right-0 float-slower font-mono text-[11px] uppercase tracking-[0.18em] text-acid card-metal rounded-full px-3.5 py-2 border border-acid/25"
+                            >+40 proyectos</span
+                        >
+                        <span
+                            class="absolute bottom-10 left-8 float-slower font-mono text-[10px] uppercase tracking-[0.18em] text-muted card-metal rounded-full px-3.5 py-2 border border-line"
+                            >E-Commerce</span
+                        >
+                        <span
+                            class="absolute bottom-4 right-6 float-slow font-mono text-[10px] uppercase tracking-[0.18em] text-muted card-metal rounded-full px-3.5 py-2 border border-line"
+                            >7—21 días</span
+                        >
+                    </div>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <label class="relative">
-                        <span class="sr-only">Buscar soluciones</span>
-                        <input
-                            id="search-input"
-                            type="search"
-                            placeholder="Buscar solución..."
-                            class="w-full sm:w-56 bg-[#111827] border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-slate-500 outline-none focus:border-cyan-400 transition-colors"
-                        />
-                    </label>
-                    <select
-                        id="sort-select"
-                        class="bg-[#111827] border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-300 outline-none focus:border-cyan-400"
-                    >
-                        <option value="featured">Ordenar: destacados</option>
-                        <option value="low">Precio: menor a mayor</option>
-                        <option value="high">Precio: mayor a menor</option>
-                        <option value="name">Nombre: A-Z</option>
-                    </select>
+
+                <div class="hidden lg:flex justify-center mt-14">
+                    <div class="h-9 w-px bg-gradient-to-b from-acid/60 to-transparent"></div>
                 </div>
-                <div class="flex gap-2 bg-[#1e293b]/50 p-1.5 rounded-xl border border-slate-800 self-start lg:self-end">
+            </section>
+
+            <!-- ============ MARQUEE ============ -->
+            <section class="marquee py-8 border-y border-line bg-white/[0.015]">
+                <div class="marquee-track font-display font-semibold text-sm tracking-wide">
+                    <span id="marquee-a" class="flex items-center gap-8 pr-8 text-muted"></span>
+                    <span id="marquee-b" class="flex items-center gap-8 pr-8 text-muted" aria-hidden="true"></span>
+                </div>
+            </section>
+
+            <!-- ============ CATÁLOGO ============ -->
+            <section id="catalogo" class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-10 reveal">
+                    <div>
+                        <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-acid mb-3">
+                            01 — Catálogo activo
+                        </p>
+                        <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                            Soluciones con <span class="chrome-soft">carácter propio</span>
+                        </h2>
+                        <p id="results-count" class="font-mono text-[11px] text-muted"></p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                        <label class="relative flex-1 sm:flex-none">
+                            <span class="sr-only">Buscar soluciones</span>
+                            <svg
+                                class="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <circle cx="11" cy="11" r="7" />
+                                <path d="m20 20-3.5-3.5" />
+                            </svg>
+                            <input
+                                id="search-input"
+                                type="search"
+                                placeholder="Buscar solución…"
+                                class="w-full sm:w-56 bg-raise border border-line rounded-xl px-4 py-3 pl-10 text-xs text-ink placeholder:text-muted/70 outline-none focus:border-acid/60 transition-colors [&::-webkit-search-cancel-button]:appearance-none"
+                            />
+                        </label>
+                        <select
+                            id="sort-select"
+                            class="bg-raise border border-line rounded-xl px-4 py-3 text-xs text-ink/80 outline-none focus:border-acid/60 transition-colors cursor-pointer"
+                        >
+                            <option value="featured">Ordenar: destacados</option>
+                            <option value="low">Precio: menor a mayor</option>
+                            <option value="high">Precio: mayor a menor</option>
+                            <option value="name">Nombre: A–Z</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-10 reveal">
                     <button
                         data-filter="all"
                         onclick="filterProducts('all', this)"
-                        class="px-3 py-1.5 rounded-lg text-xs bg-cyan-500 text-slate-950 font-bold transition-all cursor-pointer filter-btn"
+                        class="filter-btn flex items-center gap-1.5 font-mono text-[11px] px-4 py-2 rounded-lg border transition-all cursor-pointer bg-acid text-void border-acid font-bold"
                     >
-                        Todos
+                        Todos <span id="count-all" class="opacity-60"></span>
                     </button>
                     <button
                         data-filter="ecommerce"
                         onclick="filterProducts('ecommerce', this)"
-                        class="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white transition-all cursor-pointer filter-btn"
+                        class="filter-btn flex items-center gap-1.5 font-mono text-[11px] px-4 py-2 rounded-lg border border-line text-muted hover:text-ink transition-all cursor-pointer"
                     >
-                        Tiendas
+                        Tiendas <span id="count-ecommerce" class="opacity-60"></span>
                     </button>
                     <button
                         data-filter="custom"
                         onclick="filterProducts('custom', this)"
-                        class="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white transition-all cursor-pointer filter-btn"
+                        class="filter-btn flex items-center gap-1.5 font-mono text-[11px] px-4 py-2 rounded-lg border border-line text-muted hover:text-ink transition-all cursor-pointer"
                     >
-                        Sistemas
+                        Sistemas <span id="count-custom" class="opacity-60"></span>
                     </button>
                 </div>
-            </div>
 
-            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Inyectado por JS -->
-            </div>
-        </section>
+                <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                    <!-- Inyectado por JS -->
+                </div>
+            </section>
 
-        <!-- Carrito Desplegable (Drawer) -->
+            <!-- ============ PROCESO ============ -->
+            <section id="proceso" class="max-w-6xl mx-auto px-6 py-20 md:py-28 border-t border-line">
+                <div class="max-w-2xl mb-14 reveal">
+                    <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-acid mb-3">02 — Método</p>
+                    <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight mb-4">
+                        De la idea al lanzamiento, <span class="chrome-soft">sin fricción.</span>
+                    </h2>
+                    <p class="text-muted text-sm leading-relaxed font-light">
+                        Tres pasos claros que convierten una conversación en una página terminada, con comunicación
+                        constante y presupuesto definido desde el inicio.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div class="card-metal shine rounded-2xl p-7 reveal relative overflow-hidden">
+                        <span class="font-mono text-[11px] text-acid">01</span>
+                        <h3 class="font-display font-bold text-lg mt-4 mb-2">Descubrimiento</h3>
+                        <p class="text-xs text-muted leading-relaxed">
+                            Entiendo tu idea, tu público y lo que quieres transmitir. Definimos alcance, plazos y un
+                            presupuesto claro antes de escribir una línea de código.
+                        </p>
+                    </div>
+                    <div
+                        class="card-metal shine rounded-2xl p-7 reveal relative overflow-hidden"
+                        style="transition-delay: 90ms"
+                    >
+                        <span class="font-mono text-[11px] text-acid">02</span>
+                        <h3 class="font-display font-bold text-lg mt-4 mb-2">Diseño & Build</h3>
+                        <p class="text-xs text-muted leading-relaxed">
+                            Construyo la experiencia con identidad propia: estructura, visuales y micro-interacciones
+                            pensadas en conversión y en las personas que la usarán.
+                        </p>
+                    </div>
+                    <div
+                        class="card-metal shine rounded-2xl p-7 reveal relative overflow-hidden"
+                        style="transition-delay: 180ms"
+                    >
+                        <span class="font-mono text-[11px] text-acid">03</span>
+                        <h3 class="font-display font-bold text-lg mt-4 mb-2">Entrega & Soporte</h3>
+                        <p class="text-xs text-muted leading-relaxed">
+                            Recibes tu página funcionando, con explicaciones claras y soporte incluido para que siga
+                            evolucionando contigo.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ FEEDBACK ============ -->
+            <section id="confianza" class="max-w-6xl mx-auto px-6 py-20 md:py-28 border-t border-line">
+                <div class="max-w-2xl mb-14 reveal">
+                    <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-acid mb-3">03 — Feedback</p>
+                    <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight mb-4">
+                        Lo que se siente al <span class="chrome-soft">trabajar con Mercium</span>
+                    </h2>
+                    <p class="font-mono text-[10px] text-muted/70">
+                        /* Ejemplos de resultados conceptuales para demostrar el enfoque del servicio. */
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <figure class="card-metal rounded-2xl p-7 reveal">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span
+                                class="w-10 h-10 rounded-full grid place-items-center chrome font-display font-bold text-sm"
+                                >MR</span
+                            >
+                            <div>
+                                <figcaption class="font-display font-semibold text-xs">Mariana R.</figcaption>
+                                <p class="font-mono text-[9px] text-muted uppercase tracking-widest">Fundadora · Atelier</p>
+                            </div>
+                        </div>
+                        <blockquote class="text-xs text-muted leading-relaxed">
+                            "Mi tienda pasó de ser un catálogo a una experiencia que refleja mi marca. Los clientes lo
+                            notan desde la primera visita."
+                        </blockquote>
+                    </figure>
+                    <figure class="card-metal rounded-2xl p-7 reveal" style="transition-delay: 90ms">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span
+                                class="w-10 h-10 rounded-full grid place-items-center chrome font-display font-bold text-sm"
+                                >DJ</span
+                            >
+                            <div>
+                                <figcaption class="font-display font-semibold text-xs">Diego J.</figcaption>
+                                <p class="font-mono text-[9px] text-muted uppercase tracking-widest">CEO · SaaS</p>
+                            </div>
+                        </div>
+                        <blockquote class="text-xs text-muted leading-relaxed">
+                            "El dashboard quedó tan claro que mi equipo lo usa todos los días sin capacitación. El
+                            proceso fue transparente de principio a fin."
+                        </blockquote>
+                    </figure>
+                    <figure class="card-metal rounded-2xl p-7 reveal" style="transition-delay: 180ms">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span
+                                class="w-10 h-10 rounded-full grid place-items-center chrome font-display font-bold text-sm"
+                                >LV</span
+                            >
+                            <div>
+                                <figcaption class="font-display font-semibold text-xs">Lucía V.</figcaption>
+                                <p class="font-mono text-[9px] text-muted uppercase tracking-widest">Coach · Servicios</p>
+                            </div>
+                        </div>
+                        <blockquote class="text-xs text-muted leading-relaxed">
+                            "Necesitaba reservas online sin complicarme. Me entregaron una página elegante, rápida y que
+                            se ve única en mi rubro."
+                        </blockquote>
+                    </figure>
+                </div>
+
+                <!-- Métricas -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-12 reveal">
+                    <div class="card-metal rounded-2xl p-7">
+                        <p class="font-display font-bold text-4xl chrome">
+                            +<span class="count" data-target="40">0</span>
+                        </p>
+                        <p class="text-xs text-muted mt-2">proyectos conceptuales diseñados</p>
+                    </div>
+                    <div class="card-metal rounded-2xl p-7">
+                        <p class="font-display font-bold text-4xl chrome">
+                            <span class="count" data-target="7">0</span><span class="text-muted">—21</span>
+                        </p>
+                        <p class="text-xs text-muted mt-2">días de entrega estimada</p>
+                    </div>
+                    <div class="card-metal rounded-2xl p-7">
+                        <p class="font-display font-bold text-4xl chrome">
+                            <span class="count" data-target="100">0</span>%
+                        </p>
+                        <p class="text-xs text-muted mt-2">acompañamiento personalizado</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ CONTACTO ============ -->
+            <section id="contacto" class="max-w-6xl mx-auto px-6 py-20 md:py-28 border-t border-line">
+                <div class="max-w-2xl mb-12 reveal">
+                    <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-acid mb-3">04 — Contacto</p>
+                    <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight mb-4">
+                        Tu idea puede convertirse en una <span class="chrome-soft">experiencia.</span>
+                    </h2>
+                    <p class="text-muted text-sm leading-relaxed font-light">
+                        Apasionado por transformar conceptos en páginas atractivas, claras y funcionales. Este espacio
+                        muestra cómo una idea toma forma con identidad visual propia y una experiencia pensada para
+                        quienes la usarán.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+                    <div class="card-metal rounded-2xl p-7 reveal">
+                        <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-acid">Quién soy</span>
+                        <h3 class="font-display font-bold text-lg mt-3 mb-2">Diseño con intención</h3>
+                        <p class="text-xs text-muted leading-relaxed">
+                            Creo interfaces digitales que combinan estética, estructura y navegación sencilla para que
+                            cada proyecto comunique algo propio.
+                        </p>
+                    </div>
+                    <div class="card-metal rounded-2xl p-7 reveal" style="transition-delay: 90ms">
+                        <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-acid">Para quién</span>
+                        <h3 class="font-display font-bold text-lg mt-3 mb-2">Ideas que buscan destacar</h3>
+                        <p class="text-xs text-muted leading-relaxed">
+                            Emprendedores, marcas y negocios que necesitan convertir una visión, un producto o un
+                            servicio en una presencia web atractiva.
+                        </p>
+                    </div>
+                    <div class="card-metal rounded-2xl p-7 reveal" style="transition-delay: 180ms">
+                        <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-acid">Nota del proyecto</span>
+                        <h3 class="font-display font-bold text-lg mt-3 mb-2">Una demo, no una tienda real</h3>
+                        <p class="text-xs text-muted leading-relaxed">
+                            Mercium es un maquetado creado para demostrar cómo convierto ideas de clientes en páginas
+                            atractivas. Sin productos ni pagos reales.
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    class="card-metal rounded-2xl p-8 md:p-10 reveal relative overflow-hidden border-acid/20"
+                >
+                    <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-acid/10 blur-[100px] -z-10"></div>
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+                        <div>
+                            <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-acid mb-3">
+                                Hablemos — respuesta en menos de 24 h
+                            </p>
+                            <h3 class="font-display font-bold text-2xl mb-2">¿Tienes una idea para tu próximo proyecto?</h3>
+                            <p class="text-xs text-muted">Escríbeme y cuéntame qué tienes en mente.</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3 text-xs font-semibold shrink-0">
+                            <button
+                                id="copy-email"
+                                onclick="copyEmail()"
+                                class="inline-flex items-center justify-center gap-2 border border-line hover:border-acid/60 hover:text-acid rounded-xl px-5 py-3.5 transition-colors cursor-pointer font-mono"
+                                title="Copiar correo"
+                            >
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="12" height="12" rx="2" />
+                                    <path d="M5 15V5a2 2 0 0 1 2-2h10" />
+                                </svg>
+                                enmanuelpirela400@gmail.com
+                            </button>
+                            <a
+                                href="https://wa.me/584246585219?text=Hola%20Enmanuel%2C%20vi%20tu%20vitrina%20Mercium%20y%20quiero%20hablar%20de%20un%20proyecto."
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-flex items-center justify-center gap-2 bg-acid hover:bg-[#e6ff5c] text-void rounded-xl px-5 py-3.5 transition-all hover:shadow-[0_0_36px_-8px_rgba(215,248,74,0.5)]"
+                            >
+                                WhatsApp: +58 0424 658 5219
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ============ FOOTER ============ -->
+        <footer class="border-t border-line">
+            <div class="max-w-6xl mx-auto px-6 py-12">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                    <div>
+                        <span class="font-display font-bold text-sm"
+                            >Mercium<span class="text-acid">.</span></span
+                        >
+                        <p class="text-[11px] text-muted mt-2 max-w-xs leading-relaxed font-light">
+                            Vitrina de soluciones digitales con identidad propia. Demo conceptual — no es una tienda
+                            real, es una muestra de lo que puedo construir.
+                        </p>
+                    </div>
+                    <nav class="flex flex-wrap gap-6 text-[11px] text-muted font-medium">
+                        <a href="#catalogo" class="hover:text-ink transition-colors">Catálogo</a>
+                        <a href="#proceso" class="hover:text-ink transition-colors">Proceso</a>
+                        <a href="#confianza" class="hover:text-ink transition-colors">Feedback</a>
+                        <a href="#contacto" class="hover:text-ink transition-colors">Contacto</a>
+                    </nav>
+                </div>
+                <div
+                    class="mt-10 pt-6 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-[10px] text-muted/70"
+                >
+                    <p>© 2026 Mercium — Enmanuel Pirela</p>
+                    <p>
+                        Hecho a mano · HTML + Tailwind + JS
+                        <span class="text-acid">✦</span>
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- ============ CARRITO (drawer) ============ -->
         <div
             id="cart-overlay"
             onclick="toggleCart()"
-            class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity z-40"
+            class="fixed inset-0 bg-void/75 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity z-[60]"
         ></div>
         <div
             id="cart-drawer"
-            class="fixed inset-y-0 right-0 w-full md:w-96 bg-[#0f172a] border-l border-slate-800 p-6 shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col justify-between"
+            class="fixed inset-y-0 right-0 w-full md:w-[400px] bg-surface border-l border-line shadow-2xl transform translate-x-full drawer-in z-[65] flex flex-col"
         >
-            <div>
-                <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
-                    <h3 class="font-bold text-sm tracking-wide">Tu Selección Actual</h3>
-                    <button onclick="toggleCart()" class="text-slate-400 hover:text-white text-lg">✕</button>
-                </div>
-                <div id="cart-items" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-                    <!-- Items -->
-                </div>
-            </div>
-            <div class="border-t border-slate-800 pt-4">
-                <div class="flex justify-between mb-4 text-sm font-bold">
-                    <span class="text-slate-400">Total Estimado:</span>
-                    <span id="cart-total" class="text-cyan-400 text-lg">$0 USD</span>
+            <div class="flex items-center justify-between px-6 py-5 border-b border-line">
+                <div>
+                    <p class="font-mono text-[9px] uppercase tracking-[0.22em] text-acid">Tu selección</p>
+                    <h3 class="font-display font-bold text-sm mt-1">Servicios elegidos</h3>
                 </div>
                 <button
-                    onclick="checkout()"
-                    class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs transition-all cursor-pointer shadow-lg shadow-cyan-500/20"
+                    onclick="toggleCart()"
+                    class="w-9 h-9 grid place-items-center rounded-xl border border-white/10 text-muted hover:text-ink transition-colors"
+                    aria-label="Cerrar carrito"
                 >
-                    Iniciar Proyecto / Comprar
+                    ✕
                 </button>
+            </div>
+
+            <div id="cart-items" class="flex-1 overflow-y-auto px-6 py-5 space-y-4"></div>
+
+            <div class="border-t border-line px-6 py-5 space-y-3">
+                <div class="flex justify-between text-sm">
+                    <span class="text-muted">Total estimado</span>
+                    <span id="cart-total" class="font-display font-bold text-acid text-lg">$0 USD</span>
+                </div>
+                <div class="flex gap-3">
+                    <button
+                        id="clear-cart-btn"
+                        onclick="clearCart()"
+                        class="hidden border border-white/10 text-muted hover:text-rose-400 hover:border-rose-400/40 rounded-xl px-4 py-3 text-[11px] font-semibold transition-colors"
+                    >
+                        Vaciar
+                    </button>
+                    <button
+                        onclick="checkout()"
+                        class="flex-1 bg-acid hover:bg-[#e6ff5c] text-void font-display font-bold py-3 rounded-xl text-xs transition-all hover:shadow-[0_0_30px_-8px_rgba(215,248,74,0.5)]"
+                    >
+                        Iniciar proyecto →
+                    </button>
+                </div>
+                <p class="font-mono text-[9px] text-muted/60 text-center">
+                    Sin pagos reales · solo envío de tu idea
+                </p>
             </div>
         </div>
 
+        <!-- ============ VISTA RÁPIDA ============ -->
         <div
-            id="checkout-modal"
-            class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm"
+            id="quick-overlay"
+            class="fixed inset-0 z-[85] hidden items-center justify-center p-4 bg-void/85 backdrop-blur-md"
+            onclick="if (event.target === this) closeQuick()"
         >
             <div
-                class="w-full max-w-lg bg-[#0f172a] border border-slate-700 rounded-2xl shadow-2xl p-6 md:p-8 max-h-[90vh] overflow-y-auto"
+                id="quick-modal"
+                class="w-full max-w-2xl bg-surface border border-line rounded-2xl shadow-2xl overflow-hidden fade-in max-h-[92vh] overflow-y-auto"
+            >
+                <div id="quick-visual" class="relative border-b border-line bg-void"></div>
+                <div class="p-7">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <span id="quick-tag" class="font-mono text-[9px] uppercase tracking-[0.2em] text-acid border border-acid/25 rounded-full px-3 py-1"></span>
+                            <span id="quick-ref" class="font-mono text-[10px] text-muted"></span>
+                        </div>
+                        <button
+                            onclick="closeQuick()"
+                            class="w-9 h-9 grid place-items-center rounded-xl border border-white/10 text-muted hover:text-ink transition-colors"
+                            aria-label="Cerrar vista rápida"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                    <h3 id="quick-name" class="font-display font-bold text-2xl mb-2"></h3>
+                    <p id="quick-desc" class="text-sm text-muted leading-relaxed mb-6"></p>
+
+                    <div class="mb-7">
+                        <p class="font-mono text-[9px] uppercase tracking-[0.22em] text-acid mb-3">
+                            Lo que incluye
+                        </p>
+                        <ul id="quick-features" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></ul>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
+                        <div>
+                            <p class="font-mono text-[9px] uppercase tracking-[0.2em] text-muted">Inversión</p>
+                            <p id="quick-price" class="font-display font-bold text-2xl chrome"></p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button
+                                onclick="quickAddToCart()"
+                                class="bg-acid hover:bg-[#e6ff5c] text-void font-display font-bold text-xs px-6 py-3.5 rounded-xl transition-all"
+                            >
+                                Añadir al carrito
+                            </button>
+                            <a
+                                href="https://wa.me/584246585219?text=Hola%20Enmanuel%2C%20me%20interesa%20el%20proyecto%20"
+                                id="quick-wa"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="border border-line hover:border-acid/50 text-xs font-semibold px-6 py-3.5 rounded-xl transition-colors"
+                            >
+                                Consultar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ CHECKOUT ============ -->
+        <div
+            id="checkout-modal"
+            class="fixed inset-0 z-[88] hidden items-center justify-center p-4 bg-void/85 backdrop-blur-md"
+            onclick="if (event.target === this) closeCheckout()"
+        >
+            <div
+                class="w-full max-w-lg bg-surface border border-line rounded-2xl shadow-2xl p-6 md:p-8 max-h-[92vh] overflow-y-auto fade-in"
             >
                 <div class="flex justify-between items-start mb-6">
                     <div>
-                        <p class="text-cyan-400 text-[10px] font-bold uppercase tracking-widest mb-2">Paso final</p>
-                        <h3 class="text-xl font-bold">Cuéntanos sobre tu proyecto</h3>
+                        <p class="font-mono text-[9px] uppercase tracking-[0.24em] text-acid mb-2">Paso final</p>
+                        <h3 class="font-display font-bold text-xl">Cuéntanos sobre tu proyecto</h3>
                     </div>
                     <button
                         onclick="closeCheckout()"
-                        class="text-slate-400 hover:text-white text-xl"
+                        class="w-9 h-9 grid place-items-center rounded-xl border border-white/10 text-muted hover:text-ink transition-colors"
                         aria-label="Cerrar checkout"
                     >
                         ✕
                     </button>
                 </div>
-                <div id="checkout-summary" class="bg-[#111827] border border-slate-800 rounded-xl p-4 mb-5"></div>
+
+                <div id="checkout-summary" class="card-metal rounded-xl p-4 mb-5 space-y-2"></div>
+
                 <form id="checkout-form" class="space-y-4">
                     <div class="grid sm:grid-cols-2 gap-4">
-                        <label class="text-xs text-slate-400"
-                            >Nombre<input
+                        <label class="text-xs text-muted"
+                            >Nombre
+                            <input
                                 name="name"
                                 required
-                                class="mt-2 w-full bg-[#07090e] border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-cyan-400"
+                                placeholder="Tu nombre"
+                                class="mt-2 w-full bg-void border border-line rounded-lg px-3 py-3 text-sm text-ink outline-none focus:border-acid/60 placeholder:text-muted/40 transition-colors"
                         /></label>
-                        <label class="text-xs text-slate-400"
-                            >Email<input
+                        <label class="text-xs text-muted"
+                            >Email
+                            <input
                                 name="email"
                                 type="email"
                                 required
-                                class="mt-2 w-full bg-[#07090e] border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-cyan-400"
+                                placeholder="tu@email.com"
+                                class="mt-2 w-full bg-void border border-line rounded-lg px-3 py-3 text-sm text-ink outline-none focus:border-acid/60 placeholder:text-muted/40 transition-colors"
                         /></label>
                     </div>
-                    <label class="block text-xs text-slate-400"
-                        >Cuéntanos brevemente qué necesitas<textarea
+                    <label class="block text-xs text-muted"
+                        >Cuéntanos brevemente qué necesitas
+                        <textarea
                             name="brief"
                             rows="3"
                             required
-                            class="mt-2 w-full bg-[#07090e] border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-cyan-400"
+                            placeholder="Ej: quiero una tienda para mi marca de accesorios…"
+                            class="mt-2 w-full bg-void border border-line rounded-lg px-3 py-3 text-sm text-ink outline-none focus:border-acid/60 placeholder:text-muted/40 transition-colors resize-none"
                         ></textarea>
                     </label>
                     <button
                         type="submit"
-                        class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs transition-colors"
+                        class="w-full bg-acid hover:bg-[#e6ff5c] text-void font-display font-bold py-3.5 rounded-xl text-xs transition-all hover:shadow-[0_0_30px_-8px_rgba(215,248,74,0.5)]"
                     >
                         Solicitar presupuesto
                     </button>
-                    <p class="text-[10px] text-slate-500 text-center">
-                        No se realizará ningún cobro. Recibirás una respuesta en menos de 24 horas.
+                    <p class="font-mono text-[9px] text-muted/60 text-center">
+                        No se realiza ningún cobro · respuesta en menos de 24 h
                     </p>
                 </form>
-                <div id="checkout-success" class="hidden text-center py-6">
-                    <div class="text-3xl text-cyan-400 mb-3">✓</div>
-                    <h4 class="font-bold mb-2">Solicitud recibida</h4>
-                    <p class="text-xs text-slate-400">Gracias. Revisaremos tu idea y te contactaremos muy pronto.</p>
+
+                <div id="checkout-success" class="hidden text-center py-8">
+                    <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-acid/10 border border-acid/30 grid place-items-center pop-in">
+                        <svg class="w-7 h-7 text-acid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="m5 13 4 4L19 7" />
+                        </svg>
+                    </div>
+                    <h4 class="font-display font-bold mb-2">Solicitud recibida</h4>
+                    <p class="text-xs text-muted leading-relaxed max-w-xs mx-auto mb-6">
+                        Gracias. Revisaré tu idea y te escribiré muy pronto a tu correo.
+                    </p>
                     <button
                         onclick="closeCheckout()"
-                        class="mt-5 border border-slate-700 hover:border-cyan-400 text-xs font-semibold px-5 py-2.5 rounded-lg"
+                        class="border border-line hover:border-acid/50 text-xs font-semibold px-6 py-3 rounded-xl transition-colors"
                     >
                         Cerrar
                     </button>
@@ -239,288 +1067,492 @@
             </div>
         </div>
 
-        <!-- Información de contacto y contexto del proyecto -->
-        <section id="confianza" class="max-w-6xl mx-auto px-6 pt-20 pb-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div class="border-l-2 border-cyan-400 pl-5">
-                    <p class="text-2xl font-bold">+40</p>
-                    <p class="text-xs text-slate-500 mt-1">proyectos conceptuales diseñados</p>
-                </div>
-                <div class="border-l-2 border-cyan-400 pl-5">
-                    <p class="text-2xl font-bold">7-21 días</p>
-                    <p class="text-xs text-slate-500 mt-1">tiempo estimado de entrega</p>
-                </div>
-                <div class="border-l-2 border-cyan-400 pl-5">
-                    <p class="text-2xl font-bold">100%</p>
-                    <p class="text-xs text-slate-500 mt-1">acompañamiento personalizado</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="contacto" class="max-w-6xl mx-auto px-6 pt-12 pb-24 border-t border-slate-800/80">
-            <div class="max-w-2xl mb-10">
-                <p class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-3">Contacto y contexto</p>
-                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
-                    Tu idea puede convertirse en una experiencia.
-                </h2>
-                <p class="text-slate-400 text-sm md:text-base leading-relaxed">
-                    Soy una persona apasionada por transformar conceptos en páginas atractivas, claras y funcionales.
-                    Este espacio muestra cómo una idea puede tomar forma con una identidad visual propia y una
-                    experiencia pensada para las personas que la van a utilizar.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div class="bg-[#111827] border border-slate-800 rounded-2xl p-6">
-                    <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Quién soy</span>
-                    <h3 class="text-lg font-bold mt-3 mb-2">Diseño con intención</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        Creo interfaces digitales que combinan estética, estructura y una navegación sencilla para que
-                        cada proyecto comunique algo propio.
-                    </p>
-                </div>
-                <div class="bg-[#111827] border border-slate-800 rounded-2xl p-6">
-                    <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Para quién</span>
-                    <h3 class="text-lg font-bold mt-3 mb-2">Ideas que buscan destacar</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        Para emprendedores, marcas y negocios que necesitan convertir una visión, un producto o un
-                        servicio en una presencia web atractiva.
-                    </p>
-                </div>
-                <div class="bg-[#111827] border border-slate-800 rounded-2xl p-6">
-                    <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Nota del proyecto</span>
-                    <h3 class="text-lg font-bold mt-3 mb-2">Una demo, no una tienda real</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        Mercium-Shop es un maquetado simple creado para demostrar cómo puedo convertir las ideas de un
-                        cliente en páginas web atractivas, no una tienda con productos o pagos reales.
-                    </p>
-                </div>
-            </div>
-
-            <div class="mt-8 bg-cyan-500/5 border border-cyan-500/20 rounded-2xl p-6 md:p-8">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    <div>
-                        <p class="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-2">Hablemos</p>
-                        <h3 class="text-xl font-bold mb-2">¿Tienes una idea para tu próximo proyecto?</h3>
-                        <p class="text-xs text-slate-400">Escríbeme y cuéntame qué tienes en mente.</p>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3 text-xs font-semibold">
-                        <a
-                            href="mailto:enmanuelpirela400@gmail.com"
-                            class="border border-slate-700 hover:border-cyan-400 hover:text-cyan-400 rounded-xl px-4 py-3 transition-colors"
-                        >
-                            enmanuelpirela400@gmail.com
-                        </a>
-                        <a
-                            href="https://wa.me/584246585219"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 rounded-xl px-4 py-3 transition-colors"
-                        >
-                            WhatsApp: +58 0424 658 5219
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- ============ TOAST ============ -->
+        <div id="toast-wrap" class="fixed bottom-5 inset-x-0 z-[95] flex flex-col items-center gap-2 pointer-events-none px-4"></div>
 
         <script>
+            /* ---------------------------------- DATOS ---------------------------------- */
             const products = [
                 {
                     id: 1,
                     name: "Nexus E-Commerce",
-                    category: "ecommerce",
+                    cat: "ecommerce",
                     price: 350,
-                    tag: "Más Vendido",
-                    desc: "Tienda online de alta gama con pasarela de pagos integrada, animaciones fluidas y panel de control administrativo.",
-                    gradient: "from-cyan-500/10 to-blue-500/10",
+                    tag: "Más vendido",
+                    accent: "#5EEAD4",
+                    desc: "Tienda online de alta gama con pasarela de pagos integrada, animaciones fluidas y panel administrativo para gestionar tu catálogo.",
+                    features: ["Checkout integrado", "Panel administrativo", "Animaciones fluidas", "Optimización SEO"],
+                    visual: "store",
                 },
                 {
                     id: 2,
                     name: "System Dashboard Pro",
-                    category: "custom",
+                    cat: "custom",
                     price: 220,
-                    tag: "Alta Demanda",
+                    tag: "Alta demanda",
+                    accent: "#A78BFA",
                     desc: "Monitoreo en tiempo real, métricas avanzadas y control multiplataforma optimizado para servidores o negocios.",
-                    gradient: "from-indigo-500/10 to-purple-500/10",
+                    features: ["Métricas en vivo", "Alertas automáticas", "Multiplataforma", "Roles y permisos"],
+                    visual: "dash",
                 },
                 {
                     id: 3,
                     name: "Immersive Landing",
-                    category: "ecommerce",
+                    cat: "ecommerce",
                     price: 180,
-                    tag: "Entrega Rápida",
-                    desc: "Página de aterrizaje minimalista con estética futurista diseñada exclusivamente para elevar conversiones y ventas.",
-                    gradient: "from-purple-500/10 to-pink-500/10",
+                    tag: "Entrega rápida",
+                    accent: "#F472B6",
+                    desc: "Página de aterrizaje minimalista con estética futurista, diseñada exclusivamente para elevar conversiones y ventas.",
+                    features: ["Diseño a medida", "Copy de conversión", "Animaciones de entrada", "Formularios integrados"],
+                    visual: "land",
                 },
                 {
                     id: 4,
                     name: "Aurora Marketplace",
-                    category: "ecommerce",
+                    cat: "ecommerce",
                     price: 480,
                     tag: "Nuevo",
+                    accent: "#34D399",
                     desc: "Marketplace escalable para múltiples vendedores, con gestión de inventario, perfiles de tienda y checkout optimizado.",
-                    gradient: "from-emerald-500/10 to-cyan-500/10",
+                    features: ["Multi-vendedor", "Gestión de inventario", "Perfiles de tienda", "Checkout optimizado"],
+                    visual: "mart",
                 },
                 {
                     id: 5,
                     name: "Conversion Lab",
-                    category: "ecommerce",
+                    cat: "ecommerce",
                     price: 260,
                     tag: "Optimización",
+                    accent: "#FBBF24",
                     desc: "Sistema de páginas de campaña preparado para experimentar con ofertas, formularios y recorridos de conversión medibles.",
-                    gradient: "from-amber-500/10 to-orange-500/10",
+                    features: ["Pruebas A/B", "Embudos medibles", "Variantes de oferta", "Dashboard de campañas"],
+                    visual: "conv",
                 },
                 {
                     id: 6,
                     name: "Atlas Booking",
-                    category: "ecommerce",
+                    cat: "ecommerce",
                     price: 390,
                     tag: "Popular",
+                    accent: "#60A5FA",
                     desc: "Plataforma de reservas con disponibilidad en tiempo real, recordatorios automáticos y experiencia de compra sin fricción.",
-                    gradient: "from-sky-500/10 to-indigo-500/10",
+                    features: ["Disponibilidad en vivo", "Recordatorios automáticos", "Pasarela de pagos", "Gestión de agenda"],
+                    visual: "book",
                 },
                 {
                     id: 7,
                     name: "Pulse CRM",
-                    category: "custom",
+                    cat: "custom",
                     price: 320,
                     tag: "Productividad",
+                    accent: "#FB7185",
                     desc: "CRM ligero para centralizar contactos, oportunidades y seguimientos con una interfaz clara para equipos comerciales.",
-                    gradient: "from-rose-500/10 to-orange-500/10",
+                    features: ["Pipeline de ventas", "Contactos centralizados", "Tareas y recordatorios", "Reportes rápidos"],
+                    visual: "crm",
                 },
                 {
                     id: 8,
                     name: "Signal Analytics",
-                    category: "custom",
+                    cat: "custom",
                     price: 290,
-                    tag: "Datos Claros",
-                    desc: "Panel analítico con indicadores clave, filtros dinámicos y reportes visuales para tomar decisiones con más contexto.",
-                    gradient: "from-violet-500/10 to-fuchsia-500/10",
+                    tag: "Datos claros",
+                    accent: "#818CF8",
+                    desc: "Panel analítico con indicadores clave, filtros dinámicos y reportes visuales para decidir con más contexto.",
+                    features: ["KPIs en vivo", "Filtros dinámicos", "Reportes exportables", "Vista de tendencias"],
+                    visual: "analytics",
                 },
                 {
                     id: 9,
                     name: "Orbit Client Portal",
-                    category: "custom",
+                    cat: "custom",
                     price: 410,
                     tag: "Premium",
+                    accent: "#38BDF8",
                     desc: "Portal privado para compartir avances, archivos y aprobaciones en un espacio elegante diseñado para tus clientes.",
-                    gradient: "from-teal-500/10 to-blue-500/10",
+                    features: ["Área privada por cliente", "Intercambio de archivos", "Hitos y aprobaciones", "Historial de actividad"],
+                    visual: "portal",
                 },
             ];
 
+            const cats = { all: "Todos", ecommerce: "Tiendas", custom: "Sistemas" };
+
             let activeFilter = "all";
             let cart = JSON.parse(localStorage.getItem("mercium-cart") || "[]");
+            let quickId = null;
+
+            /* ---------------------------------- UTILS ---------------------------------- */
+            const $ = id => document.getElementById(id);
 
             function formatPrice(price) {
                 return new Intl.NumberFormat("en-US").format(price);
             }
 
+            function esc(s) {
+                return s.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            }
+
+            /* ------------------------- MOCKUPS CSS POR PRODUCTO ------------------------- */
+            function frame(inner) {
+                return `<div class="mb-frame h-full">
+                    <div class="mb-bar">
+                        <span class="mb-dot r"></span><span class="mb-dot y"></span><span class="mb-dot g"></span>
+                        <span class="mb-url"></span>
+                    </div>
+                    <div class="p-3" style="display:flex;flex-direction:column;gap:8px;height:calc(100% - 30px)">${inner}</div>
+                </div>`;
+            }
+
+            function glowOverlay(c) {
+                return `<div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(130px 90px at 50% 0%, ${c}22, transparent 70%)"></div>`;
+            }
+
+            function mockup(p) {
+                const c = p.accent;
+                let body = "";
+                if (p.visual === "store") {
+                    body = frame(`
+                        <div class="flex items-center gap-2 rounded-lg px-2 py-1.5" style="background:linear-gradient(90deg,${c}22,transparent);border:1px solid ${c}30">
+                            <span class="w-1.5 h-1.5 rounded-full" style="background:${c}"></span>
+                            <span class="mb-line" style="width:45%;background:rgba(255,255,255,.25)"></span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 flex-1">
+                            ${[1, 2, 3].map(i => `
+                                <div class="mb-tile flex flex-col justify-between p-1.5" style="border-color:${c}25">
+                                    <div class="h-5 rounded-md" style="background:linear-gradient(145deg,${c}66,transparent)"></div>
+                                    <span class="mb-line" style="width:75%"></span>
+                                    <span class="text-[5px] leading-none" style="color:${c}">$${(88 + i * 24)}</span>
+                                </div>`).join("")}
+                        </div>
+                        <div class="flex justify-end"><span class="mb-chip" style="background:${c};color:#05060B;border:none">Carrito</span></div>
+                    `);
+                } else if (p.visual === "dash") {
+                    body = frame(`
+                        <div class="grid grid-cols-[22px_1fr] gap-2 flex-1">
+                            <div class="flex flex-col items-center gap-1.5 py-1">
+                                <div class="w-4 h-4 rounded-md" style="background:${c}"></div>
+                                <span class="w-2 h-2 rounded-md bg-white/10"></span>
+                                <span class="w-2 h-2 rounded-md bg-white/10"></span>
+                                <span class="w-2 h-2 rounded-md bg-white/10"></span>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <div class="grid grid-cols-3 gap-1.5">
+                                    ${[1, 2, 3].map(i => `
+                                        <div class="mb-tile p-1.5 flex flex-col gap-1">
+                                            <span class="mb-line" style="width:60%"></span>
+                                            <span class="block text-[6px] leading-none" style="color:${c}">${i * 24}k</span>
+                                        </div>`).join("")}
+                                </div>
+                                <div class="mb-tile flex items-end gap-1.5 p-2 flex-1" style="border-color:${c}25">
+                                    ${[38, 65, 42, 80, 54, 72, 46].map((h, i) => `
+                                        <div class="flex-1 rounded-sm" style="height:${h}%;background:linear-gradient(180deg,${c},${c}55);opacity:${i === 4 ? 1 : 0.5}"></div>`).join("")}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="mb-chip" style="color:${c}">● En línea</span>
+                            <span class="mb-chip">Exportar</span>
+                        </div>
+                    `);
+                } else if (p.visual === "land") {
+                    body = frame(`
+                        <div class="relative flex-1 grid place-items-center overflow-hidden rounded-lg mb-tile" style="border-color:${c}25">
+                            <div class="absolute inset-0" style="background:radial-gradient(120px 60px at 50% 30%,${c}33,transparent)"></div>
+                            <div class="relative flex flex-col items-center gap-1.5 px-4">
+                                <span class="mb-line block" style="width:80%;height:6px;border-radius:6px;background:linear-gradient(90deg,${c},rgba(255,255,255,.35))"></span>
+                                <span class="mb-line" style="width:55%"></span>
+                                <span class="mt-1.5 rounded-full px-2.5 py-1 text-[6px] leading-none" style="background:${c};color:#05060B">Empezar</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="mb-line" style="width:22%"></span>
+                            <span class="mb-line" style="width:14%;background:${c}66"></span>
+                            <span class="mb-line" style="width:18%"></span>
+                        </div>
+                    `);
+                } else if (p.visual === "mart") {
+                    body = frame(`
+                        <div class="grid grid-cols-2 gap-2 flex-1">
+                            ${[1, 2, 3, 4].map(i => `
+                                <div class="mb-tile p-2 flex flex-col gap-1 justify-between" style="border-color:${c}25">
+                                    <div class="flex items-center gap-1">
+                                        <span class="w-3 h-3 rounded-full" style="background:linear-gradient(145deg,${c},${c}55)"></span>
+                                        <span class="mb-line" style="width:50%"></span>
+                                    </div>
+                                    <span class="mb-line" style="width:80%"></span>
+                                    <span class="flex items-center justify-between mt-0.5">
+                                        <span class="mb-line" style="width:28%"></span>
+                                        <span class="text-[5px] leading-none" style="color:${c}">★ ${(4 + (i % 3) * 0.2).toFixed(1)}</span>
+                                    </span>
+                                </div>`).join("")}
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="mb-chip" style="color:${c}">+ 2 vendedores</span>
+                            <span class="mb-chip">Ver todo</span>
+                        </div>
+                    `);
+                } else if (p.visual === "conv") {
+                    body = frame(`
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="mb-tile p-2 flex flex-col gap-1.5">
+                                <span class="mb-chip" style="color:${c};align-self:flex-start">A / Control</span>
+                                ${[60, 80, 45].map(h => `<span class="mb-line" style="width:${h}%;background:rgba(255,255,255,.18)"></span>`).join("")}
+                            </div>
+                            <div class="mb-tile p-2 flex flex-col gap-1.5" style="border-color:${c}40">
+                                <span class="mb-chip" style="background:${c};color:#05060B;border:none;align-self:flex-start">B / Variante</span>
+                                ${[75, 95, 65].map(h => `<span class="mb-line" style="width:${h}%;background:linear-gradient(90deg,${c},${c}66)"></span>`).join("")}
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center justify-end gap-1">
+                            ${[100, 68, 42].map((w, i) => `
+                                <span class="rounded-sm" style="width:${w}%;height:8px;background:linear-gradient(90deg,${c},${c}33);opacity:${1 - i * 0.28}"></span>`).join("")}
+                        </div>
+                    `);
+                } else if (p.visual === "book") {
+                    body = frame(`
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-1.5">
+                                ${["L", "M", "X"].map((d, i) => `<span class="text-[6px] leading-none rounded-md border px-1.5 py-1" style="border-color:${c}36;color:${i === 2 ? "#05060B" : "rgba(255,255,255,.5)"};background:${i === 2 ? c : "transparent"}">${d}</span>`).join("")}
+                            </div>
+                            <span class="mb-chip" style="color:${c}">2026</span>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1 flex-1 content-start">
+                            ${Array.from({ length: 14 }, (_, i) => `
+                                <div class="aspect-square rounded-md border flex items-center justify-center text-[5px] leading-none" style="${i === 9 ? `background:${c};color:#05060B;border-color:${c}` : i === 12 ? `border-color:${c}55;color:${c}` : "border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.4)"}">${i + 4}</div>`).join("")}
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="mb-chip" style="background:${c};color:#05060B;border:none">Disponible</span>
+                            <span class="mb-line" style="width:30%"></span>
+                        </div>
+                    `);
+                } else if (p.visual === "crm") {
+                    body = frame(`
+                        <div class="grid grid-cols-3 gap-1.5 flex-1">
+                            ${[0, 1, 2].map(col => `
+                                <div class="flex flex-col gap-1.5 rounded-lg border border-white/10 p-1.5" style="${col === 1 ? `border-color:${c}40;background:${c}0d` : ""}">
+                                    <span class="mb-chip self-start" style="${col === 1 ? `background:${c};color:#05060B;border:none` : ""}">${["Nuevo", "En curso", "Cierre"][col]}</span>
+                                    ${[0, 1].map(row => `
+                                        <div class="mb-tile p-1.5 flex flex-col gap-1" style="${col === 1 && row === 0 ? `border-color:${c}55` : ""}">
+                                            <span class="flex items-center gap-1">
+                                                <span class="w-2 h-2 rounded-full" style="background:${c}"></span>
+                                                <span class="mb-line" style="width:55%"></span>
+                                            </span>
+                                            <span class="mb-line" style="width:75%"></span>
+                                        </div>`).join("")}
+                                </div>`).join("")}
+                        </div>
+                    `);
+                } else if (p.visual === "analytics") {
+                    body = frame(`
+                        <div class="grid grid-cols-3 gap-1.5">
+                            ${[["Ventas", "12.4k"], ["Visitas", "8.2k"], ["Conv.", "3.6%"]].map(([l, v]) => `
+                                <div class="mb-tile p-1.5 flex flex-col gap-1">
+                                    <span class="mb-line" style="width:55%"></span>
+                                    <span class="text-[7px] leading-none font-bold" style="color:${c}">${v}</span>
+                                </div>`).join("")}
+                        </div>
+                        <div class="mb-tile flex-1 p-1.5">
+                            <svg viewBox="0 0 100 36" class="w-full h-full" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="l${p.id}" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="${c}" stop-opacity="0.5"/>
+                                        <stop offset="100%" stop-color="${c}" stop-opacity="0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M0,30 L14,26 L26,28 L38,18 L52,21 L64,12 L78,16 L90,6 L100,9 L100,36 L0,36 Z" fill="url(#l${p.id})"/>
+                                <path d="M0,30 L14,26 L26,28 L38,18 L52,21 L64,12 L78,16 L90,6 L100,9" fill="none" stroke="${c}" stroke-width="1.6"/>
+                            </svg>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="mb-line" style="width:32%"></span>
+                            <span class="text-[5px] leading-none" style="color:${c}">▲ +18%</span>
+                        </div>
+                    `);
+                } else if (p.visual === "portal") {
+                    body = frame(`
+                        <div class="flex items-center gap-2 rounded-lg border p-1.5" style="border-color:${c}30;background:${c}0d">
+                            <span class="w-3.5 h-3.5 rounded-full grid place-items-center text-[6px] leading-none font-bold" style="background:${c};color:#05060B">E</span>
+                            <span class="mb-line" style="width:40%"></span>
+                            <span class="mb-chip ml-auto" style="color:${c}">bienvenido</span>
+                        </div>
+                        <div class="flex-1 flex flex-col gap-1.5">
+                            ${[["brief-final.pdf", "v2.1"], ["mockups.png", "12MB"], ["feedback.txt", "Nuevo"]].map(([f, s], i) => `
+                                <div class="mb-tile flex items-center gap-1.5 p-1.5" style="${i === 2 ? `border-color:${c}55` : ""}">
+                                    <span class="w-2 h-2 rounded-sm" style="background:${c}"></span>
+                                    <span class="mb-line" style="width:45%"></span>
+                                    <span class="mb-chip ml-auto">${s}</span>
+                                </div>`).join("")}
+                        </div>
+                        <div class="flex gap-1.5 items-end">
+                            <div class="mb-tile rounded-lg p-1.5 flex flex-col gap-1 flex-1">
+                                <span class="mb-line" style="width:75%"></span>
+                                <span class="mb-line" style="width:55%"></span>
+                            </div>
+                            <span class="w-3 h-3 rounded-full" style="background:${c}"></span>
+                        </div>
+                    `);
+                }
+                return `<div class="relative h-full">${glowOverlay(c)}${body}</div>`;
+            }
+
+            /* ---------------------------------- RENDER ---------------------------------- */
             function renderProducts() {
-                const grid = document.getElementById("product-grid");
-                grid.innerHTML = "";
-                const search = document.getElementById("search-input").value.trim().toLowerCase();
-                const sort = document.getElementById("sort-select").value;
-                let filtered =
-                    activeFilter === "all" ? [...products] : products.filter(p => p.category === activeFilter);
-                filtered = filtered.filter(p => `${p.name} ${p.desc} ${p.tag}`.toLowerCase().includes(search));
+                const grid = $("product-grid");
+                const search = $("search-input").value.trim().toLowerCase();
+                const sort = $("sort-select").value;
+
+                let filtered = activeFilter === "all" ? [...products] : products.filter(p => p.cat === activeFilter);
+                filtered = filtered.filter(p =>
+                    `${p.name} ${p.desc} ${p.tag} ${cats[p.cat]}`.toLowerCase().includes(search)
+                );
                 filtered.sort((a, b) => {
                     if (sort === "low") return a.price - b.price;
                     if (sort === "high") return b.price - a.price;
                     if (sort === "name") return a.name.localeCompare(b.name);
                     return a.id - b.id;
                 });
-                document.getElementById("results-count").innerText =
-                    `${filtered.length} ${filtered.length === 1 ? "solución encontrada" : "soluciones encontradas"}`;
+
+                $("results-count").innerText = `${String(filtered.length).padStart(2, "0")} ${filtered.length === 1 ? "solución disponible" : "soluciones disponibles"} · ${cats[activeFilter].toLowerCase()}`;
 
                 if (!filtered.length) {
-                    grid.innerHTML = `<div class="md:col-span-3 border border-dashed border-slate-700 rounded-2xl p-12 text-center"><p class="text-lg font-bold mb-2">No encontramos esa solución</p><p class="text-xs text-slate-500">Prueba otra búsqueda o cambia la categoría.</p></div>`;
+                    grid.innerHTML = `
+                        <div class="md:col-span-2 xl:col-span-3 card-metal rounded-2xl p-14 text-center">
+                            <p class="text-3xl mb-3">⌁</p>
+                            <p class="font-display font-bold text-lg mb-2">No encontramos esa solución</p>
+                            <p class="text-xs text-muted">Prueba otra búsqueda o cambia la categoría.</p>
+                        </div>`;
                     return;
                 }
 
-                filtered.forEach(p => {
-                    grid.innerHTML += `
-                    <div class="group relative bg-[#111827] border border-slate-800 hover:border-cyan-500/50 rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-br ${p.gradient} opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                        <div>
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-[10px] bg-slate-800 text-cyan-400 px-3 py-1 rounded-full font-bold uppercase tracking-wider">${p.tag}</span>
-                                <span class="text-xs text-slate-500 font-mono">#0${p.id}</span>
-                            </div>
-                            <h3 class="text-lg font-bold mb-2 group-hover:text-cyan-400 transition-colors">${p.name}</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed mb-6">${p.desc}</p>
-                        </div>
-                        <div class="flex justify-between items-center border-t border-slate-800/80 pt-4 relative z-10">
-                            <div>
-                                <p class="text-[10px] text-slate-500 uppercase">Inversión</p>
-                                <span class="text-xl font-extrabold text-cyan-400">$${formatPrice(p.price)} <span class="text-xs text-slate-400 font-normal">USD</span></span>
-                            </div>
-                            <button onclick="addToCart(${p.id})" class="bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl border border-slate-700 transition-all cursor-pointer">
-                                Añadir al Carrito
+                grid.innerHTML = filtered
+                    .map((p, i) => {
+                        const inCart = cart.find(item => item.id === p.id);
+                        const badge =
+                            inCart && inCart.quantity >= 1
+                                ? `<span class="absolute top-3 left-3 z-20 font-mono text-[9px] uppercase tracking-widest bg-acid text-void rounded-full px-2.5 py-1">En carrito ×${inCart.quantity}</span>`
+                                : "";
+                        return `
+                        <article class="tilt card-metal shine group relative rounded-2xl overflow-hidden reveal flex flex-col transition-transform duration-300 will-change-transform" data-id="${p.id}" style="transition-delay:${(i % 3) * 70}ms">
+                            ${badge}
+                            <button
+                                onclick="openQuick(${p.id})"
+                                class="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300 font-mono text-[9px] uppercase tracking-widest text-ink bg-void/80 border border-white/10 rounded-full px-3 py-1.5 cursor-pointer backdrop-blur"
+                            >
+                                Vista rápida ⤢
                             </button>
-                        </div>
-                    </div>
-                `;
+                            <div class="relative h-44 p-3">
+                                <div class="h-full">${mockup(p)}</div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent pointer-events-none"></div>
+                            </div>
+                            <div class="p-6 pt-3 flex flex-col flex-1 relative z-10">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="font-mono text-[9px] uppercase tracking-[0.2em] rounded-full border border-white/12 px-3 py-1" style="color:${p.accent};border-color:${p.accent}40">${p.tag}</span>
+                                    <span class="font-mono text-[10px] text-muted">#0${p.id}</span>
+                                </div>
+                                <h3 class="font-display font-bold text-lg mb-2 transition-colors group-hover:text-acid">${p.name}</h3>
+                                <p class="text-xs text-muted leading-relaxed mb-6 font-light">${p.desc}</p>
+                                <div class="flex items-center justify-between border-t border-line pt-4 mt-auto">
+                                    <div>
+                                        <p class="font-mono text-[9px] uppercase tracking-widest text-muted">Inversión</p>
+                                        <span class="font-display font-extrabold text-xl chrome">$${formatPrice(p.price)} <span class="text-[10px] text-muted font-normal">USD</span></span>
+                                    </div>
+                                    <button
+                                        onclick="addToCart(${p.id})"
+                                        class="bg-line/70 hover:bg-acid hover:text-void text-xs font-display font-bold px-4 py-2.5 rounded-xl border border-white/5 transition-all cursor-pointer"
+                                    >
+                                        Añadir +
+                                    </button>
+                                </div>
+                            </div>
+                        </article>`;
+                    })
+                    .join("");
+                observeReveals(grid);
+            }
+
+            function updateFilterCounts() {
+                ["all", "ecommerce", "custom"].forEach(k => {
+                    const el = $("count-" + k);
+                    if (el) el.innerText = k === "all" ? products.length : products.filter(p => p.cat === k).length;
                 });
             }
 
             function filterProducts(cat, button) {
                 activeFilter = cat;
                 document.querySelectorAll(".filter-btn").forEach(btn => {
-                    btn.classList.remove("bg-cyan-500", "text-slate-950", "font-bold");
-                    btn.classList.add("text-slate-400");
+                    btn.classList.remove("bg-acid", "text-void", "border-acid", "font-bold");
+                    btn.classList.add("border-line", "text-muted");
                 });
-                button.classList.add("bg-cyan-500", "text-slate-950", "font-bold");
-                button.classList.remove("text-slate-400");
+                button.classList.add("bg-acid", "text-void", "border-acid", "font-bold");
+                button.classList.remove("border-line", "text-muted");
                 renderProducts();
             }
 
-            function addToCart(id) {
+            /* ---------------------------------- CARRITO ---------------------------------- */
+            function addToCart(id, silent) {
                 const existing = cart.find(item => item.id === id);
-                if (existing) {
-                    existing.quantity += 1;
-                } else {
-                    cart.push({ id, quantity: 1 });
-                }
+                if (existing) existing.quantity += 1;
+                else cart.push({ id, quantity: 1 });
                 updateCartUI();
-                openCart();
+                if (!silent) {
+                    const p = products.find(x => x.id === id);
+                    showToast(`"${p.name}" añadido al carrito`, "Ver carrito", toggleCart);
+                }
             }
 
             function updateCartUI() {
                 localStorage.setItem("mercium-cart", JSON.stringify(cart));
-                const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-                document.getElementById("cart-count").innerText = itemCount;
-                const container = document.getElementById("cart-items");
-                container.innerHTML = "";
+                const count = cart.reduce((s, i) => s + i.quantity, 0);
+                $("cart-count").innerText = count;
 
+                const container = $("cart-items");
+                container.innerHTML = "";
                 let total = 0;
+
                 if (!cart.length) {
-                    container.innerHTML = `<div class="text-center py-12"><p class="text-2xl mb-3">🛒</p><p class="text-sm font-bold">Tu carrito está vacío</p><p class="text-xs text-slate-500 mt-2">Añade una solución para comenzar.</p></div>`;
+                    container.innerHTML = `
+                        <div class="text-center py-16">
+                            <p class="text-3xl mb-4 opacity-70">🛒</p>
+                            <p class="font-display font-bold text-sm mb-2">Tu carrito está vacío</p>
+                            <p class="text-xs text-muted mb-6">Añade una solución para comenzar.</p>
+                            <button onclick="toggleCart()" class="text-xs font-bold text-acid hover:underline">Ir al catálogo →</button>
+                        </div>`;
+                    $("clear-cart-btn").classList.add("hidden");
+                    $("cart-total").innerText = "$0 USD";
+                    return;
                 }
+
+                $("clear-cart-btn").classList.remove("hidden");
                 cart.forEach(item => {
-                    const product = products.find(p => p.id === item.id);
-                    if (!product) return;
-                    total += product.price * item.quantity;
+                    const p = products.find(x => x.id === item.id);
+                    if (!p) return;
+                    total += p.price * item.quantity;
                     container.innerHTML += `
-                    <div class="bg-[#111827] p-3.5 rounded-xl border border-slate-800">
-                        <div class="flex justify-between gap-3">
-                            <div><p class="font-bold text-xs">${product.name}</p><p class="text-cyan-400 text-xs font-mono font-bold">$${formatPrice(product.price)} USD</p></div>
-                            <button onclick="removeFromCart(${product.id})" class="text-slate-500 hover:text-rose-400 text-xs">Eliminar</button>
-                        </div>
-                        <div class="flex items-center gap-3 mt-3">
-                            <button onclick="changeQuantity(${product.id}, -1)" class="w-7 h-7 rounded-md border border-slate-700 text-slate-300 hover:border-cyan-400">−</button>
-                            <span class="text-xs font-bold w-4 text-center">${item.quantity}</span>
-                            <button onclick="changeQuantity(${product.id}, 1)" class="w-7 h-7 rounded-md border border-slate-700 text-slate-300 hover:border-cyan-400">+</button>
-                            <span class="text-xs text-slate-500 ml-auto">$${formatPrice(product.price * item.quantity)}</span>
-                        </div>
-                    </div>
-                `;
+                        <div class="card-metal rounded-xl p-4">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-9 h-9 rounded-lg shrink-0 grid place-items-center text-[13px] font-bold font-display" style="background:${p.accent}20;color:${p.accent}">${p.name[0]}</span>
+                                    <div>
+                                        <p class="font-display font-bold text-xs">${p.name}</p>
+                                        <p class="font-mono text-[10px] font-bold" style="color:${p.accent}">$${formatPrice(p.price)} USD</p>
+                                    </div>
+                                </div>
+                                <button onclick="removeFromCart(${p.id})" class="text-muted hover:text-rose-400 text-xs transition-colors" aria-label="Eliminar ${p.name}">✕</button>
+                            </div>
+                            <div class="flex items-center justify-between mt-4">
+                                <div class="flex items-center gap-2.5">
+                                    <button onclick="changeQuantity(${p.id}, -1)" class="w-7 h-7 rounded-lg border border-white/10 text-muted hover:border-acid/50 hover:text-acid transition-colors cursor-pointer">−</button>
+                                    <span class="font-mono text-xs font-bold w-5 text-center">${item.quantity}</span>
+                                    <button onclick="changeQuantity(${p.id}, 1)" class="w-7 h-7 rounded-lg border border-white/10 text-muted hover:border-acid/50 hover:text-acid transition-colors cursor-pointer">+</button>
+                                </div>
+                                <span class="font-mono text-xs text-ink/80 font-bold">$${formatPrice(p.price * item.quantity)}</span>
+                            </div>
+                        </div>`;
                 });
-                document.getElementById("cart-total").innerText = `$${formatPrice(total)} USD`;
+                $("cart-total").innerText = `$${formatPrice(total)} USD`;
             }
 
             function changeQuantity(id, amount) {
-                const item = cart.find(entry => entry.id === id);
+                const item = cart.find(e => e.id === id);
                 if (!item) return;
                 item.quantity += amount;
                 if (item.quantity <= 0) removeFromCart(id);
@@ -528,59 +1560,314 @@
             }
 
             function removeFromCart(id) {
-                cart = cart.filter(item => item.id !== id);
+                cart = cart.filter(i => i.id !== id);
                 updateCartUI();
+            }
+
+            function clearCart() {
+                cart = [];
+                updateCartUI();
+                showToast("Carrito vaciado", null, null);
             }
 
             function toggleCart() {
-                const drawer = document.getElementById("cart-drawer");
-                const overlay = document.getElementById("cart-overlay");
-                const isClosed = drawer.classList.contains("translate-x-full");
-                drawer.classList.toggle("translate-x-full", !isClosed);
-                overlay.classList.toggle("opacity-0", !isClosed);
-                overlay.classList.toggle("pointer-events-none", !isClosed);
+                const drawer = $("cart-drawer");
+                const overlay = $("cart-overlay");
+                const closed = drawer.classList.contains("translate-x-full");
+                drawer.classList.toggle("translate-x-full", !closed);
+                overlay.classList.toggle("opacity-0", !closed);
+                overlay.classList.toggle("pointer-events-none", !closed);
             }
 
             function openCart() {
-                const drawer = document.getElementById("cart-drawer");
+                const drawer = $("cart-drawer");
                 if (drawer.classList.contains("translate-x-full")) toggleCart();
             }
 
-            function closeCheckout() {
-                document.getElementById("checkout-modal").classList.add("hidden");
-                document.getElementById("checkout-modal").classList.remove("flex");
-                document.getElementById("checkout-form").classList.remove("hidden");
-                document.getElementById("checkout-success").classList.add("hidden");
+            /* ---------------------------------- TOAST ---------------------------------- */
+            function showToast(message, actionLabel, actionFn) {
+                const wrap = $("toast-wrap");
+                const toast = document.createElement("div");
+                toast.className =
+                    "toast-enter pointer-events-auto flex items-center gap-3 bg-raise border border-acid/25 rounded-xl pl-5 pr-3 py-3 shadow-2xl shadow-black/50 max-w-sm w-full";
+                toast.innerHTML = `
+                    <span class="w-6 h-6 shrink-0 rounded-full bg-acid/15 text-acid grid place-items-center">
+                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 13 4 4L19 7"/></svg>
+                    </span>
+                    <p class="text-xs font-semibold flex-1">${esc(message)}</p>
+                    ${
+                        actionLabel && actionFn
+                            ? `<button class="text-acid text-[11px] font-bold font-display uppercase tracking-wider hover:underline shrink-0">${esc(actionLabel)}</button>`
+                            : ""
+                    }
+                `;
+                toast.querySelector("button")?.addEventListener("click", () => {
+                    closeToasts();
+                    actionFn();
+                });
+                wrap.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = "0";
+                    toast.style.transition = "opacity .3s ease";
+                    setTimeout(() => toast.remove(), 300);
+                }, 3200);
             }
 
+            function closeToasts() {
+                $("toast-wrap").innerHTML = "";
+            }
+
+            /* ------------------------------ VISTA RÁPIDA ------------------------------ */
+            function openQuick(id) {
+                const p = products.find(x => x.id === id);
+                if (!p) return;
+                quickId = id;
+                $("quick-visual").innerHTML = `<div class="p-4 h-56 md:h-64">${mockup(p)}</div>`;
+                $("quick-visual").style.background = `radial-gradient(60% 80% at 80% 0%, ${p.accent}14, transparent)`;
+                $("quick-tag").innerText = p.tag;
+                $("quick-ref").innerText = `REF — MER-0${p.id} / ${cats[p.cat]}`;
+                $("quick-name").innerText = p.name;
+                $("quick-desc").innerText = p.desc;
+                $("quick-price").innerHTML = `$${formatPrice(p.price)} <span class="text-xs text-muted font-normal">USD</span>`;
+                $("quick-features").innerHTML = p.features
+                    .map(f => `
+                        <li class="flex items-center gap-2 text-xs text-muted">
+                            <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:${p.accent}"></span>
+                            ${esc(f)}
+                        </li>`)
+                    .join("");
+                $("quick-wa").href =
+                    "https://wa.me/584246585219?text=" +
+                    encodeURIComponent(`Hola Enmanuel, me interesa el proyecto ${p.name} de tu vitrina Mercium.`);
+                $("quick-overlay").classList.remove("hidden");
+                $("quick-overlay").classList.add("flex");
+                document.body.style.overflow = "hidden";
+            }
+
+            function quickAddToCart() {
+                if (quickId) addToCart(quickId);
+            }
+
+            function closeQuick() {
+                $("quick-overlay").classList.add("hidden");
+                $("quick-overlay").classList.remove("flex");
+                if (!$("checkout-modal").classList.contains("hidden")) return;
+                document.body.style.overflow = "";
+            }
+
+            /* --------------------------------- CHECKOUT -------------------------------- */
             function checkout() {
-                if (cart.length === 0) {
+                if (!cart.length) {
                     openCart();
+                    showToast("Añade al menos una solución", null, null);
                     return;
                 }
-                const total = cart.reduce((sum, item) => {
-                    const product = products.find(p => p.id === item.id);
-                    return sum + product.price * item.quantity;
+                const count = cart.reduce((s, i) => s + i.quantity, 0);
+                let html = `<div class="flex justify-between items-center font-mono text-[10px] uppercase tracking-widest text-muted mb-2"><span>${count} servicios</span><span class="text-acid">Resumen</span></div>`;
+                cart.forEach(item => {
+                    const p = products.find(x => x.id === item.id);
+                    if (!p) return;
+                    html += `
+                        <div class="flex justify-between items-center gap-3 text-xs">
+                            <span class="text-ink/85 truncate">${esc(p.name)} <span class="text-muted font-mono text-[10px]">×${item.quantity}</span></span>
+                            <span class="font-mono text-ink/70 shrink-0">$${formatPrice(p.price * item.quantity)}</span>
+                        </div>`;
+                });
+                const total = cart.reduce((s, i) => {
+                    const p = products.find(x => x.id === i.id);
+                    return s + p.price * i.quantity;
                 }, 0);
-                document.getElementById("checkout-summary").innerHTML =
-                    `<div class="flex justify-between text-xs text-slate-400"><span>${cart.reduce((sum, item) => sum + item.quantity, 0)} servicio(s) seleccionado(s)</span><strong class="text-cyan-400 text-sm">$${formatPrice(total)} USD</strong></div>`;
-                document.getElementById("checkout-modal").classList.remove("hidden");
-                document.getElementById("checkout-modal").classList.add("flex");
-                const drawer = document.getElementById("cart-drawer");
+                html += `<div class="flex justify-between items-center border-t border-line pt-2.5 mt-2.5 text-sm font-bold"><span class="text-muted">Total estimado</span><span class="text-acid font-display">$${formatPrice(total)} USD</span></div>`;
+                $("checkout-summary").innerHTML = html;
+
+                toggleCartIfOpen();
+                $("checkout-modal").classList.remove("hidden");
+                $("checkout-modal").classList.add("flex");
+                document.body.style.overflow = "hidden";
+            }
+
+            function toggleCartIfOpen() {
+                const drawer = $("cart-drawer");
                 if (!drawer.classList.contains("translate-x-full")) toggleCart();
             }
 
-            document.getElementById("search-input").addEventListener("input", renderProducts);
-            document.getElementById("sort-select").addEventListener("change", renderProducts);
-            document.getElementById("checkout-form").addEventListener("submit", event => {
+            function closeCheckout() {
+                $("checkout-modal").classList.add("hidden");
+                $("checkout-modal").classList.remove("flex");
+                $("checkout-form").classList.remove("hidden");
+                $("checkout-success").classList.add("hidden");
+                $("checkout-form").reset();
+                if ($("quick-overlay").classList.contains("hidden")) document.body.style.overflow = "";
+            }
+
+            /* --------------------------------- MENÚ MÓVIL ------------------------------- */
+            function toggleMobileMenu() {
+                const menu = $("mobile-menu");
+                const hidden = menu.classList.contains("hidden");
+                if (hidden) {
+                    menu.classList.remove("hidden");
+                    menu.classList.add("flex");
+                    document.body.style.overflow = "hidden";
+                } else {
+                    menu.classList.add("hidden");
+                    menu.classList.remove("flex");
+                    document.body.style.overflow = "";
+                }
+            }
+
+            /* ------------------------------- COPIAR EMAIL ------------------------------ */
+            function copyEmail() {
+                const email = "enmanuelpirela400@gmail.com";
+                const done = () => showToast("Email copiado al portapapeles", null, null);
+                if (navigator.clipboard?.writeText) {
+                    navigator.clipboard.writeText(email).then(done).catch(() => fallbackCopy(email, done));
+                } else {
+                    fallbackCopy(email, done);
+                }
+            }
+
+            function fallbackCopy(text, done) {
+                const ta = document.createElement("textarea");
+                ta.value = text;
+                ta.style.position = "fixed";
+                ta.style.opacity = "0";
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand("copy");
+                    done();
+                } catch (e) {}
+                ta.remove();
+            }
+
+            /* ------------------------------ EFFECTS / UI ------------------------------ */
+            // Header al hacer scroll + barra de progreso
+            const navbar = $("navbar");
+            const progress = $("scroll-progress");
+            function onScroll() {
+                const y = window.scrollY;
+                navbar.classList.toggle("!py-2.5", y > 24);
+                navbar.classList.toggle("!bg-void/85", y > 24);
+                navbar.classList.toggle("shadow-2xl", y > 24);
+                const h = document.documentElement.scrollHeight - window.innerHeight;
+                progress.style.width = (h > 0 ? (y / h) * 100 : 0) + "%";
+            }
+            window.addEventListener("scroll", onScroll, { passive: true });
+            onScroll();
+
+            // Spotlight
+            let raf = null;
+            window.addEventListener("mousemove", e => {
+                if (raf) return;
+                raf = requestAnimationFrame(() => {
+                    const s = $("spotlight");
+                    s.style.setProperty("--mx", e.clientX + "px");
+                    s.style.setProperty("--my", e.clientY + "px");
+                    raf = null;
+                });
+            });
+
+            // Tilt en tarjetas (solo en pantallas con hover)
+            if (window.matchMedia("(hover:hover)").matches) {
+                document.addEventListener("mouseover", e => {
+                    const card = e.target.closest?.(".tilt");
+                    if (card && !card._tilt) {
+                        card._tilt = true;
+                        card.addEventListener("mousemove", ev => {
+                            const r = card.getBoundingClientRect();
+                            const x = (ev.clientX - r.left) / r.width - 0.5;
+                            const y = (ev.clientY - r.top) / r.height - 0.5;
+                            card.style.transform = `perspective(800px) rotateY(${x * 5}deg) rotateX(${y * -5}deg) translateY(-2px)`;
+                        });
+                        card.addEventListener("mouseleave", () => {
+                            card.style.transform = "perspective(800px) rotateY(0deg) rotateX(0deg)";
+                        });
+                    }
+                });
+            }
+
+            // Reveal on scroll
+            const revealObserver = new IntersectionObserver(
+                entries => {
+                    entries.forEach(en => {
+                        if (en.isIntersecting) {
+                            en.target.classList.add("in");
+                            revealObserver.unobserve(en.target);
+                        }
+                    });
+                },
+                { threshold: 0.12 }
+            );
+
+            function observeReveals(scope) {
+                (scope || document).querySelectorAll(".reveal:not(.in)").forEach(el => revealObserver.observe(el));
+            }
+
+            // Contadores animados
+            const counterObserver = new IntersectionObserver(
+                entries => {
+                    entries.forEach(en => {
+                        if (!en.isIntersecting) return;
+                        const el = en.target;
+                        counterObserver.unobserve(el);
+                        const target = +el.dataset.target;
+                        const dur = 1100;
+                        const t0 = performance.now();
+                        function tick(now) {
+                            const p = Math.min((now - t0) / dur, 1);
+                            const ease = 1 - Math.pow(1 - p, 3);
+                            el.innerText = Math.round(target * ease);
+                            if (p < 1) requestAnimationFrame(tick);
+                        }
+                        requestAnimationFrame(tick);
+                    });
+                },
+                { threshold: 0.6 }
+            );
+            document.querySelectorAll(".count[data-target]").forEach(el => counterObserver.observe(el));
+
+            // Marquee (rellenar una vez)
+            const items = ["Tiendas online", "Dashboards", "Marketplaces", "CRM", "Reservas", "Portales de cliente", "Landing pages", "Analytics"];
+            const html = items.map(i => `<span class="flex items-center gap-8"><span class="text-ink">${i}</span><span class="text-acid">✦</span></span>`).join("");
+            $("marquee-a").innerHTML = html;
+            $("marquee-b").innerHTML = html;
+
+            // Tecla Esc
+            document.addEventListener("keydown", e => {
+                if (e.key !== "Escape") return;
+                const menu = $("mobile-menu");
+                if (!menu.classList.contains("hidden")) {
+                    toggleMobileMenu();
+                    return;
+                }
+                if (!$("quick-overlay").classList.contains("hidden")) {
+                    closeQuick();
+                    return;
+                }
+                if (!$("checkout-modal").classList.contains("hidden")) {
+                    closeCheckout();
+                    return;
+                }
+                const drawer = $("cart-drawer");
+                if (!drawer.classList.contains("translate-x-full")) toggleCart();
+            });
+
+            // Eventos
+            $("search-input").addEventListener("input", renderProducts);
+            $("sort-select").addEventListener("change", renderProducts);
+            $("checkout-form").addEventListener("submit", event => {
                 event.preventDefault();
-                document.getElementById("checkout-form").classList.add("hidden");
-                document.getElementById("checkout-success").classList.remove("hidden");
+                $("checkout-form").classList.add("hidden");
+                $("checkout-success").classList.remove("hidden");
                 cart = [];
                 updateCartUI();
             });
+
+            // Init
+            updateFilterCounts();
             renderProducts();
             updateCartUI();
+            observeReveals();
         </script>
     </body>
 </html>

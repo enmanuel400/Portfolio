@@ -1,14 +1,22 @@
 {
     "name": "vellum",
     "private": true,
-    "version": "1.0.0",
+    "version": "1.1.0",
+    "description": "Espacio visual para organizar notas, ideas y material de referencia.",
     "main": "main.js",
+    "author": "Enmanuel Pirela",
+    "license": "MIT",
     "scripts": {
         "dev": "vite --host 0.0.0.0 --port 5174",
         "desktop": "electron .",
         "build": "vite build",
         "preview": "vite preview",
-        "pack": "npm run build && electron-builder"
+        "pack": "npm run build && electron-builder --dir",
+        "dist:linux": "npm run build && electron-builder --linux AppImage",
+        "dist:win": "npm run build && electron-builder --win zip --config.win.signAndEditExecutable=false",
+        "dist:win-installer": "npm run build && electron-builder --win nsis",
+        "dist:mac": "npm run build && electron-builder --mac dmg zip",
+        "dist:all": "npm run build && electron-builder -l -w --config.win.signAndEditExecutable=false"
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4.3.3",
@@ -23,21 +31,31 @@
         "appId": "com.vellum.app",
         "productName": "Vellum",
         "directories": {
-            "output": "release"
+            "output": "release",
+            "buildResources": "build"
         },
         "files": [
             "dist/**/*",
-            "main.js"
+            "main.js",
+            "preload.js",
+            "build/icon.png"
         ],
-        "win": {
-            "target": [
-                "nsis"
-            ]
-        },
+        "artifactName": "vellum-${version}-${os}-${arch}.${ext}",
         "linux": {
-            "target": [
-                "AppImage"
-            ]
+            "target": ["AppImage"],
+            "category": "Utility",
+            "executableName": "vellum",
+            "icon": "build/icon.png",
+            "synopsis": "Espacio visual para notas, ideas y referencias."
+        },
+        "win": {
+            "target": ["zip"],
+            "icon": "build/icon.ico"
+        },
+        "mac": {
+            "target": ["dmg", "zip"],
+            "category": "public.app-category.productivity",
+            "icon": "build/icon.png"
         }
     }
 }

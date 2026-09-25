@@ -3,27 +3,49 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="enmanuelOS — un portfolio presentado como una experiencia de escritorio. Proyectos, contacto y un navegador propio dentro de un sistema operativo simulado."
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="style.css" />
-        <title>Desktop</title>
+        <title>enmanuelOS — Portfolio de escritorio</title>
     </head>
     <body>
-        <main class="desktop-shell">
+        <!-- Secuencia de arranque -->
+        <div class="boot-screen" id="bootScreen" aria-hidden="true">
+            <div class="boot-inner">
+                <div class="boot-logo"><span class="brand-dot"></span> enmanuelOS</div>
+                <div class="boot-tag">un escritorio para ideas en movimiento</div>
+                <div class="boot-line"><span id="bootLine">cargando kernel</span><i>…</i></div>
+                <div class="boot-bar"><span id="bootFill"></span></div>
+                <div class="boot-skip">clic para saltar el arranque</div>
+            </div>
+        </div>
+
+        <main class="desktop-shell wall-noche" id="desktopShell">
             <div class="ambient-grid"></div>
             <div class="aurora aurora-one"></div>
             <div class="aurora aurora-two"></div>
+            <div class="film-grain"></div>
 
             <header class="topbar">
                 <div class="brand-mark">
-                    <span class="brand-dot"></span> enmanuelOS <span class="brand-version">v.01</span>
+                    <span class="brand-dot"></span> enmanuelOS <span class="brand-version">v.02</span>
                 </div>
                 <div class="workspace-label">ESPACIO DE TRABAJO / PRINCIPAL</div>
                 <div class="system-status">
                     <span class="status-pulse"></span><span id="systemStatus">sistema listo</span
-                    ><span class="status-divider"></span><span id="live-clock"></span>
+                    ><span class="status-divider"></span><span id="live-clock">--:--:--</span>
                 </div>
             </header>
 
-            <section class="desktop-area" aria-label="Escritorio">
+            <section class="desktop-area" id="desktopArea" aria-label="Escritorio">
                 <div class="desktop-copy">
                     <p class="eyebrow">PORTFOLIO DIGITAL</p>
                     <h1>Un escritorio para<br /><em>ideas en movimiento.</em></h1>
@@ -32,21 +54,26 @@
                     </p>
                 </div>
 
-                <div class="desktop-icons" aria-label="Aplicaciones">
-                    <button class="desktop-icon" data-open="winProyectos">
+                <div class="desktop-icons" id="desktopIcons" aria-label="Aplicaciones">
+                    <button class="desktop-icon" data-open="winProyectos" title="Abrir Proyectos">
                         <span class="icon-glyph icon-folder"></span><strong>Proyectos</strong><small>directorio</small>
                     </button>
-                    <button class="desktop-icon" data-open="winTerm">
+                    <button class="desktop-icon" data-open="winTerm" title="Abrir Terminal">
                         <span class="icon-glyph icon-terminal">&gt;_</span><strong>Terminal</strong
                         ><small>consola</small>
                     </button>
-                    <button class="desktop-icon" data-open="winContactos">
+                    <button class="desktop-icon" data-open="winKata" title="Abrir Kata, el navegador">
+                        <span class="icon-glyph icon-kata">◍</span><strong>Kata</strong><small>navegador</small>
+                    </button>
+                    <button class="desktop-icon" data-open="winContactos" title="Abrir Contactos">
                         <span class="icon-glyph icon-contact">@</span><strong>Contactos</strong
                         ><small>conexiones</small>
                     </button>
-                    <button class="desktop-icon" data-open="winBrowser">
-                        <span class="icon-glyph icon-browser">◌</span><strong>Browser</strong
-                        ><small>github space</small>
+                    <button class="desktop-icon" data-open="winNotas" title="Abrir Notas">
+                        <span class="icon-glyph icon-notas">✎</span><strong>Notas</strong><small>borradores</small>
+                    </button>
+                    <button class="desktop-icon" data-open="winAcerca" title="Abrir Acerca de">
+                        <span class="icon-glyph icon-acerca">i</span><strong>Acerca de</strong><small>sistema</small>
                     </button>
                 </div>
 
@@ -57,7 +84,9 @@
                     <div class="widget-bar"><span></span></div>
                 </div>
 
-                <div class="scroll-hint"><span></span> selecciona una aplicación para comenzar</div>
+                <div class="scroll-hint">
+                    <span></span> doble clic para abrir · <strong>clic derecho</strong> para opciones
+                </div>
             </section>
 
             <nav class="dock" aria-label="Barra de aplicaciones">
@@ -66,33 +95,41 @@
                         <span>⌂</span>
                     </button>
                     <span class="dock-divider"></span>
-                    <button class="dock-button" data-open="winTerm" title="Abrir Terminal">
+                    <button class="dock-button" data-open="winTerm" title="Terminal">
                         <span class="dock-glyph">&gt;_</span><i data-indicator="winTerm"></i>
                     </button>
-                    <button class="dock-button" data-open="winProyectos" title="Abrir Proyectos">
+                    <button class="dock-button" data-open="winProyectos" title="Proyectos">
                         <span class="dock-glyph folder-glyph"></span><i data-indicator="winProyectos"></i>
                     </button>
-                    <button class="dock-button" data-open="winBrowser" title="Abrir Browser">
-                        <span class="dock-glyph browser-glyph">◌</span><i data-indicator="winBrowser"></i>
+                    <button class="dock-button" data-open="winKata" title="Kata — navegador">
+                        <span class="dock-glyph kata-glyph">◍</span><i data-indicator="winKata"></i>
                     </button>
-                    <button class="dock-button" data-open="winContactos" title="Abrir Contactos">
+                    <button class="dock-button" data-open="winNotas" title="Notas">
+                        <span class="dock-glyph notas-glyph">✎</span><i data-indicator="winNotas"></i>
+                    </button>
+                    <button class="dock-button" data-open="winContactos" title="Contactos">
                         <span class="dock-glyph">@</span><i data-indicator="winContactos"></i>
+                    </button>
+                    <button class="dock-button" data-open="winAcerca" title="Acerca de">
+                        <span class="dock-glyph acerca-glyph">i</span><i data-indicator="winAcerca"></i>
                     </button>
                 </div>
                 <div class="dock-tray">
                     <span class="tray-signal"></span><span>WI-FI</span><span class="tray-battery">▰</span
-                    ><span>100%</span><button id="powerButton" title="Cerrar sesión">↗</button>
+                    ><span>100%</span><button id="powerButton" title="Reiniciar sistema">↗</button>
                 </div>
             </nav>
 
-            <div class="windows hidden" id="winProyectos">
+            <!-- Proyectos -->
+            <section class="windows" id="winProyectos" aria-label="Proyectos">
                 <div class="window-header">
                     <div class="window-title">
                         <span class="title-icon folder-glyph"></span> Proyectos <small>/home/enmanuel/projects</small>
                     </div>
                     <div class="window-actions">
-                        <button class="window-minimize" title="Minimizar">−</button
-                        ><button class="btnClose" data-target="winProyectos" title="Cerrar">×</button>
+                        <button class="window-minimize" title="Minimizar" aria-label="Minimizar">−</button
+                        ><button class="window-maximize" title="Maximizar" aria-label="Maximizar">▢</button
+                        ><button class="btnClose" data-target="winProyectos" title="Cerrar" aria-label="Cerrar">×</button>
                     </div>
                 </div>
                 <div class="win-body win-proyectos">
@@ -132,18 +169,29 @@
                             ><span><strong>Vellum</strong><small>workspace de escritorio</small></span
                             ><span class="project-arrow">↗</span></a
                         >
+                        <a
+                            href="https://github.com/enmanuel400/Kata"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="project-row project-row-kata"
+                            ><span class="project-index">04</span
+                            ><span><strong>Kata</strong><small>navegador de escritorio</small></span
+                            ><span class="project-tag">EXTERNO</span><span class="project-arrow">↗</span></a
+                        >
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="windows hidden" id="winContactos">
+            <!-- Contactos -->
+            <section class="windows" id="winContactos" aria-label="Contactos">
                 <div class="window-header">
                     <div class="window-title">
                         <span class="title-icon contact-glyph">@</span> Contactos <small>canales abiertos</small>
                     </div>
                     <div class="window-actions">
-                        <button class="window-minimize" title="Minimizar">−</button
-                        ><button class="btnClose" data-target="winContactos" title="Cerrar">×</button>
+                        <button class="window-minimize" title="Minimizar" aria-label="Minimizar">−</button
+                        ><button class="window-maximize" title="Maximizar" aria-label="Maximizar">▢</button
+                        ><button class="btnClose" data-target="winContactos" title="Cerrar" aria-label="Cerrar">×</button>
                     </div>
                 </div>
                 <div class="win-body win-contactos">
@@ -156,73 +204,235 @@
                         </p>
                     </div>
                     <div class="contacto-grid">
-                        <a href="https://github.com/enmanuel400" target="_blank" class="contacto-card"
+                        <a href="https://github.com/enmanuel400" target="_blank" rel="noopener" class="contacto-card"
                             ><span>GH</span><strong>GitHub</strong><small>código y repositorios</small></a
 ><a
                             href="https://www.linkedin.com/in/enmanuel-pirela-697020437/"
                             target="_blank"
+                            rel="noopener"
                             class="contacto-card"
                             ><span>in</span><strong>LinkedIn</strong><small>perfil profesional</small></a
                         ><a href="mailto:enmanuelpirela400@gmail.com" class="contacto-card"
                             ><span>@</span><strong>Gmail</strong><small>enmanuelpirela400</small></a
-                        ><a href="https://wa.me/+584246585219" target="_blank" class="contacto-card"
+                        ><a href="https://wa.me/+584246585219" target="_blank" rel="noopener" class="contacto-card"
                             ><span>WA</span><strong>WhatsApp</strong><small>mensaje directo</small></a
                         >
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="windows hidden" id="winTerm">
+            <!-- Terminal -->
+            <section class="windows" id="winTerm" aria-label="Terminal">
                 <div class="window-header">
                     <div class="window-title">
-                        <span class="title-icon terminal-glyph">&gt;_</span> Terminal <small>guest@enmanuelOS: ~</small>
+                        <span class="title-icon terminal-glyph">&gt;_</span> Terminal
+                        <small>guest@enmanuelOS: ~</small>
                     </div>
                     <div class="window-actions">
-                        <button class="window-minimize" title="Minimizar">−</button
-                        ><button class="btnClose" data-target="winTerm" title="Cerrar">×</button>
+                        <button class="window-minimize" title="Minimizar" aria-label="Minimizar">−</button
+                        ><button class="window-maximize" title="Maximizar" aria-label="Maximizar">▢</button
+                        ><button class="btnClose" data-target="winTerm" title="Cerrar" aria-label="Cerrar">×</button>
                     </div>
                 </div>
                 <div class="win-body win-term">
                     <div class="term-toolbar"><span></span><span>bash / sesión interactiva</span><span>●</span></div>
-                    <div class="term-history">
+                    <div class="term-history" id="termHistory">
                         <p class="term-welcome">
                             enmanuelOS terminal [versión 1.0]<br />Escribe <strong>help</strong> para ver los comandos
                             disponibles.
                         </p>
                     </div>
                     <div class="term-cont">
-                        <span>guest@enmanuelOS:~$</span
+                        <span class="term-prompt">guest@enmanuelOS:~$</span
                         ><input type="text" id="input-key" autocomplete="off" aria-label="Comando de terminal" />
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="windows hidden" id="winBrowser">
+            <!-- Kata (reemplaza a Browser) -->
+            <section class="windows" id="winKata" aria-label="Kata, el navegador">
                 <div class="browser-header">
                     <div class="window-title">
-                        <span class="title-icon browser-glyph">◌</span> Browser <small>github space</small>
+                        <span class="title-icon kata-glyph">◍</span> Kata <small>navegador de escritorio</small>
                     </div>
                     <div class="browser-controls">
-                        <button class="browser-btn" id="browserBack" title="Atrás">‹</button
-                        ><button class="browser-btn" id="browserForward" title="Adelante">›</button
-                        ><button class="browser-btn" id="browserReload" title="Recargar">↻</button>
+                        <button class="browser-btn" data-kata-nav="back" title="Atrás" aria-label="Atrás">‹</button
+                        ><button class="browser-btn" data-kata-nav="fwd" title="Adelante" aria-label="Adelante">›</button
+                        ><button class="browser-btn" data-kata-nav="reload" title="Recargar" aria-label="Recargar"
+                            >↻</button
+                        >
                     </div>
                     <input
                         type="text"
                         class="browser-url"
-                        id="browserUrlInput"
-                        value="github.com/enmanuel400"
+                        value="kata.app/espacios"
                         aria-label="Dirección web"
+                        spellcheck="false"
                     />
                     <div class="window-actions">
-                        <button class="btnClose" data-target="winBrowser" title="Cerrar">×</button>
+                        <button class="window-minimize" title="Minimizar" aria-label="Minimizar">−</button
+                        ><button class="window-maximize" title="Maximizar" aria-label="Maximizar">▢</button
+                        ><button class="btnClose" data-target="winKata" title="Cerrar" aria-label="Cerrar">×</button>
                     </div>
                 </div>
-                <div class="win-browser-body" id="githubAppContainer">
-                    <div class="github-loading">Conectando con GitHub<span>...</span></div>
+                <div class="kata-body">
+                    <div class="kata-hero">
+                        <div class="kata-copy">
+                            <span class="section-kicker">PROYECTO DESTACADO · EXTERNO</span>
+                            <h2>kata — un navegador que se queda contigo.</h2>
+                            <p>
+                                Local, privado y silencioso. Sin cuentas, sin telemetría ni sincronización forzada: el
+                                estado de la aplicación vive en tu equipo. Construido con Tauri, React y Rust para
+                                Linux.
+                            </p>
+                            <div class="kata-badges">
+                                <span>Tauri 2</span><span>React 19</span><span>TypeScript</span><span>Rust</span
+                                ><span>Linux</span>
+                            </div>
+                            <a
+                                class="kata-cta"
+                                href="https://github.com/enmanuel400/Kata"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >Ver repositorio ↗</a
+                            >
+                        </div>
+                        <div class="kata-feats">
+                            <div class="kata-feat"
+                                ><strong>privado / local</strong><small>sin cuenta ni nube</small></div
+                            >
+                            <div class="kata-feat"
+                                ><strong>espacios de trabajo</strong><small>pestañas organizadas</small></div
+                            >
+                            <div class="kata-feat"
+                                ><strong>inicio personalizable</strong><small>tu punto de partida</small></div
+                            >
+                            <div class="kata-feat"
+                                ><strong>ligero</strong><small>webviews nativos</small></div
+                            >
+                        </div>
+                    </div>
+                    <div class="kata-shots">
+                        <figure
+                            ><img src="assets/kata-home.webp" alt="Página de inicio de kata" loading="lazy" /><figcaption
+                                >inicio</figcaption
+                            ></figure
+                        >
+                        <figure
+                            ><img src="assets/kata-search.webp" alt="Búsqueda web desde kata" loading="lazy" /><figcaption
+                                >búsqueda</figcaption
+                            ></figure
+                        >
+                        <figure
+                            ><img
+                                src="assets/kata-youtube.webp"
+                                alt="YouTube ejecutándose en kata"
+                                loading="lazy" /><figcaption>youtube</figcaption></figure
+                        >
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notas -->
+            <section class="windows" id="winNotas" aria-label="Notas">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span class="title-icon notas-glyph">✎</span> Notas <small>documento local</small>
+                    </div>
+                    <div class="window-actions">
+                        <button class="window-minimize" title="Minimizar" aria-label="Minimizar">−</button
+                        ><button class="window-maximize" title="Maximizar" aria-label="Maximizar">▢</button
+                        ><button class="btnClose" data-target="winNotas" title="Cerrar" aria-label="Cerrar">×</button>
+                    </div>
+                </div>
+                <div class="win-body win-notas">
+                    <div class="notas-toolbar">
+                        <span class="notas-doc">BORRADOR ACTUAL</span>
+                        <button id="notesClear" class="ghost-btn" title="Limpiar el borrador">nuevo borrador</button>
+                    </div>
+                    <textarea
+                        id="notesArea"
+                        class="notes-area"
+                        placeholder="Escribe algo que valga la pena recordar…"
+                        spellcheck="false"
+                    ></textarea>
+                    <div class="notas-footer">
+                        <span id="notesMeta">0 palabras · 0 caracteres</span>
+                        <span id="notesStatus" class="notes-status">guardando…</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Acerca de -->
+            <section class="windows" id="winAcerca" aria-label="Acerca de">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span class="title-icon acerca-glyph">i</span> Acerca de <small>info del sistema</small>
+                    </div>
+                    <div class="window-actions">
+                        <button class="window-minimize" title="Minimizar" aria-label="Minimizar">−</button
+                        ><button class="window-maximize" title="Maximizar" aria-label="Maximizar">▢</button
+                        ><button class="btnClose" data-target="winAcerca" title="Cerrar" aria-label="Cerrar">×</button>
+                    </div>
+                </div>
+                <div class="win-body win-acerca">
+                    <div class="acerca-grid">
+                        <pre class="acerca-ascii" aria-hidden="true">
+        .:::.
+      .:::::::.
+     :::::::::::
+    ':::::::::::'
+      '::::::::'
+        '::::'</pre
+                        >
+                        <div class="acerca-specs">
+                            <div><span>usuario</span><b>guest@enmanuelOS</b></div>
+                            <div><span>SO</span><b>enmanuelOS v1.0</b></div>
+                            <div><span>kernel</span><b>6.6.0-desktop</b></div>
+                            <div><span>shell</span><b>bash — sesión interactiva</b></div>
+                            <div><span>uptime</span><b id="aboutUptime">—</b></div>
+                            <div><span>resolución</span><b id="aboutRes">—</b></div>
+                        </div>
+                    </div>
+                    <div class="acerca-pitch">
+                        <h3>Detrás del sistema.</h3>
+                        <p>
+                            Diseño y desarrollo de productos digitales desde Venezuela: interfaces premium, dashboards
+                            técnicos y experiencias web con foco en claridad y conversión.
+                        </p>
+                        <div class="acerca-actions">
+                            <button class="ghost-btn" data-jump="winProyectos">ver proyectos</button>
+                            <button class="ghost-btn" data-jump="winContactos">abrir canales</button>
+                        </div>
+                        <span class="acerca-ver">enmanuelOS · escritorio v.02 del portfolio</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Menú contextual -->
+        <div class="context-menu" id="contextMenu" role="menu" aria-label="Menú del escritorio" hidden>
+            <button role="menuitem" data-action="open" data-open="winTerm">Terminal</button>
+            <button role="menuitem" data-action="open" data-open="winNotas">Notas</button>
+            <div class="ctx-sub">
+                <span class="ctx-parent">Cambiar fondo de pantalla</span>
+                <div class="ctx-submenu">
+                    <button role="menuitem" data-action="wall" data-wall="noche"
+                        ><i class="swatch-noche"></i>Noche</button
+                    ><button role="menuitem" data-action="wall" data-wall="bosque"
+                        ><i class="swatch-bosque"></i>Bosque</button
+                    ><button role="menuitem" data-action="wall" data-wall="amanecer"
+                        ><i class="swatch-amanecer"></i>Amanecer</button
+                    >
                 </div>
             </div>
-        </main>
+            <div class="ctx-sep"></div>
+            <button role="menuitem" data-action="open" data-open="winAcerca">Acerca de enmanuelOS</button>
+            <div class="ctx-sep"></div>
+            <button role="menuitem" data-action="reset">Restaurar escritorio</button>
+            <button role="menuitem" data-action="closeAll">Cerrar todas las ventanas</button>
+        </div>
+
         <div class="toast" id="toast" role="status"></div>
         <script src="app.js"></script>
     </body>

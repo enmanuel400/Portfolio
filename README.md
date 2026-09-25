@@ -48,11 +48,12 @@ Cada proyecto refleja una forma distinta de pensar en producto, diseño y experi
 
 ### Desktop
 
-Presentación del portfolio como un escritorio digital interactivo.
+Portfolio presentado como una **experiencia de escritorio real** (enmanuelOS v.02): arranque del sistema, gestor de ventanas con minimizar/maximizar, dock con magnificación, iconos arrastrables, menú contextual, tres fondos de pantalla y terminal interactiva.
 
 - Propósito: crear una experiencia memorable y diferenciada para mostrar trabajos, redes y contacto
 - Público: recruiters, clientes y colaboradores
 - Tecnologías: HTML, CSS, JavaScript
+- Destacado: incluye un showcase del navegador **kata** (Tauri 2 + React + Rust) con capturas reales y enlace a [github.com/enmanuel400/Kata](https://github.com/enmanuel400/Kata)
 
 ### Mercium Shop
 
@@ -80,7 +81,7 @@ Workspace visual para organizar ideas, notas y contenido personal.
 
 ## Estructura del repositorio
 
-- Desktop/ — interfaz tipo escritorio del portfolio
+- Desktop/ — interfaz tipo escritorio del portfolio (incluye las capturas de kata en Desktop/assets/)
 - mercium-shop/ — landing page comercial
 - sysdash/ — dashboard de monitoreo del sistema
 - vellum/ — espacio personal de trabajo visual
@@ -94,7 +95,7 @@ Workspace visual para organizar ideas, notas y contenido personal.
 
 ![Sysdash](assets/screenshots/sysdash.png)
 
-![Vellum](assets/screenshots/vellum.png)
+![Vellum — tinta](assets/screenshots/vellum-dark.png)
 
 ## Enlaces en vivo
 
@@ -109,6 +110,7 @@ Workspace visual para organizar ideas, notas y contenido personal.
 - Ver catálogo comercial: https://portfolio-mercium-shop-enmanuel.netlify.app
 - Leer documentación de Sysdash: https://github.com/enmanuel400/Portfolio/blob/master/sysdash/README.md
 - Leer documentación de Vellum: https://github.com/enmanuel400/Portfolio/blob/master/vellum/README.md
+- Explorar el navegador kata (presentado dentro de Desktop): https://github.com/enmanuel400/Kata
 
 Cada proyecto puede abrirse directamente desde su archivo HTML o ejecutarse según su entorno específico:
 
