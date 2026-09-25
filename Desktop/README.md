@@ -59,6 +59,8 @@ Dentro del sistema se presenta **kata** — un navegador de escritorio construid
 
 ![Desktop móvil](../assets/screenshots/desktop-mobile.png)
 
+![Terminal de trazo con neofetch](../assets/screenshots/desktop-terminal.png)
+
 ## Demo en vivo
 
 https://portfolio-desktop-enmanuel.netlify.app
