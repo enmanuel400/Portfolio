@@ -1,12 +1,12 @@
-# Desktop — enmanuelOS
+# Desktop — trazo
 
 Un portfolio presentado como una **experiencia de escritorio** real: un sistema operativo simulado con arranque, gestor de ventanas, dock con magnificación, terminal interactiva y seis aplicaciones.
 
-En lugar de una landing page, el visitante **enciende enmanuelOS** y explora el trabajo como si estuviera frente a la estación de desarrollo de su autor.
+En lugar de una landing page, el visitante **enciende trazo** y explora el trabajo como si estuviera frente a la estación de desarrollo de su autor.
 
 ## Descripción
 
-Desktop no es solo una página: es un entorno. Un overlay de arranque da paso a un escritorio con iconos arrastrables, ventanas de cristal que se minimizan al dock, un menú contextual, fondos de pantalla intercambiables y persistencia local de todo el estado (posiciones, fondo, notas).
+Desktop no es solo una página: es un entorno llamado **trazo** — *un escritorio donde cada idea deja su trazo*. Un overlay de arranque da paso a un escritorio con iconos arrastrables, ventanas de cristal que se minimizan al dock, un menú contextual, fondos de pantalla intercambiables y persistencia local de todo el estado (posiciones, fondo, notas).
 
 Dentro del sistema se presenta **kata** — un navegador de escritorio construido por el mismo autor con Tauri — como proyecto destacado externo, con sus capturas reales y enlace al repositorio.
 
@@ -26,7 +26,7 @@ Dentro del sistema se presenta **kata** — un navegador de escritorio construid
 - **Arranque del sistema**: overlay con logo, líneas de boot animadas y barra de progreso (se puede saltar con clic).
 - **Gestor de ventanas**: abrir, minimizar (con animación al dock), maximizar/restaurar, cerrar y arrastrar; foco por z-index y título destacado.
 - **Dock como taskbar**: clic enfoca/minimiza/restaura, indicadores de app activa y **magnificación al hover**.
-- **Escritorio interactivo**: doble clic abre (un toque en táctil), clic selecciona, iconos **arrastrables** con posición persistida.
+- **Escritorio interactivo**: doble clic abre (un toque en táctil), clic selecciona, iconos **arrastrables** con posición persistida. El hover nunca mueve iconos: el arrastre solo responde a una pulsación real.
 - **Menú contextual** (clic derecho): abrir apps, cambiar fondo, restaurar escritorio y cerrar ventanas.
 - **Tres fondos de pantalla** (Noche, Bosque, Amanecer) con persistencia, desde el menú o `wallpaper <1|2|3>` en la terminal.
 - **Terminal ampliada**: `help`, `about`, `proyectos`, `contactos`, `kata`, `notas`, `acerca`, `open <app>`, `wallpaper`, `neofetch`, `echo`, `whoami`, `ls`, `date`, `uptime`, `clear`; historial con ↑/↓ y autocompletado con Tab.
@@ -55,7 +55,7 @@ Dentro del sistema se presenta **kata** — un navegador de escritorio construid
 
 ## Vista previa
 
-![Desktop — enmanuelOS](../assets/screenshots/desktop.png)
+![Desktop — trazo](../assets/screenshots/desktop.png)
 
 ![Desktop móvil](../assets/screenshots/desktop-mobile.png)
 
@@ -77,7 +77,7 @@ Abre `index.html` en el navegador. No requiere build ni dependencias: HTML, CSS 
 ## Estructura
 
 - `index.html` — estructura del sistema (boot, escritorio, dock, 6 ventanas, menú contextual)
-- `style.css` — identidad visual enmanuelOS (3 fondos, ventanas de cristal, dock)
+- `style.css` — identidad visual trazo (3 fondos, ventanas de cristal, dock)
 - `app.js` — lógica del escritorio (gestor de ventanas, terminal, notas, persistencia)
 - `assets/` — capturas webp del proyecto kata para la ventana del navegador
 

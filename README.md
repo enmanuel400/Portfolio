@@ -48,7 +48,7 @@ Cada proyecto refleja una forma distinta de pensar en producto, diseño y experi
 
 ### Desktop
 
-Portfolio presentado como una **experiencia de escritorio real** (enmanuelOS v.02): arranque del sistema, gestor de ventanas con minimizar/maximizar, dock con magnificación, iconos arrastrables, menú contextual, tres fondos de pantalla y terminal interactiva.
+Portfolio presentado como una **experiencia de escritorio real** (trazo v.02): arranque del sistema, gestor de ventanas con minimizar/maximizar, dock con magnificación, iconos arrastrables, menú contextual, tres fondos de pantalla y terminal interactiva.
 
 - Propósito: crear una experiencia memorable y diferenciada para mostrar trabajos, redes y contacto
 - Público: recruiters, clientes y colaboradores

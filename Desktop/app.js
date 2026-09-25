@@ -1,5 +1,5 @@
 /* ============================================================
-   enmanuelOS v.02 — lógica del escritorio
+   trazo v.02 — lógica del escritorio
    ============================================================ */
 
 const $ = selector => document.querySelector(selector);
@@ -10,12 +10,16 @@ const bootScreen = $("#bootScreen");
 const toast = $("#toast");
 const desktopArea = $("#desktopArea");
 const winEls = $$(".windows");
+// estado inicial: todas las ventanas cerradas (el CSS ya las oculta)
+winEls.forEach(win => win.classList.add("hidden"));
 const STORE = {
-    wall: "enmanuelos.wall",
-    icons: "enmanuelos.icons",
-    winPos: "enmanuelos.windowsPos",
-    notes: "enmanuelos.notas",
+    wall: "trazo.wall",
+    icons: "trazo.icons",
+    winPos: "trazo.windowsPos",
+    notes: "trazo.notas",
 };
+
+const HINT_KEY = "trazo.hintDbl";
 
 let zIndex = 100;
 let toastTimer;
@@ -88,7 +92,7 @@ function finishBoot() {
         bootScreen.classList.add("done");
         document.body.classList.add("booted");
         $("#systemStatus").textContent = "sesión iniciada";
-        showToast("Bienvenido a enmanuelOS");
+        showToast("Bienvenido a trazo");
     }, 420);
 }
 
@@ -218,11 +222,15 @@ function closeWindow(id) {
 function toggleWindow(id) {
     const win = getWin(id);
     if (!win) return;
-    if (win.classList.contains("hidden")) openWindow(id);
-    else if (win.classList.contains("minimized")) restoreWindow(win);
-    else if (win.classList.contains("open")) {
+    if (win.classList.contains("closing")) {
+        openWindow(id); // se estaba cerrando: vuelve a abrir
+    } else if (win.classList.contains("open")) {
         if (activeWindow === id) minimizeWindow(id);
         else focusWindow(win);
+    } else if (win.classList.contains("minimized")) {
+        restoreWindow(win);
+    } else {
+        openWindow(id); // oculta o estado inicial: primer clic abre
     }
 }
 
@@ -376,6 +384,10 @@ const COARSE_POINTER = matchMedia("(pointer: coarse)").matches;
 function selectIcon(icon) {
     desktopIcons.forEach(other => other.classList.toggle("selected", other === icon));
     icon.focus({ preventScroll: true });
+    if (!localStorage.getItem(HINT_KEY)) {
+        localStorage.setItem(HINT_KEY, "1");
+        showToast("doble clic para abrir");
+    }
 }
 
 function deselectIcons() {
@@ -409,10 +421,12 @@ desktopIcons.forEach(icon => {
     let startY = 0;
     let grabX = 0;
     let grabY = 0;
+    let pressed = false;
     let dragging = false;
 
     icon.addEventListener("pointerdown", event => {
         if (event.button !== 0 && event.pointerType !== "touch") return;
+        pressed = true;
         startX = event.clientX;
         startY = event.clientY;
         const rect = icon.getBoundingClientRect();
@@ -428,6 +442,7 @@ desktopIcons.forEach(icon => {
     });
 
     icon.addEventListener("pointermove", event => {
+        if (!pressed) return; // el hover jamás activa el arrastre
         const dx = event.clientX - startX;
         const dy = event.clientY - startY;
         if (!dragging && Math.hypot(dx, dy) > 6) {
@@ -450,6 +465,7 @@ desktopIcons.forEach(icon => {
     });
 
     icon.addEventListener("pointerup", () => {
+        pressed = false;
         if (dragging) {
             icon.classList.remove("dragging");
             saveIconPositions();
@@ -457,6 +473,13 @@ desktopIcons.forEach(icon => {
                 movedIcon = false;
             }, 40);
         }
+    });
+
+    icon.addEventListener("pointercancel", () => {
+        pressed = false;
+        dragging = false;
+        movedIcon = false;
+        icon.classList.remove("dragging");
     });
 
     if (COARSE_POINTER) {
@@ -569,7 +592,7 @@ function termPrint(raw, result, type = "ok") {
         : `<span class="term-${type}">${esc(result)}</span>`;
     termHistory.insertAdjacentHTML(
         "beforeend",
-        `<p><span class="term-cmd">guest@enmanuelOS:~$ ${esc(raw)}</span><br />${content}</p>`,
+        `<p><span class="term-cmd">guest@trazo:~$ ${esc(raw)}</span><br />${content}</p>`,
     );
     termHistory.scrollTop = termHistory.scrollHeight;
 }
@@ -651,8 +674,8 @@ function executeCommand(raw) {
                 "      '::::::::'",
                 "        '::::'",
                 "",
-                `usuario    guest@enmanuelOS`,
-                `SO         enmanuelOS v1.0`,
+                `usuario    guest@trazo`,
+                `SO         trazo v1.0`,
                 `kernel     6.6.0-desktop`,
                 `shell      bash — sesión interactiva`,
                 `uptime     ${formatUptime()}`,
@@ -670,7 +693,7 @@ function executeCommand(raw) {
         case "uptime":
             return `El sistema lleva activo ${formatUptime()}.`;
         case "clear":
-            termHistory.innerHTML = '<p class="term-welcome">enmanuelOS terminal [versión 1.0]<br />Escribe <strong>help</strong> para ver los comandos disponibles.</p>';
+            termHistory.innerHTML = '<p class="term-welcome">trazo terminal [versión 1.0]<br />Escribe <strong>help</strong> para ver los comandos disponibles.</p>';
             return null;
         default:
             return `Comando no reconocido: ${raw}`;
