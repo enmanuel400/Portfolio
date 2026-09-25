@@ -24,10 +24,9 @@ Thumbs.db
 # Local Netlify folder
 .netlify
 
-# Personal profile images
+# Personal profile images (la foto usada por los CVs sí se versiona)
 assets/profile-photo-original.jpg
 assets/profile-photo-linkedin.jpg
-assets/perfil.jpeg
 CV-Enmanuel-Pirela.md
 LinkedIn-Enmanuel-Pirela.md
 CV-Enmanuel-Pirela.html
