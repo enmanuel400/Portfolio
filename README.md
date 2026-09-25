@@ -91,7 +91,7 @@ Workspace visual para organizar ideas, notas y contenido personal.
 
 ![Desktop](assets/screenshots/desktop.png)
 
-![Mercium Shop](assets/screenshots/mercium-shop.png)
+![Mercium Shop](assets/screenshots/mercium-desktop.png)
 
 ![Sysdash](assets/screenshots/sysdash.png)
 
