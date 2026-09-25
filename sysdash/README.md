@@ -126,7 +126,3 @@ sysdash/
 
 - Python · FastAPI · Uvicorn · psutil
 - JavaScript vanilla · Tailwind CSS · Chart.js
-
-## Demo en vivo
-
-https://portfolio-sysdash-enmanuel.netlify.app
