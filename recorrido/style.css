@@ -1961,15 +1961,18 @@ html.js.no-gsap .reveal {
         gap: 0;
         width: 100%;
         margin-top: var(--s-8);
+        /* aire lateral: la lista respira y no toca los bordes */
+        padding-inline: clamp(var(--s-6), 5vw, var(--s-12));
     }
 
     .map-node {
         display: grid;
-        grid-template-rows: auto;
-        grid-template-columns: auto 1fr auto;
+        grid-template-rows: auto auto;
+        grid-template-columns: auto 1fr;
         align-items: baseline;
-        gap: var(--s-3);
-        padding: 15px 0;
+        column-gap: var(--s-4);
+        row-gap: 3px;
+        padding: 17px 0;
         border: 0;
         border-bottom: 1px solid var(--line);
         border-radius: 0;
@@ -1992,7 +1995,8 @@ html.js.no-gsap .reveal {
     }
 
     .map-num {
-        font-size: 12px;
+        grid-row: 1 / span 2;
+        font-size: 13px;
         letter-spacing: 0.14em;
         color: var(--muted);
     }
@@ -2001,14 +2005,19 @@ html.js.no-gsap .reveal {
         font-size: 1.2rem;
     }
 
+    /* la descripción baja a una segunda línea: se lee completa y con
+       contraste, sin el truncado que tenía en la fila */
     .map-gist {
-        max-width: 46%;
-        font-size: 10px;
-        letter-spacing: 0.03em;
-        text-align: right;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        grid-column: 2;
+        max-width: 34ch;
+        font-size: 12px;
+        letter-spacing: 0.01em;
+        text-transform: none;
+        color: var(--dim);
+        text-align: left;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
     }
 
     .dash-grid {
