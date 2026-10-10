@@ -1069,6 +1069,14 @@ html.js.no-gsap .reveal {
     grid-template-columns: 1.25fr 1fr;
 }
 
+/* los ítems de rejilla deben poder encoger por debajo de su contenido
+   intrínseco: sin esto una captura ancha ensancha la columna y, como la
+   estación tiene overflow:hidden, el texto/imagen se recorta en el móvil */
+.prj-body > *,
+.manifesto-grid > * {
+    min-width: 0;
+}
+
 .prj-about p {
     color: var(--dim);
     max-width: 46ch;
@@ -1104,6 +1112,7 @@ html.js.no-gsap .reveal {
 /* marco de ventana genérico (chroma del sistema trazo) */
 .win-frame {
     position: relative;
+    min-width: 0;
     border: var(--border-hair);
     border-radius: var(--r-lg);
     background: var(--panel-solid);
@@ -1152,6 +1161,8 @@ html.js.no-gsap .reveal {
 
 .win-frame img {
     width: 100%;
+    max-width: 100%;
+    height: auto;
 }
 
 /* ---------- 01 · trazo (mint) ---------- */
@@ -1856,6 +1867,20 @@ html.js.no-gsap .reveal {
         font-size: 16px;
     }
 
+    /* las estaciones apilan sus bloques en una sola columna:
+       nombre arriba · imagen al medio · descripción abajo */
+    .station {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* proyecto y mapa crecen desde arriba; hero, manifiesto y cierre
+       conservan su centrado vertical original */
+    .station.project,
+    .station.map {
+        justify-content: flex-start;
+    }
+
     .rail {
         display: flex;
         top: auto;
@@ -1896,6 +1921,25 @@ html.js.no-gsap .reveal {
         grid-template-columns: 96px 1fr;
     }
 
+    .map-head {
+        padding-top: clamp(5rem, 10vh, 6rem);
+    }
+
+    .prj-body,
+    .prj-body-swap {
+        gap: var(--s-8);
+    }
+
+    /* la captura sube por delante de la descripción: imagen al medio */
+    .prj-body > .prj-visual {
+        order: -1;
+    }
+
+    .hero-inner {
+        padding-top: clamp(6rem, 12vh, 7rem);
+        padding-bottom: clamp(3rem, 6vh, 4rem);
+    }
+
     .bar-version {
         display: none;
     }
@@ -1911,8 +1955,60 @@ html.js.no-gsap .reveal {
         letter-spacing: 0.1em;
     }
 
+    /* el mapa pasa de tarjetas (cuadros) a una lista de filas */
     .map-nodes {
         grid-template-columns: 1fr;
+        gap: 0;
+        width: 100%;
+        margin-top: var(--s-8);
+    }
+
+    .map-node {
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: auto 1fr auto;
+        align-items: baseline;
+        gap: var(--s-3);
+        padding: 15px 0;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        border-radius: 0;
+        background: none;
+    }
+
+    /* los destacados también pierden el aspecto de tarjeta */
+    .map-node.is-featured {
+        background: none;
+        border-color: var(--line);
+    }
+
+    .map-node:first-child {
+        border-top: 1px solid var(--line);
+    }
+
+    .map-node::before,
+    .map-node.is-featured::after {
+        display: none;
+    }
+
+    .map-num {
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+    }
+
+    .map-name {
+        font-size: 1.2rem;
+    }
+
+    .map-gist {
+        max-width: 46%;
+        font-size: 10px;
+        letter-spacing: 0.03em;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .dash-grid {
