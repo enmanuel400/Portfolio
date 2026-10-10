@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+        name="description"
+        content="trazo — el recorrido. Portfolio inmersivo de Enmanuel Pirela: seis proyectos conectados por un solo trazo. Frontend, Python y aplicaciones de escritorio."
+    />
+    <meta name="theme-color" content="#070d0f" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+        /* habilita los estados de reveal solo si hay JS */
+        document.documentElement.classList.add("js");
+    </script>
+    <noscript><style>.boot{display:none}.reveal{opacity:1!important;transform:none!important}</style></noscript>
+    <title>trazo — el recorrido · Enmanuel Pirela</title>
+</head>
+<body>
+    <a class="skip-link" href="#heroTitle">saltar al contenido</a>
+
+    <!-- Firma de arranque -->
+    <div class="boot" id="boot" role="dialog" aria-modal="true" aria-label="Firma de arranque trazo">
+        <div class="boot-inner">
+            <div class="boot-mark">
+                <span class="brand-dot" aria-hidden="true"></span>
+                <span class="boot-name">trazo</span>
+                <svg class="boot-stroke" viewBox="0 0 320 60" fill="none" aria-hidden="true">
+                    <path
+                        d="M6 48 C 60 6, 120 6, 160 30 S 286 52, 314 14"
+                        pathLength="1"
+                    />
+                </svg>
+            </div>
+            <p class="boot-tag mono">una línea · seis proyectos · un recorrido</p>
+        </div>
+        <div class="boot-skip mono">clic para entrar</div>
+    </div>
+
+    <!-- Grano de película (fijo, bajo la chrome, sobre el contenido) -->
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- Resplandor que sigue al cursor (solo puntero fino) -->
+    <div class="cursor-glow" aria-hidden="true"></div>
+
+    <!-- Cabecera flotante -->
+    <header class="bar">
+        <div class="bar-brand">
+            <svg class="bar-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <path d="M5 35 C 13 20, 27 13, 35 19 C 40 23, 41 27, 40 31" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="40" cy="31" r="4" fill="currentColor"/>
+            </svg>
+            trazo <span class="bar-version mono">v.03 · recorrido</span>
+        </div>
+        <div class="bar-station mono" id="barStation">estación 00 / inicio</div>
+    </header>
+
+    <!-- Rail de progreso / nodos -->
+    <nav class="rail" aria-label="Estaciones del recorrido">
+        <div class="rail-track" aria-hidden="true"><span class="rail-fill" id="railFill"></span></div>
+        <ol class="rail-stops" id="railStops">
+            <li><button class="rail-dot" data-jump="0" aria-label="Ir a inicio"><span class="rail-tip mono">00 · inicio</span></button></li>
+            <li><button class="rail-dot" data-jump="1" aria-label="Ir a quién soy"><span class="rail-tip mono">01 · quién soy</span></button></li>
+            <li><button class="rail-dot" data-jump="2" aria-label="Ir al recorrido"><span class="rail-tip mono">02 · el recorrido</span></button></li>
+            <li><button class="rail-dot" data-jump="3" aria-label="Ir a la estación kata"><span class="rail-tip mono">03 · kata</span></button></li>
+            <li><button class="rail-dot" data-jump="4" aria-label="Ir a la estación miso"><span class="rail-tip mono">04 · miso</span></button></li>
+            <li><button class="rail-dot" data-jump="5" aria-label="Ir a la estación trazo"><span class="rail-tip mono">05 · trazo</span></button></li>
+            <li><button class="rail-dot" data-jump="6" aria-label="Ir a la estación mercium"><span class="rail-tip mono">06 · mercium</span></button></li>
+            <li><button class="rail-dot" data-jump="7" aria-label="Ir a la estación sysdash"><span class="rail-tip mono">07 · sysdash</span></button></li>
+            <li><button class="rail-dot" data-jump="8" aria-label="Ir a la estación vellum"><span class="rail-tip mono">08 · vellum</span></button></li>
+            <li><button class="rail-dot" data-jump="9" aria-label="Ir al cierre"><span class="rail-tip mono">09 · cierre</span></button></li>
+        </ol>
+    </nav>
+
+    <main class="route" id="route">
+        <!-- ============ ESTACIÓN 00 · HERO ============ -->
+        <section class="station hero" id="st-0" data-station="0" aria-labelledby="heroTitle">
+            <div class="station-bg hero-bg" aria-hidden="true">
+                <div class="aurora aurora-a"></div>
+                <div class="aurora aurora-b"></div>
+                <div class="field-grid"></div>
+            </div>
+            <span class="sec-phantom mono" aria-hidden="true">00</span>
+
+            <div class="shell hero-inner">
+                <p class="kicker mono reveal">portfolio · 2026 — seis proyectos en un trazo</p>
+                <h1 class="hero-title" id="heroTitle" tabindex="-1">
+                    <span class="hero-line reveal"><em>Enmanuel</em></span>
+                    <span class="hero-line reveal">Pirela</span>
+                </h1>
+                <p class="hero-sub reveal">
+                    Dibujo productos digitales de punta a punta: interfaces, dashboards y aplicaciones de
+                    escritorio que dejan huella.
+                </p>
+                <div class="hero-cta reveal">
+                    <a class="btn" href="#st-1" data-jump="1">
+                        <span>Iniciar el recorrido</span>
+                        <span class="btn-arrow" aria-hidden="true">↓</span>
+                    </a>
+                    <span class="hero-meta mono">frontend · python · desktop — remoto · disponible</span>
+                </div>
+            </div>
+
+            <p class="hero-scroll mono" aria-hidden="true">desliza para trazar</p>
+        </section>
+
+        <!-- ============ ESTACIÓN 01 · QUIÉN SOY ============ -->
+        <section class="station manifesto" id="st-1" data-station="1" aria-labelledby="maniTitle">
+            <div class="station-bg mani-bg" aria-hidden="true"><div class="aurora aurora-c"></div></div>
+            <span class="sec-phantom mono" aria-hidden="true">01</span>
+
+            <div class="shell manifesto-grid">
+                <div class="mani-copy">
+                    <h2 class="section-title reveal" id="maniTitle">Cada interfaz empieza como un trazo.</h2>
+                    <p class="reveal">
+                        Soy Enmanuel, desarrollador web autodidacta. Desde 2020 construyo productos completos —
+                        interfaces, APIs y aplicaciones de escritorio — para entender cómo una idea se dibuja
+                        hasta que funciona de verdad.
+                    </p>
+                    <p class="reveal">
+                        En 2026 terminé seis proyectos y cada uno tenía una intención: comunicar, vender,
+                        monitorear, ordenar, navegar y buscar. Todos empiezan igual: una línea en blanco.
+                    </p>
+
+                    <dl class="stack reveal">
+                        <div class="stack-row"><dt class="mono">frontend</dt><dd>React · TypeScript · JavaScript · HTML · CSS · Tailwind</dd></div>
+                        <div class="stack-row"><dt class="mono">backend</dt><dd>Python · FastAPI · APIs</dd></div>
+                        <div class="stack-row"><dt class="mono">desktop</dt><dd>Tauri · Electron · Vite</dd></div>
+                        <div class="stack-row"><dt class="mono">herramientas</dt><dd>Git · GitHub · Netlify · Chart.js</dd></div>
+                    </dl>
+
+                    <div class="mani-badge reveal">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        <span class="mono">disponible · trabajo remoto · inmediato</span>
+                    </div>
+                </div>
+
+                <figure class="mani-portrait reveal">
+                    <div class="portrait-frame">
+                        <img src="assets/perfil.jpeg" alt="Retrato de Enmanuel Pirela" width="640" height="800" loading="lazy" />
+                    </div>
+                    <figcaption class="mono">enmanuel pirela — dibujante de interfaces</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <!-- ============ ESTACIÓN 02 · EL RECORRIDO ============ -->
+        <section class="station map" id="st-2" data-station="2" aria-labelledby="mapTitle">
+            <div class="station-bg map-bg" aria-hidden="true"><div class="field-grid"></div></div>
+            <span class="sec-phantom mono" aria-hidden="true">02</span>
+
+            <div class="shell map-head">
+                <p class="kicker mono reveal">el recorrido</p>
+                <h2 class="section-title reveal" id="mapTitle">Seis proyectos, un solo trazo.</h2>
+                <p class="map-intro reveal">
+                    Una línea continua. Abro con los dos más complejos —kata y miso— y sigo con el resto del
+                    taller.
+                </p>
+            </div>
+
+            <ol class="map-nodes" id="mapNodes">
+                <li class="map-node is-featured reveal" data-num="01"><span class="map-num mono">01</span><span class="map-name">kata</span><span class="map-gist mono">un navegador que se queda contigo</span></li>
+                <li class="map-node is-featured reveal" data-num="02"><span class="map-num mono">02</span><span class="map-name">miso</span><span class="map-gist mono">busca una vez, encuentra en todos lados</span></li>
+                <li class="map-node reveal" data-num="03"><span class="map-num mono">03</span><span class="map-name">trazo</span><span class="map-gist mono">un portfolio que es un sistema</span></li>
+                <li class="map-node reveal" data-num="04"><span class="map-num mono">04</span><span class="map-name">mercium</span><span class="map-gist mono">una landing con intención de tienda</span></li>
+                <li class="map-node reveal" data-num="05"><span class="map-num mono">05</span><span class="map-name">sysdash</span><span class="map-gist mono">los números del sistema, en vivo</span></li>
+                <li class="map-node reveal" data-num="06"><span class="map-num mono">06</span><span class="map-name">vellum</span><span class="map-gist mono">un escritorio para ordenar el pensamiento</span></li>
+            </ol>
+
+            <svg class="map-line" viewBox="0 0 1200 900" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                <path
+                    id="mapPath"
+                    d="M 40 830 C 200 760, 220 660, 420 640 C 620 620, 640 480, 860 470 C 1020 464, 1090 380, 1160 240
+                       C 1176 200, 1130 120, 1040 130 C 880 150, 860 300, 700 330 C 520 365, 300 250, 160 160"
+                    pathLength="1"
+                />
+            </svg>
+        </section>
+
+        <!-- ============ ESTACIÓN 03 · KATA ============ -->
+        <section class="station project st-kata" id="st-3" data-station="3" aria-labelledby="tKata">
+            <div class="station-bg prj-bg" aria-hidden="true"><div class="aurora aurora-b"></div></div>
+
+            <div class="shell prj-head">
+                <span class="prj-ghost mono" aria-hidden="true">03</span>
+                <p class="prj-num mono">estación 03 · 2026<span class="prj-flag mono">destacado</span></p>
+                <h2 class="prj-title reveal" id="tKata">kata</h2>
+                <p class="prj-tagline reveal">un navegador que se queda contigo.</p>
+            </div>
+
+            <div class="shell prj-body">
+                <div class="prj-about reveal">
+                    <p>
+                        Privado, local y silencioso. Sin cuentas, sin telemetría ni sincronización forzada: el
+                        estado vive en el equipo del usuario. Un navegador de escritorio para Linux construido
+                        con Tauri.
+                    </p>
+                    <p class="prj-stack mono">tauri 2 · react 19 · typescript · rust</p>
+                    <div class="prj-links">
+                        <a class="link" href="https://github.com/enmanuel400/Kata" target="_blank" rel="noopener noreferrer">
+                            repositorio <span class="link-arrow" aria-hidden="true">↗</span>
+                        </a>
+                        <span class="prj-tag mono">proyecto externo</span>
+                    </div>
+                </div>
+
+                <figure class="prj-visual reveal">
+                    <div class="win-frame kata-frame">
+                        <div class="win-bar kata-bar">
+                            <span class="kata-tabs" id="kataTabs">
+                                <button class="kata-tab is-active" data-kata="kata-home.webp" aria-label="Ver inicio de kata">◍ inicio</button>
+                                <button class="kata-tab" data-kata="kata-search.webp" aria-label="Ver búsqueda de kata">⌕ búsqueda</button>
+                                <button class="kata-tab" data-kata="kata-youtube.webp" aria-label="Ver reproducción en kata">▷ reproducción</button>
+                            </span>
+                            <span class="win-title kata-url mono">kata.app/espacios</span>
+                        </div>
+                        <div class="kata-body">
+                            <img id="kataShot" src="assets/kata/kata-home.webp" alt="Captura de la interfaz de kata" loading="lazy" />
+                        </div>
+                    </div>
+                </figure>
+            </div>
+        </section>
+
+        <!-- ============ ESTACIÓN 04 · MISO ============ -->
+        <section class="station project st-miso" id="st-4" data-station="4" aria-labelledby="tMiso">
+            <div class="station-bg prj-bg" aria-hidden="true"><div class="aurora aurora-c"></div></div>
+
+            <div class="shell prj-head">
+                <span class="prj-ghost mono" aria-hidden="true">04</span>
+                <p class="prj-num mono">estación 04 · 2026<span class="prj-flag mono">destacado</span></p>
+                <h2 class="prj-title reveal" id="tMiso">miso</h2>
+                <p class="prj-tagline reveal">busca una vez, encuentra en todos lados.</p>
+            </div>
+
+            <div class="shell prj-body prj-body-swap">
+                <figure class="prj-visual reveal">
+                    <div class="win-frame miso-frame">
+                        <div class="win-bar"><span class="win-dots" aria-hidden="true"></span><span class="win-title mono">miso — búsqueda federada</span></div>
+                        <div class="miso-tabs" role="tablist" aria-label="Vistas de miso">
+                            <button class="miso-tab is-active" data-miso="demo" role="tab" aria-selected="true">⌕ demo interactiva</button>
+                            <button class="miso-tab" data-miso="shot" role="tab" aria-selected="false">▦ captura real</button>
+                        </div>
+                        <div class="miso-body">
+                            <div class="miso-search">
+                                <span class="miso-glyph mono" aria-hidden="true">⌕</span>
+                                <input
+                                    type="text"
+                                    id="misoInput"
+                                    placeholder="escribe un título…"
+                                    aria-label="Buscador de miso"
+                                    role="combobox"
+                                    aria-expanded="false"
+                                    aria-controls="misoSuggest"
+                                    aria-autocomplete="list"
+                                    autocomplete="off"
+                                    spellcheck="false"
+                                />
+                                <span class="miso-src mono">3 fuentes</span>
+                            </div>
+                            <ul class="miso-suggest" id="misoSuggest" role="listbox" aria-live="polite"></ul>
+                            <div class="miso-grid" id="misoGrid">
+                                <div class="miso-card"><span class="miso-thumb" aria-hidden="true"></span><b>El viaje de chihiro</b><small class="mono">stream 01</small></div>
+                                <div class="miso-card"><span class="miso-thumb" aria-hidden="true"></span><b>Parasite</b><small class="mono">stream 02</small></div>
+                                <div class="miso-card"><span class="miso-thumb" aria-hidden="true"></span><b>Dune: parte dos</b><small class="mono">stream 03</small></div>
+                                <div class="miso-card"><span class="miso-thumb" aria-hidden="true"></span><b>Interestelar</b><small class="mono">+2 fuentes</small></div>
+                            </div>
+                        </div>
+                        <img
+                            class="miso-shot"
+                            id="misoShot"
+                            src="assets/miso/miso-full.png"
+                            alt="Captura real de la interfaz de miso"
+                            loading="lazy"
+                        />
+                    </div>
+                </figure>
+
+                <div class="prj-about reveal">
+                    <p>
+                        Búsqueda federada que consulta varias fuentes a la vez, unifica los resultados en una
+                        cuadrícula y reproduce dentro de la app: sin pestañas, sin ventanas emergentes, sin
+                        publicidad. Todo ocurre en tu equipo.
+                    </p>
+                    <p class="prj-stack mono">electron · node/express · react · typescript</p>
+                    <div class="prj-links">
+                        <a class="link" href="https://github.com/enmanuel400/Miso" target="_blank" rel="noopener noreferrer">
+                            repositorio <span class="link-arrow" aria-hidden="true">↗</span>
+                        </a>
+                        <span class="prj-tag mono">proyecto externo</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ESTACIÓN 05 · TRAZO ============ -->
+        <section class="station project st-trazo" id="st-5" data-station="5" aria-labelledby="tTrazo">
+            <div class="station-bg prj-bg" aria-hidden="true"><div class="aurora aurora-a"></div></div>
+
+            <div class="shell prj-head">
+                <span class="prj-ghost mono" aria-hidden="true">05</span>
+                <p class="prj-num mono">estación 05 · 2026</p>
+                <h2 class="prj-title reveal" id="tTrazo">trazo</h2>
+                <p class="prj-tagline reveal">un portfolio que es un sistema.</p>
+            </div>
+
+            <div class="shell prj-body">
+                <div class="prj-about reveal">
+                    <p>
+                        La estación desde la que nació todo esto. Un sistema operativo simulado: arranque,
+                        ventanas que se arrastran, dock con magnificación, terminal interactiva y notas que se
+                        guardan solas.
+                    </p>
+                    <p class="prj-stack mono">html · css · javascript</p>
+                    <div class="prj-links">
+                        <a class="link" href="https://trazoos.netlify.app" target="_blank" rel="noopener noreferrer">
+                            demo en vivo <span class="link-arrow" aria-hidden="true">↗</span>
+                        </a>
+                        <span class="prj-tag mono">desplegado</span>
+                    </div>
+                </div>
+
+                <figure class="prj-visual reveal">
+                    <div class="win-frame os-window">
+                        <div class="win-bar"><span class="win-dots" aria-hidden="true"></span><span class="win-title mono">trazo — escritorio · v.02</span></div>
+                        <div class="os-dock" aria-hidden="true">
+                            <span class="dock-ic mono">▦</span><span class="dock-ic mono">&gt;_</span><span class="dock-ic mono">◍</span><span class="dock-ic mono">@</span><span class="dock-ic mono">✎</span>
+                        </div>
+                        <img src="assets/shots/desktop.png" alt="Captura del portfolio trazo v.02" loading="lazy" />
+                    </div>
+                </figure>
+            </div>
+        </section>
+
+        <!-- ============ ESTACIÓN 06 · MERCIUM ============ -->
+        <section class="station project st-mercium" id="st-6" data-station="6" aria-labelledby="tMercium">
+            <div class="station-bg prj-bg" aria-hidden="true"><div class="aurora aurora-d"></div></div>
+
+            <div class="shell prj-head">
+                <span class="prj-ghost mono" aria-hidden="true">06</span>
+                <p class="prj-num mono">estación 06 · 2026</p>
+                <h2 class="prj-title reveal" id="tMercium">mercium</h2>
+                <p class="prj-tagline reveal">una landing con intención de tienda.</p>
+            </div>
+
+            <div class="shell prj-body prj-body-swap">
+                <figure class="prj-visual reveal">
+                    <div class="win-frame shop-frame">
+                        <div class="win-bar"><span class="win-dots" aria-hidden="true"></span><span class="win-title mono">mercium.shop — catálogo</span></div>
+                        <div class="shop-strip">
+                            <span class="shop-pill mono">ofertas</span><span class="shop-pill mono">servicios</span><span class="shop-pill mono">checkout</span>
+                        </div>
+                        <img src="assets/shots/mercium-hero.png" alt="Captura de la landing de Mercium" loading="lazy" />
+                    </div>
+                </figure>
+
+                <div class="prj-about reveal">
+                    <p>
+                        Catálogo, filtros, carrito y checkout con totales calculados al instante. Pensada para
+                        captar leads y comunicar valor, no para decorar.
+                    </p>
+                    <p class="prj-stack mono">html · tailwind · javascript</p>
+                    <div class="prj-links">
+                        <a class="link" href="https://mercium-shop.netlify.app" target="_blank" rel="noopener noreferrer">
+                            demo en vivo <span class="link-arrow" aria-hidden="true">↗</span>
+                        </a>
+                        <span class="prj-tag mono">desplegado</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ESTACIÓN 07 · SYSDASH ============ -->
+        <section class="station project st-sysdash" id="st-7" data-station="7" aria-labelledby="tSysdash">
+            <div class="station-bg prj-bg" aria-hidden="true"><div class="aurora aurora-d"></div></div>
+
+            <div class="shell prj-head">
+                <span class="prj-ghost mono" aria-hidden="true">07</span>
+                <p class="prj-num mono">estación 07 · 2026</p>
+                <h2 class="prj-title reveal" id="tSysdash">sysdash</h2>
+                <p class="prj-tagline reveal">los números del sistema, en vivo.</p>
+            </div>
+
+            <div class="shell prj-body">
+                <div class="prj-about reveal">
+                    <p>
+                        CPU, RAM, disco, red y procesos activos. Una API propia con Python y FastAPI alimenta un
+                        panel que no pide permiso para mostrar la verdad.
+                    </p>
+                    <p class="prj-stack mono">python · fastapi · chart.js</p>
+                    <div class="prj-links">
+                        <a class="link" href="https://github.com/enmanuel400/Portfolio/blob/master/sysdash/README.md" target="_blank" rel="noopener noreferrer">
+                            leer documentación <span class="link-arrow" aria-hidden="true">↗</span>
+                        </a>
+                        <span class="prj-tag mono">ejecución local</span>
+                    </div>
+                </div>
+
+                <figure class="prj-visual reveal">
+                    <div class="win-frame dash-frame">
+                        <div class="win-bar"><span class="win-dots" aria-hidden="true"></span><span class="win-title mono">sysdash — panel de operaciones</span><span class="dash-live mono">● en vivo</span></div>
+                        <div class="dash-body">
+                            <div class="dash-grid">
+                                <div class="dash-metric"><span class="mono">cpu</span><canvas id="chartCpu" width="340" height="90"></canvas></div>
+                                <div class="dash-metric"><span class="mono">ram</span><canvas id="chartRam" width="340" height="90"></canvas></div>
+                                <div class="dash-metric"><span class="mono">disco</span><canvas id="chartDisk" width="340" height="90"></canvas></div>
+                                <div class="dash-metric"><span class="mono">red</span><canvas id="chartNet" width="340" height="90"></canvas></div>
+                            </div>
+                            <ul class="dash-procs">
+                                <li class="mono"><span>kernel</span><b></b><i>protegido</i></li>
+                                <li class="mono"><span>trazo.ui</span><b></b><i>corriendo</i></li>
+                                <li class="mono"><span>api.fastapi</span><b></b><i>corriendo</i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </figure>
+            </div>
+        </section>
+
+        <!-- ============ ESTACIÓN 08 · VELLUM ============ -->
+        <section class="station project st-vellum" id="st-8" data-station="8" aria-labelledby="tVellum">
+            <div class="station-bg prj-bg" aria-hidden="true"><div class="aurora aurora-e"></div></div>
+
+            <div class="shell prj-head">
+                <span class="prj-ghost mono" aria-hidden="true">08</span>
+                <p class="prj-num mono">estación 08 · 2026</p>
+                <h2 class="prj-title reveal" id="tVellum">vellum</h2>
+                <p class="prj-tagline reveal">un escritorio para ordenar el pensamiento.</p>
+            </div>
+
+            <div class="shell prj-body prj-body-swap">
+                <figure class="prj-visual reveal">
+                    <div class="win-frame vellum-frame">
+                        <div class="win-bar"><span class="win-dots" aria-hidden="true"></span><span class="win-title mono">vellum — espacio de trabajo</span></div>
+                        <img src="assets/shots/vellum-dark.png" alt="Captura del workspace Vellum" loading="lazy" />
+                    </div>
+                </figure>
+
+                <div class="prj-about reveal">
+                    <p>
+                        Notas, ideas y contenido en un workspace visual con calma. Modo claro y oscuro para que
+                        el foco esté siempre en la idea, no en la herramienta.
+                    </p>
+                    <p class="prj-stack mono">vite · electron · tailwind</p>
+                    <div class="prj-links">
+                        <a class="link" href="https://github.com/enmanuel400/Portfolio/tree/master/vellum" target="_blank" rel="noopener noreferrer">
+                            ver código <span class="link-arrow" aria-hidden="true">↗</span>
+                        </a>
+                        <span class="prj-tag mono">app de escritorio</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ESTACIÓN 09 · CIERRE ============ -->
+        <section class="station close" id="st-9" data-station="9" aria-labelledby="closeTitle">
+            <div class="station-bg close-bg" aria-hidden="true">
+                <div class="aurora aurora-a"></div>
+                <div class="field-grid"></div>
+            </div>
+            <span class="sec-phantom mono" aria-hidden="true">09</span>
+
+            <div class="shell close-inner">
+                <p class="kicker mono reveal">cierre</p>
+                <h2 class="close-title reveal" id="closeTitle">
+                    Donde termina un trazo,<br />
+                    empieza el siguiente.
+                </h2>
+                <p class="close-sub reveal">
+                    Si tu proyecto necesita una interfaz clara, un panel que hable o una app que se sienta
+                    propia, hablemos.
+                </p>
+                <div class="close-cta reveal">
+                    <a class="btn btn-coral" href="mailto:enmanuelpirela400@gmail.com">
+                        <span>Conversar</span>
+                        <span class="btn-arrow" aria-hidden="true">↗</span>
+                    </a>
+                </div>
+
+                <ul class="close-links reveal">
+                    <li><a class="link" href="https://github.com/enmanuel400" target="_blank" rel="noopener noreferrer">github <span class="link-arrow" aria-hidden="true">↗</span></a></li>
+                    <li><a class="link" href="https://www.linkedin.com/in/enmanuel-pirela-697020437/" target="_blank" rel="noopener noreferrer">linkedin <span class="link-arrow" aria-hidden="true">↗</span></a></li>
+                    <li><a class="link" href="https://wa.me/+584246585219" target="_blank" rel="noopener noreferrer">whatsapp <span class="link-arrow" aria-hidden="true">↗</span></a></li>
+                </ul>
+            </div>
+
+            <footer class="route-foot">
+                <p class="mono route-brand">
+                    <svg class="route-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <path d="M5 35 C 13 20, 27 13, 35 19 C 40 23, 41 27, 40 31" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                        <circle cx="40" cy="31" r="4" fill="currentColor"/>
+                    </svg>
+                    trazo · v.03 — el recorrido
+                </p>
+                <p class="mono">v.02 vive dentro de la estación 05</p>
+            </footer>
+        </section>
+    </main>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"
+        defer
+    ></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"
+        defer
+    ></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js"
+        defer
+    ></script>
+    <script src="app.js" defer></script>
+</body>
+</html>
