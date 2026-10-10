@@ -4,7 +4,7 @@
 
 <img src="assets/screenshots/desktop.png" alt="Portfolio preview" width="900" />
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Recorrido-00D4FF?style=for-the-badge&logo=netlify)](https://trazoos.netlify.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Recorrido-00D4FF?style=for-the-badge&logo=vercel)](https://trazo-v03.vercel.app)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Portfolio-181717?style=for-the-badge&logo=github)](https://github.com/enmanuel400/Portfolio)
 [![Mercium Shop](https://img.shields.io/badge/Mercium%20Shop-Live-8B5CF6?style=for-the-badge&logo=shopify)](https://mercium-shop.netlify.app)
 [![Miso](https://img.shields.io/badge/Miso-GitHub-A99DF0?style=for-the-badge&logo=github)](https://github.com/enmanuel400/Miso)
@@ -58,6 +58,7 @@ Portfolio inmersivo presentado como **una línea continua** que conecta estacion
 
 - Propósito: presentar el trabajo como un viaje, del quién soy al cierre
 - Tecnologías: HTML, CSS, JavaScript + GSAP ScrollTrigger
+- Demo en vivo: https://trazo-v03.vercel.app
 - Carpeta: `recorrido/` — se abre con `python3 -m http.server 8123 --directory recorrido`
 
 ### Kata
@@ -137,6 +138,7 @@ Workspace visual para organizar ideas, notas y contenido personal.
 
 ## Enlaces en vivo
 
+- Recorrido (trazo v.03): https://trazo-v03.vercel.app
 - Desktop: https://trazoos.netlify.app
 - Mercium Shop: https://mercium-shop.netlify.app
 - Miso: app de escritorio local / no pública como sitio web — https://github.com/enmanuel400/Miso
@@ -145,7 +147,8 @@ Workspace visual para organizar ideas, notas y contenido personal.
 
 ## Cómo explorar el repositorio
 
-- Ver demo del portfolio: https://trazoos.netlify.app
+- Ver demo del recorrido (trazo v.03): https://trazo-v03.vercel.app
+- Ver demo del portfolio de escritorio (v.02): https://trazoos.netlify.app
 - Ver catálogo comercial: https://mercium-shop.netlify.app
 - Leer documentación de Sysdash: https://github.com/enmanuel400/Portfolio/blob/master/sysdash/README.md
 - Leer documentación de Vellum: https://github.com/enmanuel400/Portfolio/blob/master/vellum/README.md

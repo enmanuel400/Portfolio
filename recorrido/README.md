@@ -8,6 +8,8 @@ Demo local:
 python3 -m http.server 8123 --directory recorrido
 ```
 
+En vivo: **https://trazo-v03.vercel.app**
+
 ## Estaciones
 
 | # | Estación | Contenido |
@@ -35,4 +37,4 @@ python3 -m http.server 8123 --directory recorrido
 
 ## Identidad
 
-Hereda los tokens de trazo v.02 (`--ink`, `--mint`, `--coral`, `--yellow`, Space Grotesk + DM Mono) y añade `--ice` (color del trazo) y `--violet-quiet` (solo proyectos externos: mercium, miso). La marca —un trazo que termina en un punto— vive en `assets/favicon.svg` y en la barra y el pie. Desplegable en Netlify con solo arrastrar la carpeta.
+Hereda los tokens de trazo v.02 (`--ink`, `--mint`, `--coral`, `--yellow`, Space Grotesk + DM Mono) y añade `--ice` (color del trazo) y `--violet-quiet` (solo proyectos externos: mercium, miso). La marca —un trazo que termina en un punto— vive en `assets/favicon.svg` y en la barra y el pie. Desplegado en vivo en Vercel: **https://trazo-v03.vercel.app**.
