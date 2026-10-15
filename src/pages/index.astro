@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Monogram from '../components/Monogram.astro';
+---
+
+<Base
+  title="Enmanuel Pirela — Frontend developer"
+  description="Frontend developer. Interfaces claras, rendimiento y atención al detalle."
+>
+  <main class="wrap" style="padding-block: var(--s-32)">
+    <div class="hero">
+      <Monogram variant="line" size={56} />
+      <p class="label" style="margin-top: var(--s-8)">Frontend developer · Portfolio en construcción</p>
+      <h1 class="display-l" style="margin-top: var(--s-4); max-width: 18ch">
+        Interfaces claras, con detalle de verdad.
+      </h1>
+      <p class="lede" style="margin-top: var(--s-6)">
+        Estoy montando el sitio nuevo por fases. Mientras tanto puedes ver la
+        <a class="link" href="/estilo">guía de estilo</a> con la dirección visual y las
+        propuestas de monograma.
+      </p>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .hero {
+    max-width: 70ch;
+  }
+</style>

@@ -1,0 +1,118 @@
+/* ============================================================
+   Tokens — sistema de diseño
+   Dirección: técnico monocromo (base B) + titulares editoriales (A)
+   Tipografías: Newsreader (display) · Schibsted Grotesk (texto) · JetBrains Mono (etiquetas)
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* — Neutrales (fríos, casi neutros; nunca #000 ni #fff puros) — */
+  --paper: #fbfbfa;
+  --paper-2: #f4f5f3;
+  --paper-3: #ecedea;
+  --ink: #121417;
+  --ink-2: #3b3f45;
+  --ink-3: #63696f;
+  --ink-4: #868c92;
+  --line: rgba(18, 20, 23, 0.12);
+  --line-2: rgba(18, 20, 23, 0.22);
+
+  /* — Acento: verde lima —
+     --accent sirve para gráficos y texto grande; --accent-ink es el que
+     pasa contraste AA sobre papel para enlaces y texto normal. */
+  --accent: #3be27a;
+  --accent-ink: #0e6b37;
+  --accent-soft: rgba(59, 226, 122, 0.16);
+
+  /* — Semánticos (lo que usan los componentes) — */
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --fg-2: var(--ink-2);
+  --muted: var(--ink-3);
+  --faint: var(--ink-4);
+  --surface: #ffffff;
+  --surface-2: var(--paper-2);
+
+  /* — Tipografía — */
+  --font-sans: "Schibsted Grotesk Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Newsreader Variable", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+
+  /* Escala display fluida (titulares editoriales) */
+  --display-s: clamp(1.6rem, 1.1rem + 2vw, 2.4rem);
+  --display-m: clamp(2.1rem, 1.3rem + 3.4vw, 3.75rem);
+  --display-l: clamp(2.6rem, 1.3rem + 5.4vw, 5.5rem);
+
+  --leading-tight: 1.04;
+  --leading-snug: 1.22;
+  --leading-body: 1.62;
+  --tracking-tight: -0.02em;
+  --tracking-label: 0.09em;
+
+  /* — Espaciado (base 4px) — */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.25rem;
+  --s-6: 1.5rem;
+  --s-8: 2rem;
+  --s-12: 3rem;
+  --s-16: 4rem;
+  --s-24: 6rem;
+  --s-32: 8rem;
+
+  /* — Contenedores — */
+  --wrap: 1200px;
+  --wrap-narrow: 66ch;
+
+  /* — Radios: regla fija — controles 6px · superficies 10px · etiquetas pill — */
+  --r-1: 6px;
+  --r-2: 10px;
+  --r-3: 16px;
+  --r-pill: 999px;
+
+  /* — Sombras entintadas (nunca negro puro) — */
+  --shadow-1: 0 1px 2px rgba(18, 20, 23, 0.05), 0 1px 1px rgba(18, 20, 23, 0.04);
+  --shadow-2: 0 10px 30px -14px rgba(18, 20, 23, 0.22);
+
+  /* — Movimiento — */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-1: 140ms;
+  --dur-2: 240ms;
+  --dur-3: 420ms;
+
+  /* — Foco accesible — */
+  --focus-color: var(--accent-ink);
+  --focus-width: 2px;
+  --focus-offset: 2px;
+}
+
+/* — Tema oscuro opcional (intercambio semántico, aún sin conmutador) — */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0e1012;
+  --paper-2: #14171a;
+  --paper-3: #1a1e22;
+  --ink: #f2f3f1;
+  --ink-2: #c6cac8;
+  --ink-3: #8b918e;
+  --ink-4: #6a706d;
+  --line: rgba(242, 243, 241, 0.14);
+  --line-2: rgba(242, 243, 241, 0.24);
+  --accent: #3be27a;
+  --accent-ink: #5cf0a0;
+  --accent-soft: rgba(59, 226, 122, 0.18);
+  --surface: #121519;
+  --surface-2: #171b1f;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --shadow-2: 0 10px 30px -14px rgba(0, 0, 0, 0.65);
+}

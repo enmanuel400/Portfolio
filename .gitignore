@@ -6,7 +6,15 @@ __pycache__/
 node_modules/
 dist/
 .vite/
+.astro/
 *.log
+
+# Vercel CLI
+.vercel
+
+# Tooling local del asistente
+.agents/
+skills-lock.json
 
 # Build artifacts and large binaries
 vellum/release/

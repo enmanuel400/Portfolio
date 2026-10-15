@@ -1,0 +1,35 @@
+---
+import '@fontsource-variable/schibsted-grotesk';
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/newsreader/wght-italic.css';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: string;
+}
+
+const {
+  title = 'Enmanuel Pirela — Frontend developer',
+  description = 'Frontend developer. Interfaces claras, rendimiento y atención al detalle.',
+  lang = 'en',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
