@@ -5,18 +5,26 @@ import '@fontsource-variable/newsreader/wght-italic.css';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/tokens.css';
 import '../styles/base.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, type Lang } from '../site.config';
+import { stripLang } from '../i18n/utils';
 
 interface Props {
-  title?: string;
-  description?: string;
-  lang?: string;
+  title: string;
+  description: string;
+  lang: Lang;
+  /** Ruta neutra para alternas hreflang; si se omite se deduce de la URL. */
+  path?: string;
 }
 
-const {
-  title = 'Enmanuel Pirela — Frontend developer',
-  description = 'Frontend developer. Interfaces claras, rendimiento y atención al detalle.',
-  lang = 'en',
-} = Astro.props;
+const { title, description, lang } = Astro.props;
+const neutralPath = stripLang(Astro.url.pathname).replace(/\/+$/, '') || '/';
+
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const enHref = new URL(neutralPath, SITE.url).href;
+const esHref = new URL(neutralPath === '/' ? '/es' : `/es${neutralPath}`, SITE.url).href;
+const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}`;
 ---
 
 <!doctype html>
@@ -25,11 +33,55 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="es" href={esHref} />
+    <link rel="alternate" hreflang="x-default" href={enHref} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_ES'} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>
+      // Idioma automático solo en las portadas, y solo si el usuario no eligió antes.
+      (function () {
+        try {
+          var path = location.pathname.replace(/\/+$/, '') || '/';
+          if (path !== '/' && path !== '/es') return;
+          if (localStorage.getItem('lang')) return;
+          var langs = navigator.languages || [navigator.language || 'en'];
+          var prefersEs = langs.some(function (l) {
+            return /^es\b/i.test(l);
+          });
+          if (prefersEs && path === '/') location.replace('/es');
+          else if (!prefersEs && path === '/es') location.replace('/');
+        } catch (e) {}
+      })();
+      // Recuerda la elección manual del conmutador.
+      document.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest && e.target.closest('[data-lang-switch]');
+        if (a) {
+          try {
+            localStorage.setItem('lang', a.getAttribute('data-lang-switch'));
+          } catch (_) {}
+        }
+      });
+    </script>
   </head>
   <body>
-    <slot />
+    <a class="skip" href="#main">Skip to content</a>
+    <Header lang={lang} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
   </body>
 </html>

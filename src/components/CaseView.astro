@@ -1,0 +1,234 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import type { Lang } from '../site.config';
+import { useTranslations, localizePath } from '../i18n/utils';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  lang: Lang;
+}
+const { entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const { data } = entry;
+const { Content } = await render(entry);
+
+const all = await getCollection('projects', ({ data: d }) => d.lang === lang);
+const ordered = all.sort((a, b) => a.data.order - b.data.order);
+const idx = ordered.findIndex((p) => p.id === entry.id);
+const next = ordered[(idx + 1) % ordered.length];
+---
+
+<article class="case">
+  <header class="wrap case__head">
+    <a class="label case__back" href={localizePath('/work', lang)}>← {t('case.back')}</a>
+    <h1 class="display-l case__title">{data.title}</h1>
+    <p class="lede case__lede">{data.lede}</p>
+
+    <dl class="meta">
+      <div class="meta__item">
+        <dt class="label">{t('case.role')}</dt>
+        <dd>{data.role}</dd>
+      </div>
+      <div class="meta__item">
+        <dt class="label">{t('case.year')}</dt>
+        <dd>{data.year}</dd>
+      </div>
+      <div class="meta__item">
+        <dt class="label">{t('case.status')}</dt>
+        <dd>{data.status}</dd>
+      </div>
+    </dl>
+
+    <div class="case__foot">
+      <ul class="tags">
+        {data.stack.map((s: string) => <li class="tag">{s}</li>)}
+      </ul>
+      <div class="case__links">
+        {
+          data.repo && (
+            <a class="btn btn--ghost" href={data.repo} target="_blank" rel="noreferrer">
+              {t('case.repo')} ↗
+            </a>
+          )
+        }
+        {
+          data.live && (
+            <a class="btn btn--primary" href={data.live} target="_blank" rel="noreferrer">
+              {t('case.live')} ↗
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap case__hero">
+    <Image
+      src={data.image}
+      alt={`${data.title} — ${data.tagline}`}
+      widths={[600, 1000, 1440]}
+      sizes="(max-width: 1100px) 100vw, 1100px"
+      format="webp"
+    />
+  </div>
+
+  <div class="wrap--narrow prose">
+    <Content />
+  </div>
+
+  <nav class="wrap case__next" aria-label={t('case.next')}>
+    <a href={localizePath(`/work/${next.data.slug}`, lang)}>
+      <span class="label">{t('case.next')}</span>
+      <span class="case__next-title">{next.data.title} →</span>
+    </a>
+  </nav>
+</article>
+
+<style>
+  .case__head {
+    padding-block: var(--s-24) var(--s-12);
+    display: grid;
+    gap: var(--s-5);
+    max-width: 46rem;
+  }
+
+  .case__back {
+    color: var(--muted);
+    width: fit-content;
+    transition: color var(--dur-1) var(--ease);
+  }
+
+  .case__back:hover {
+    color: var(--fg);
+  }
+
+  .case__title {
+    margin-top: var(--s-2);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-8);
+    margin-top: var(--s-4);
+  }
+
+  .meta__item {
+    display: grid;
+    gap: var(--s-1);
+  }
+
+  .meta__item dd {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--fg-2);
+  }
+
+  .case__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    margin-top: var(--s-4);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--line);
+  }
+
+  .tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+
+  .case__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+
+  .case__hero {
+    margin-block: var(--s-8) var(--s-16);
+  }
+
+  .case__hero :global(img) {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--r-2);
+    background: var(--surface-2);
+  }
+
+  .case__next {
+    margin-top: var(--s-24);
+    padding-top: var(--s-8);
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .case__next a {
+    display: grid;
+    gap: var(--s-1);
+    text-align: right;
+  }
+
+  .case__next-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+  }
+
+  /* Prosa del caso (markdown) */
+  .prose {
+    display: grid;
+    gap: var(--s-5);
+  }
+
+  .prose :global(h2) {
+    font-size: var(--display-s);
+    margin-top: var(--s-8);
+  }
+
+  .prose :global(p) {
+    color: var(--fg-2);
+    text-wrap: pretty;
+  }
+
+  .prose :global(ul) {
+    display: grid;
+    gap: var(--s-3);
+    padding-left: var(--s-5);
+  }
+
+  .prose :global(li) {
+    color: var(--fg-2);
+  }
+
+  .prose :global(li::marker) {
+    color: var(--accent-ink);
+  }
+
+  .prose :global(strong) {
+    color: var(--fg);
+    font-weight: 600;
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-1);
+    padding: 0.1em 0.35em;
+  }
+
+  .prose :global(a) {
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

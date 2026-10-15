@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import CaseView from '../../components/CaseView.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects', ({ data }) => data.lang === 'en');
+  return entries.map((entry) => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+---
+
+<Base title={entry.data.title} description={entry.data.description} lang="en">
+  <CaseView entry={entry} lang="en" />
+</Base>

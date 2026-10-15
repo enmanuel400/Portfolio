@@ -10,15 +10,19 @@ interface Props {
   variant: 'serif' | 'block' | 'line';
   size?: number;
   label?: string;
+  decorative?: boolean;
 }
 
-const { variant, size = 72, label } = Astro.props;
+const { variant, size = 72, label, decorative = false } = Astro.props;
 const aria = label ?? `Monograma Enmanuel Pirela (${variant})`;
+const a11y = decorative
+  ? { 'aria-hidden': 'true' as const }
+  : { role: 'img' as const, 'aria-label': aria };
 ---
 
 {
   variant === 'serif' && (
-    <span class="mg mg--serif" style={`--mg-size:${size}px`} role="img" aria-label={aria}>
+    <span class="mg mg--serif" style={`--mg-size:${size}px`} {...a11y}>
       EP
     </span>
   )
@@ -31,8 +35,7 @@ const aria = label ?? `Monograma Enmanuel Pirela (${variant})`;
       width={size}
       height={size}
       viewBox="0 0 72 72"
-      role="img"
-      aria-label={aria}
+      {...a11y}
       fill="none"
     >
       <rect width="72" height="72" rx="16" fill="var(--ink)" />
@@ -58,8 +61,7 @@ const aria = label ?? `Monograma Enmanuel Pirela (${variant})`;
       width={size}
       height={size}
       viewBox="0 0 72 72"
-      role="img"
-      aria-label={aria}
+      {...a11y}
       fill="none"
     >
       <g stroke="var(--ink)" stroke-width="4" stroke-linecap="square">

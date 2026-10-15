@@ -1,0 +1,231 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import ProjectCard from './ProjectCard.astro';
+import { type Lang } from '../site.config';
+import { useTranslations, localizePath } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const all = await getCollection('projects', ({ data }) => data.lang === lang);
+const projects = all.sort((a, b) => a.data.order - b.data.order);
+const star = projects.find((p) => p.data.star) ?? projects[0];
+const rest = projects.filter((p) => p.id !== star.id);
+
+const posts = {
+  en: [
+    'The states you skip',
+    'Local servers are a feature',
+    'A design system for one person',
+  ],
+  es: [
+    'Los estados que te saltas',
+    'Los servidores locales son una función',
+    'Un design system para una persona',
+  ],
+}[lang];
+---
+
+<section class="hero wrap">
+  <p class="label">{t('home.hero.eyebrow')}</p>
+  <h1 class="display-l hero__title">{t('home.hero.title')}</h1>
+  <p class="lede hero__lede">{t('home.hero.lede')}</p>
+  <div class="hero__cta">
+    <a class="btn btn--primary" href={localizePath('/work', lang)}>{t('home.hero.cta.work')}</a>
+    <a class="btn btn--ghost" href={localizePath('/about', lang)}>{t('home.hero.cta.about')}</a>
+  </div>
+</section>
+
+<section class="wrap sec" id="work">
+  <div class="sec__head">
+    <p class="label">{t('home.work.eyebrow')}</p>
+    <a class="link" href={localizePath('/work', lang)}>{t('home.work.all')} →</a>
+  </div>
+
+  <a class="star" href={localizePath(`/work/${star.data.slug}`, lang)}>
+    <div class="star__media">
+      <Image
+        src={star.data.image}
+        alt={`${star.data.title} — ${star.data.tagline}`}
+        widths={[600, 1000, 1400]}
+        sizes="(max-width: 900px) 100vw, 60vw"
+        format="webp"
+      />
+    </div>
+    <div class="star__body">
+      <span class="label">{t('home.work.featured')}</span>
+      <h2 class="display-m star__title">{star.data.title}</h2>
+      <p class="lede">{star.data.tagline}</p>
+      <ul class="star__tags">
+        {star.data.stack.slice(0, 4).map((s: string) => <li class="tag">{s}</li>)}
+      </ul>
+      <span class="link star__cta">{t('case.view')} →</span>
+    </div>
+  </a>
+
+  <div class="grid">
+    {rest.map((p) => <ProjectCard entry={p} lang={lang} />)}
+  </div>
+</section>
+
+<section class="wrap sec sec--about" id="about">
+  <p class="label">{t('home.about.eyebrow')}</p>
+  <p class="about__text">{t('home.about.text')}</p>
+  <a class="link" href={localizePath('/about', lang)}>{t('home.about.more')} →</a>
+</section>
+
+<section class="wrap sec" id="writing">
+  <div class="sec__head">
+    <p class="label">{t('home.writing.eyebrow')}</p>
+    <a class="link" href={localizePath('/writing', lang)}>{t('home.writing.all')} →</a>
+  </div>
+  <ul class="wlist">
+    {posts.map((title, i) => (
+      <li class="wlist__item">
+        <span class="label">{String(i + 1).padStart(2, '0')}</span>
+        <span class="wlist__title">{title}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--s-24) var(--s-16);
+    max-width: 46rem;
+  }
+
+  .hero__title {
+    margin-top: var(--s-4);
+    max-width: 20ch;
+  }
+
+  .hero__lede {
+    margin-top: var(--s-6);
+  }
+
+  .hero__cta {
+    margin-top: var(--s-8);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+
+  .sec {
+    padding-block: var(--s-12);
+    display: grid;
+    gap: var(--s-8);
+  }
+
+  .sec__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-4);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: var(--s-4);
+  }
+
+  .star {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: var(--s-8);
+    align-items: center;
+  }
+
+  .star__media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r-2);
+    background: var(--surface-2);
+  }
+
+  .star__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform var(--dur-3) var(--ease);
+  }
+
+  .star:hover .star__media :global(img) {
+    transform: scale(1.02);
+  }
+
+  .star__body {
+    display: grid;
+    gap: var(--s-4);
+    align-content: start;
+  }
+
+  .star__title {
+    margin-top: var(--s-2);
+  }
+
+  .star__tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+
+  .star__cta {
+    color: var(--accent-ink);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-8);
+  }
+
+  .sec--about {
+    gap: var(--s-5);
+    border-top: 1px solid var(--line);
+  }
+
+  .about__text {
+    font-family: var(--font-display);
+    font-size: var(--display-s);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    max-width: 46rem;
+    text-wrap: balance;
+  }
+
+  .wlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+
+  .wlist__item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-5);
+    padding-block: var(--s-5);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .wlist__title {
+    font-size: var(--text-lg);
+  }
+
+  @media (max-width: 820px) {
+    .star {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

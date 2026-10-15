@@ -1,0 +1,101 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '../site.config';
+import { localizePath } from '../i18n/utils';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  lang: Lang;
+  index?: number;
+}
+const { entry, lang, index } = Astro.props;
+const { data } = entry;
+const href = localizePath(`/work/${data.slug}`, lang);
+const num = typeof index === 'number' ? String(index + 1).padStart(2, '0') : null;
+---
+
+<a class="pcard" href={href}>
+  <div class="pcard__media">
+    <Image
+      src={data.image}
+      alt={`${data.title} — ${data.tagline}`}
+      widths={[420, 760, 1100]}
+      sizes="(max-width: 760px) 100vw, 46vw"
+      format="webp"
+      loading="lazy"
+    />
+  </div>
+  <div class="pcard__body">
+    <div class="pcard__top">
+      {num && <span class="label">{num}</span>}
+      <span class="label pcard__year">{data.year}</span>
+    </div>
+    <h3 class="pcard__title">{data.title}</h3>
+    <p class="pcard__tag">{data.tagline}</p>
+    <ul class="pcard__tags">
+      {data.stack.slice(0, 3).map((s: string) => <li class="tag">{s}</li>)}
+    </ul>
+  </div>
+</a>
+
+<style>
+  .pcard {
+    display: grid;
+    gap: var(--s-4);
+    align-content: start;
+  }
+
+  .pcard__media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r-2);
+    background: var(--surface-2);
+  }
+
+  .pcard__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform var(--dur-3) var(--ease);
+  }
+
+  .pcard:hover .pcard__media :global(img) {
+    transform: scale(1.02);
+  }
+
+  .pcard__body {
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .pcard__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .pcard__year {
+    color: var(--muted);
+  }
+
+  .pcard__title {
+    font-size: 1.5rem;
+  }
+
+  .pcard__tag {
+    color: var(--fg-2);
+    text-wrap: pretty;
+  }
+
+  .pcard__tags {
+    list-style: none;
+    margin: var(--s-2) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+</style>

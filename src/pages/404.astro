@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { useTranslations, localizePath } from '../i18n/utils';
+
+const lang = 'en';
+const t = useTranslations(lang);
+---
+
+<Base title={t('notfound.title')} description={t('notfound.text')} lang={lang}>
+  <section class="wrap nf">
+    <p class="label">404</p>
+    <h1 class="display-m">{t('notfound.title')}</h1>
+    <p class="lede">{t('notfound.text')}</p>
+    <a class="btn btn--primary" href={localizePath('/', lang)}>{t('notfound.home')}</a>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    padding-block: var(--s-32);
+    display: grid;
+    gap: var(--s-5);
+    justify-items: start;
+    max-width: 40rem;
+  }
+</style>
