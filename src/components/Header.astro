@@ -19,6 +19,8 @@ const nav = [
 
 const isActive = (p: string) => current === p || current.startsWith(p + '/');
 const other = otherLang(lang);
+// En la página 404 no existe equivalente localizado: el conmutador lleva al inicio.
+const switchTarget = current === '/404' ? '/' : current;
 ---
 
 <header class="hdr">
@@ -45,7 +47,7 @@ const other = otherLang(lang);
       }
       <a
         class="nav__lang"
-        href={localizePath(current, other)}
+        href={localizePath(switchTarget, other)}
         data-lang-switch={other}
         lang={other}
         aria-label={other === 'es' ? 'ES — Cambiar a español' : 'EN — Switch to English'}

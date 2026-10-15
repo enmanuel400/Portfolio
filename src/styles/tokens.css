@@ -98,7 +98,7 @@
   --focus-offset: 2px;
 }
 
-/* — Tema oscuro opcional (intercambio semántico, aún sin conmutador) — */
+/* — Tema oscuro (por defecto; el conmutador cambia data-theme en el html) — */
 [data-theme="dark"] {
   color-scheme: dark;
   --paper: #0e1012;

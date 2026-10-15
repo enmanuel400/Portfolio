@@ -22,11 +22,13 @@ export function stripLang(pathname: string): string {
   return pathname;
 }
 
-/** Convierte una ruta neutra ("/work") en su versión localizada. */
+/** Convierte una ruta neutra ("/work") en su versión localizada, con barra final. */
 export function localizePath(path: string, lang: Lang): string {
-  const p = path.startsWith('/') ? path : `/${path}`;
+  // Normaliza a "/algo/" para coincidir con la URL canónica del build (evita redirecciones).
+  let p = path.startsWith('/') ? path : `/${path}`;
+  if (p !== '/') p = p.replace(/\/+$/, '') + '/';
   if (lang === defaultLang) return p;
-  return p === '/' ? '/es' : `/es${p}`;
+  return p === '/' ? '/es/' : `/es${p}`;
 }
 
 /** Devuelve el otro idioma. */

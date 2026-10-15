@@ -22,8 +22,9 @@ const t = useTranslations(lang);
 const neutralPath = stripLang(Astro.url.pathname).replace(/\/+$/, '') || '/';
 
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const ogImage = new URL('/og.png', SITE.url).href;
 const enHref = new URL(neutralPath, SITE.url).href;
-const esHref = new URL(neutralPath === '/' ? '/es' : `/es${neutralPath}`, SITE.url).href;
+const esHref = new URL(neutralPath === '/' ? '/es/' : `/es${neutralPath}`, SITE.url).href;
 const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}`;
 ---
 
@@ -45,6 +46,7 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0e1012" />
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
@@ -61,7 +63,12 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_ES'} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE.name} — ${t('brand.role')}`} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
 
     <script is:inline>
       // Idioma automático solo en las portadas, y solo si el usuario no eligió antes.
@@ -74,7 +81,7 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
           var prefersEs = langs.some(function (l) {
             return /^es\b/i.test(l);
           });
-          if (prefersEs && path === '/') location.replace('/es');
+          if (prefersEs && path === '/') location.replace('/es/');
           else if (!prefersEs && path === '/es') location.replace('/');
         } catch (e) {}
       })();
@@ -121,6 +128,20 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
             document.documentElement.getAttribute('data-theme') === 'dark' ? 'true' : 'false'
           );
         }
+
+        // Mantiene el color de la barra del navegador acorde al tema activo.
+        var metaTC = document.querySelector('meta[name="theme-color"]');
+        function syncThemeColor() {
+          if (!metaTC) return;
+          metaTC.setAttribute(
+            'content',
+            document.documentElement.getAttribute('data-theme') === 'dark' ? '#0e1012' : '#fbfbfa'
+          );
+        }
+        syncThemeColor();
+        document.addEventListener('click', function (e) {
+          if (e.target && e.target.closest && e.target.closest('[data-theme-toggle]')) syncThemeColor();
+        });
 
         var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
         if (!els.length) return;
