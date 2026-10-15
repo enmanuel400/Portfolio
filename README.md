@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="assets/screenshots/portfolio-preview.png" alt="Portfolio de Enmanuel Pirela en escritorio y móvil" width="100%" />
+<img src="assets/preview.png" alt="Portfolio de Enmanuel Pirela en escritorio y móvil" width="100%" />
 
 [![Web](https://img.shields.io/badge/enmanuelpirela.vercel.app-Visitar-3BE27A?style=for-the-badge&logo=vercel&logoColor=black)](https://enmanuelpirela.vercel.app)
 [![GitHub](https://img.shields.io/badge/GitHub-enmanuel400-181717?style=for-the-badge&logo=github)](https://github.com/enmanuel400)
@@ -81,4 +81,4 @@ En Vercel, con la app en la raíz del repositorio:
 - **Root Directory:** `.` · **Framework:** Astro (detección automática) · **Node:** 22.x
 - Variables de entorno: `RESEND_API_KEY` y, si quieres, `CONTACT_FROM`.
 
-El portfolio anterior (*trazo v.03*, inmersivo) sigue en `recorrido/` como referencia y no forma parte de este build.
+El portfolio anterior (*trazo v.03*, inmersivo) y el resto de material de entonces están en [`legacy/`](legacy/), fuera del build.

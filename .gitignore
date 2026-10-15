@@ -17,9 +17,7 @@ dist/
 skills-lock.json
 
 # Build artifacts and large binaries
-vellum/release/
-vellum/dist/
-vellum/node_modules/
+legacy/vellum/release/
 
 # OS / editor files
 .DS_Store
