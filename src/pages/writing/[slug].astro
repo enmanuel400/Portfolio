@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostView from '../../components/PostView.astro';
+import { getPosts } from '../../data/posts';
+
+export async function getStaticPaths() {
+  const entries = await getPosts('en');
+  return entries.map((entry) => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+---
+
+<Base title={entry.data.title} description={entry.data.description} lang="en">
+  <PostView entry={entry} lang="en" />
+</Base>

@@ -257,6 +257,61 @@ a {
   navigation: auto;
 }
 
+/* — Prosa (markdown de casos y escritos) — */
+.prose {
+  display: grid;
+  gap: var(--s-5);
+}
+
+.prose h2 {
+  font-size: var(--display-s);
+  margin-top: var(--s-8);
+}
+
+.prose p {
+  color: var(--fg-2);
+  text-wrap: pretty;
+}
+
+.prose ul,
+.prose ol {
+  display: grid;
+  gap: var(--s-3);
+  padding-left: var(--s-5);
+}
+
+.prose li {
+  color: var(--fg-2);
+}
+
+.prose li::marker {
+  color: var(--accent-ink);
+}
+
+.prose strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.prose em {
+  color: var(--fg);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  padding: 0.1em 0.35em;
+}
+
+.prose a {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* — Movimiento sutil — */
 @media (prefers-reduced-motion: no-preference) {
   /* Entrada escalonada del hero */

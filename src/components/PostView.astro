@@ -1,0 +1,88 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import type { Lang } from '../site.config';
+import { useTranslations, localizePath } from '../i18n/utils';
+import { getPosts } from '../data/posts';
+
+interface Props {
+  entry: CollectionEntry<'writing'>;
+  lang: Lang;
+}
+const { entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const { data } = entry;
+const { Content } = await render(entry);
+
+const ordered = await getPosts(lang);
+const idx = ordered.findIndex((p) => p.id === entry.id);
+const next = ordered[(idx + 1) % ordered.length];
+
+const words = (entry.body ?? '').trim().split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 200));
+---
+
+<article class="post">
+  <header class="wrap post__head">
+    <a class="label post__back" href={localizePath('/writing', lang)}>← {t('writing.back')}</a>
+    <h1 class="display-l post__title">{data.title}</h1>
+    <p class="lede">{data.description}</p>
+    <p class="label post__meta">{minutes} {t('writing.min')}</p>
+  </header>
+
+  <div class="wrap--narrow prose reveal">
+    <Content />
+  </div>
+
+  <nav class="wrap post__next reveal" aria-label={t('writing.next')}>
+    <a href={localizePath(`/writing/${next.data.slug}`, lang)}>
+      <span class="label">{t('writing.next')}</span>
+      <span class="post__next-title">{next.data.title} →</span>
+    </a>
+  </nav>
+</article>
+
+<style>
+  .post__head {
+    padding-block: var(--s-24) var(--s-12);
+    display: grid;
+    gap: var(--s-5);
+    max-width: 46rem;
+  }
+
+  .post__back {
+    color: var(--muted);
+    width: fit-content;
+    transition: color var(--dur-1) var(--ease);
+  }
+
+  .post__back:hover {
+    color: var(--fg);
+  }
+
+  .post__title {
+    margin-top: var(--s-2);
+  }
+
+  .post__meta {
+    margin-top: var(--s-2);
+  }
+
+  .post__next {
+    margin-top: var(--s-24);
+    padding-top: var(--s-8);
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .post__next a {
+    display: grid;
+    gap: var(--s-1);
+    text-align: right;
+  }
+
+  .post__next-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+  }
+</style>

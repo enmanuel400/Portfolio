@@ -1,14 +1,14 @@
 ---
 import type { Lang } from '../site.config';
 import { useTranslations, localizePath } from '../i18n/utils';
-import { posts } from '../data/posts';
+import { getPosts } from '../data/posts';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const list = posts[lang];
+const list = await getPosts(lang);
 ---
 
 <section class="wrap page-head">
@@ -24,8 +24,12 @@ const list = posts[lang];
         <li class="plist__item">
           <span class="label">{String(i + 1).padStart(2, '0')}</span>
           <div class="plist__body">
-            <h2 class="plist__title">{post.title}</h2>
-            <p class="plist__desc">{post.description}</p>
+            <h2 class="plist__title">
+              <a class="plist__link" href={localizePath(`/writing/${post.data.slug}`, lang)}>
+                {post.data.title}
+              </a>
+            </h2>
+            <p class="plist__desc">{post.data.description}</p>
           </div>
         </li>
       ))
@@ -67,6 +71,14 @@ const list = posts[lang];
 
   .plist__title {
     font-size: var(--display-s);
+  }
+
+  .plist__link {
+    transition: color var(--dur-1) var(--ease);
+  }
+
+  .plist__link:hover {
+    color: var(--accent-ink);
   }
 
   .plist__desc {

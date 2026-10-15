@@ -50,6 +50,9 @@ export const ui = {
 
     'writing.title': 'Writing',
     'writing.lede': 'Short pieces on the details that decide how an interface feels.',
+    'writing.back': 'All writing',
+    'writing.next': 'Next piece',
+    'writing.min': 'min read',
 
     'about.title': 'About',
     'about.eyebrow': 'About me',
@@ -117,6 +120,9 @@ export const ui = {
 
     'writing.title': 'Escritos',
     'writing.lede': 'Piezas cortas sobre los detalles que deciden cómo se siente una interfaz.',
+    'writing.back': 'Todos los escritos',
+    'writing.next': 'Siguiente pieza',
+    'writing.min': 'min de lectura',
 
     'about.title': 'Sobre mí',
     'about.eyebrow': 'Sobre mí',

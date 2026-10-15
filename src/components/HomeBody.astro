@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import ProjectCard from './ProjectCard.astro';
+import { getPosts } from '../data/posts';
 import { type Lang } from '../site.config';
 import { useTranslations, localizePath } from '../i18n/utils';
 
@@ -16,18 +17,7 @@ const projects = all.sort((a, b) => a.data.order - b.data.order);
 const star = projects.find((p) => p.data.star) ?? projects[0];
 const rest = projects.filter((p) => p.id !== star.id);
 
-const posts = {
-  en: [
-    'The states you skip',
-    'Local servers are a feature',
-    'A design system for one person',
-  ],
-  es: [
-    'Los estados que te saltas',
-    'Los servidores locales son una función',
-    'Un design system para una persona',
-  ],
-}[lang];
+const posts = await getPosts(lang);
 ---
 
 <section class="hero wrap enter">
@@ -84,10 +74,12 @@ const posts = {
     <a class="link" href={localizePath('/writing', lang)}>{t('home.writing.all')} →</a>
   </div>
   <ul class="wlist">
-    {posts.map((title, i) => (
+    {posts.map((post, i) => (
       <li class="wlist__item">
         <span class="label">{String(i + 1).padStart(2, '0')}</span>
-        <span class="wlist__title">{title}</span>
+        <a class="wlist__title" href={localizePath(`/writing/${post.data.slug}`, lang)}>
+          {post.data.title}
+        </a>
       </li>
     ))}
   </ul>
@@ -219,6 +211,11 @@ const posts = {
     font-family: var(--font-display);
     font-weight: 600;
     font-size: var(--text-lg);
+    transition: color var(--dur-1) var(--ease);
+  }
+
+  .wlist__title:hover {
+    color: var(--accent-ink);
   }
 
   @media (max-width: 820px) {
