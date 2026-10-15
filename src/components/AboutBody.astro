@@ -66,14 +66,104 @@ const a = about[lang];
 <section class="wrap about__contact" id="contact">
   <h2 class="display-s">{a.contact.title}</h2>
   <p class="lede">{a.contact.lede}</p>
-  <p class="about__email">
-    <a class="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>
-  </p>
+
+  <form
+    class="cform"
+    id="contact-form"
+    action="/api/contact"
+    method="post"
+    novalidate
+    data-sending={t('form.sending')}
+    data-ok={t('form.ok')}
+    data-error={t('form.error')}
+  >
+    <div class="cform__row">
+      <div class="field">
+        <label for="cf-name">{t('form.name')}</label>
+        <input id="cf-name" name="name" type="text" required autocomplete="name" maxlength="120" />
+      </div>
+      <div class="field">
+        <label for="cf-email">{t('form.email')}</label>
+        <input id="cf-email" name="email" type="email" required autocomplete="email" maxlength="200" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="cf-message">{t('form.message')}</label>
+      <textarea id="cf-message" name="message" required rows="6" minlength="10" maxlength="5000"></textarea>
+    </div>
+
+    <div class="hp" aria-hidden="true">
+      <label for="cf-company">Company</label>
+      <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="cform__foot">
+      <button class="btn btn--primary" type="submit" data-send>{t('form.send')}</button>
+      <p class="cform__status" role="status" aria-live="polite"></p>
+    </div>
+  </form>
+
+  <p class="about__or">{t('form.or')} <a class="link" href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+
   <div class="about__links">
     <a class="btn btn--ghost" href={SITE.links.github} target="_blank" rel="noreferrer">GitHub ↗</a>
     <a class="btn btn--ghost" href={SITE.links.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
   </div>
 </section>
+
+<script is:inline>
+  (function () {
+    var form = document.getElementById('contact-form');
+    if (!form) return;
+    var btn = form.querySelector('[data-send]');
+    var status = form.querySelector('.cform__status');
+    var idle = btn ? btn.textContent : '';
+    var msg = { sending: form.dataset.sending, ok: form.dataset.ok, error: form.dataset.error };
+
+    function setStatus(text, kind) {
+      if (!status) return;
+      status.textContent = text || '';
+      status.classList.toggle('is-ok', kind === 'ok');
+      status.classList.toggle('is-error', kind === 'error');
+    }
+
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      if (btn) {
+        btn.setAttribute('aria-busy', 'true');
+        btn.textContent = msg.sending;
+      }
+      setStatus(msg.sending, 'pending');
+
+      try {
+        var res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form).entries())),
+        });
+        var data = await res.json().catch(function () {
+          return {};
+        });
+        if (res.ok && data.ok) {
+          form.reset();
+          setStatus(msg.ok, 'ok');
+        } else {
+          setStatus(msg.error, 'error');
+        }
+      } catch (err) {
+        setStatus(msg.error, 'error');
+      } finally {
+        if (btn) {
+          btn.removeAttribute('aria-busy');
+          btn.textContent = idle;
+        }
+      }
+    });
+  })();
+</script>
 
 <style>
   .page-head {
@@ -191,11 +281,64 @@ const a = about[lang];
     display: grid;
     gap: var(--s-4);
     justify-items: start;
+    max-width: 44rem;
   }
 
-  .about__email {
-    font-size: var(--text-lg);
-    margin-top: var(--s-2);
+  .cform {
+    width: 100%;
+    display: grid;
+    gap: var(--s-5);
+    margin-top: var(--s-4);
+  }
+
+  .cform__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-5);
+  }
+
+  .cform__foot {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+  }
+
+  .cform__status {
+    font-size: var(--text-sm);
+    color: var(--muted);
+  }
+
+  .cform__status.is-ok {
+    color: var(--accent-ink);
+  }
+
+  .cform__status.is-error {
+    color: #a42025;
+  }
+
+  [data-theme='dark'] .cform__status.is-error {
+    color: #ff8080;
+  }
+
+  .btn[aria-busy='true'] {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  /* Trampa para bots: fuera de pantalla y fuera del orden de tabulación */
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .about__or {
+    font-size: var(--text-sm);
+    color: var(--fg-2);
+    margin-top: var(--s-3);
   }
 
   .about__links {
@@ -215,6 +358,15 @@ const a = about[lang];
     .about__grid {
       grid-template-columns: 1fr;
       gap: var(--s-8);
+    }
+  }
+
+  @media (max-width: 620px) {
+    .about__contact {
+      max-width: none;
+    }
+    .cform__row {
+      grid-template-columns: 1fr;
     }
   }
 </style>

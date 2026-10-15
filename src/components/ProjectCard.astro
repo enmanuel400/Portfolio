@@ -8,11 +8,14 @@ interface Props {
   entry: CollectionEntry<'projects'>;
   lang: Lang;
   index?: number;
+  /** Nivel de encabezado de la tarjeta (para no saltar de h1 a h3). */
+  headingLevel?: 2 | 3;
 }
-const { entry, lang, index } = Astro.props;
+const { entry, lang, index, headingLevel = 3 } = Astro.props;
 const { data } = entry;
 const href = localizePath(`/work/${data.slug}`, lang);
 const num = typeof index === 'number' ? String(index + 1).padStart(2, '0') : null;
+const Heading = `h${headingLevel}`;
 ---
 
 <a class="pcard" href={href}>
@@ -31,7 +34,7 @@ const num = typeof index === 'number' ? String(index + 1).padStart(2, '0') : nul
       {num && <span class="label">{num}</span>}
       <span class="label pcard__year">{data.year}</span>
     </div>
-    <h3 class="pcard__title">{data.title}</h3>
+    <Heading class="pcard__title">{data.title}</Heading>
     <p class="pcard__tag">{data.tagline}</p>
     <ul class="pcard__tags">
       {data.stack.slice(0, 3).map((s: string) => <li class="tag">{s}</li>)}
