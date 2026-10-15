@@ -46,29 +46,28 @@ select {
   color: inherit;
 }
 
-/* — Titulares en la serif editorial — */
+/* — Titulares con la fuente de carácter — */
 h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   text-wrap: balance;
-  font-optical-sizing: auto;
 }
 
 h4,
 h5,
 h6 {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-weight: 600;
   line-height: var(--leading-snug);
 }
 
 ::selection {
   background: var(--accent);
-  color: var(--ink);
+  color: #0e1012;
 }
 
 /* — Contenedores — */
@@ -100,12 +99,12 @@ h6 {
   text-wrap: pretty;
 }
 
-/* — Etiqueta técnica (mono) — el único uso de mayúsculas en el sistema — */
+/* — Etiqueta de interfaz (fuente de carácter) — */
 .label {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: var(--tracking-label);
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -147,9 +146,10 @@ a {
   padding: 0.28rem 0.62rem;
   border: 1px solid var(--line);
   border-radius: var(--r-pill);
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--text-xs);
-  letter-spacing: 0.02em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   color: var(--fg-2);
   background: var(--surface);
 }
@@ -163,6 +163,7 @@ a {
   padding: 0.7rem 1.15rem;
   border: 1px solid transparent;
   border-radius: var(--r-1);
+  font-family: var(--font-display);
   font-size: var(--text-sm);
   font-weight: 600;
   line-height: 1;
@@ -202,9 +203,10 @@ a {
 }
 
 .field > label {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--text-xs);
-  letter-spacing: var(--tracking-label);
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--fg-2);
 }
@@ -248,6 +250,104 @@ a {
 :focus-visible {
   outline: var(--focus-width) solid var(--focus-color);
   outline-offset: var(--focus-offset);
+}
+
+/* — Transición de página nativa (sin JS) — */
+@view-transition {
+  navigation: auto;
+}
+
+/* — Movimiento sutil — */
+@media (prefers-reduced-motion: no-preference) {
+  /* Entrada escalonada del hero */
+  .enter > * {
+    animation: enter var(--dur-reveal) var(--ease) both;
+  }
+  .enter > *:nth-child(2) {
+    animation-delay: calc(var(--stagger) * 1);
+  }
+  .enter > *:nth-child(3) {
+    animation-delay: calc(var(--stagger) * 2);
+  }
+  .enter > *:nth-child(4) {
+    animation-delay: calc(var(--stagger) * 3);
+  }
+  .enter > *:nth-child(5) {
+    animation-delay: calc(var(--stagger) * 4);
+  }
+
+  /* Aparición al hacer scroll (solo con JS, para no ocultar nada sin JS) */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity var(--dur-reveal) var(--ease), transform var(--dur-reveal) var(--ease);
+  }
+  .js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* — Punto guía del cursor (decorativo; solo punteros finos) — */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-3) var(--ease);
+  will-change: transform;
+}
+
+.cursor-dot > span {
+  display: block;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent);
+  transition: transform var(--dur-2) var(--ease), background var(--dur-2) var(--ease);
+}
+
+.js.has-cursor .cursor-dot.is-visible {
+  opacity: 1;
+}
+
+.cursor-dot.is-active > span {
+  transform: scale(3.4);
+  background: color-mix(in srgb, var(--accent) 32%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.cursor-dot.is-press > span {
+  transform: scale(0.6);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot {
+    display: none;
+  }
 }
 
 /* — Movimiento reducido — */

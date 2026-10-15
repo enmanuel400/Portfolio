@@ -33,7 +33,7 @@ const a = about[lang];
   </figure>
 </section>
 
-<section class="wrap about__grid">
+<section class="wrap about__grid reveal">
   <div class="about__block">
     <h2 class="label">{t('about.stack.title')}</h2>
     <dl class="stack">
@@ -80,7 +80,11 @@ const a = about[lang];
     padding-block: var(--s-24) var(--s-12);
     display: grid;
     gap: var(--s-5);
-    max-width: 30ch;
+    max-width: 46rem;
+  }
+
+  .page-head h1 {
+    max-width: 22ch;
   }
 
   .about__top {
@@ -152,7 +156,7 @@ const a = about[lang];
     margin: 0;
     color: var(--fg-2);
     font-size: var(--text-sm);
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
   }
 
   .bullets {

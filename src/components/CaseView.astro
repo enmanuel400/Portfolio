@@ -73,11 +73,11 @@ const next = ordered[(idx + 1) % ordered.length];
     />
   </div>
 
-  <div class="wrap--narrow prose">
+  <div class="wrap--narrow prose reveal">
     <Content />
   </div>
 
-  <nav class="wrap case__next" aria-label={t('case.next')}>
+  <nav class="wrap case__next reveal" aria-label={t('case.next')}>
     <a href={localizePath(`/work/${next.data.slug}`, lang)}>
       <span class="label">{t('case.next')}</span>
       <span class="case__next-title">{next.data.title} →</span>

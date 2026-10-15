@@ -30,7 +30,7 @@ const posts = {
 }[lang];
 ---
 
-<section class="hero wrap">
+<section class="hero wrap enter">
   <p class="label">{t('home.hero.eyebrow')}</p>
   <h1 class="display-l hero__title">{t('home.hero.title')}</h1>
   <p class="lede hero__lede">{t('home.hero.lede')}</p>
@@ -40,7 +40,7 @@ const posts = {
   </div>
 </section>
 
-<section class="wrap sec" id="work">
+<section class="wrap sec reveal" id="work">
   <div class="sec__head">
     <p class="label">{t('home.work.eyebrow')}</p>
     <a class="link" href={localizePath('/work', lang)}>{t('home.work.all')} →</a>
@@ -72,13 +72,13 @@ const posts = {
   </div>
 </section>
 
-<section class="wrap sec sec--about" id="about">
+<section class="wrap sec sec--about reveal" id="about">
   <p class="label">{t('home.about.eyebrow')}</p>
   <p class="about__text">{t('home.about.text')}</p>
   <a class="link" href={localizePath('/about', lang)}>{t('home.about.more')} →</a>
 </section>
 
-<section class="wrap sec" id="writing">
+<section class="wrap sec reveal" id="writing">
   <div class="sec__head">
     <p class="label">{t('home.writing.eyebrow')}</p>
     <a class="link" href={localizePath('/writing', lang)}>{t('home.writing.all')} →</a>
@@ -192,12 +192,12 @@ const posts = {
   }
 
   .about__text {
-    font-family: var(--font-display);
-    font-size: var(--display-s);
-    line-height: var(--leading-snug);
-    letter-spacing: var(--tracking-tight);
-    max-width: 46rem;
-    text-wrap: balance;
+    font-family: var(--font-sans);
+    font-size: clamp(1.25rem, 1rem + 1.3vw, 1.75rem);
+    line-height: 1.4;
+    max-width: 46ch;
+    color: var(--fg-2);
+    text-wrap: pretty;
   }
 
   .wlist {
@@ -216,6 +216,8 @@ const posts = {
   }
 
   .wlist__title {
+    font-family: var(--font-display);
+    font-weight: 600;
     font-size: var(--text-lg);
   }
 

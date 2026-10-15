@@ -1,0 +1,256 @@
+---
+// Página de comparación tipográfica (solo para elegir; no va en la navegación).
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/gabarito';
+import '@fontsource-variable/fredoka';
+import '@fontsource-variable/baloo-2';
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+const candidates = [
+  {
+    key: 'actual',
+    name: 'Actual — Newsreader + Schibsted',
+    family: "'Newsreader Variable', Georgia, serif",
+    desc: 'Lo que hay hoy: serif editorial en títulos (no es cartoon), grotesca en el resto.',
+  },
+  {
+    key: 'bricolage',
+    name: 'Bricolage Grotesque',
+    family: "'Bricolage Grotesque Variable', sans-serif",
+    desc: 'Con carácter, algo irregular y expresiva. "Juguetona" pero sofisticada; muy usada en portfolios actuales.',
+  },
+  {
+    key: 'gabarito',
+    name: 'Gabarito',
+    family: "'Gabarito Variable', sans-serif",
+    desc: 'Geométrica amable, con curvas suaves. Legible y simpática sin ser infantil.',
+  },
+  {
+    key: 'fredoka',
+    name: 'Fredoka',
+    family: "'Fredoka Variable', sans-serif",
+    desc: 'Redondeada y claramente cartoon. Más desenfadada; hay que sujetarla bien para que no parezca infantil.',
+  },
+  {
+    key: 'baloo',
+    name: 'Baloo 2',
+    family: "'Baloo 2 Variable', sans-serif",
+    desc: 'Redonda y con peso, muy cartoon. Da el máximo de personalidad; la más arriesgada.',
+  },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Comparación tipográfica</title>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap">
+        <p class="label">Comparación tipográfica</p>
+        <h1 class="display-m">Elige la fuente para títulos y UI</h1>
+        <p class="lede">
+          En cada bloque, los títulos, la navegación, los botones y las etiquetas usan la fuente
+          candidata; el párrafo de cuerpo se queda en Schibsted Grotesk para que veas el contraste.
+        </p>
+      </div>
+    </header>
+
+    {
+      candidates.map((c) => (
+        <section class="demo wrap" style={`--fd: ${c.family}`}>
+          <div class="demo__head">
+            <span class="label">Opción</span>
+            <h2 class="demo__name">{c.name}</h2>
+            <p class="demo__desc">{c.desc}</p>
+          </div>
+
+          <div class="specimen">
+            <p class="label">Trabajo seleccionado</p>
+            <p class="specimen__title">I build interfaces that hold up on the tenth visit.</p>
+            <p class="specimen__title specimen__title--sm">Diseño y construyo de punta a punta.</p>
+
+            <nav class="specimen__nav">
+              <span class="specimen__navlink is-active">Work</span>
+              <span class="specimen__navlink">Writing</span>
+              <span class="specimen__navlink">About</span>
+              <span class="specimen__lang">EN</span>
+            </nav>
+
+            <div class="specimen__btns">
+              <span class="btn btn--primary">See selected work</span>
+              <span class="btn btn--ghost">About me</span>
+            </div>
+
+            <ul class="specimen__tags">
+              <li class="tag">Electron</li>
+              <li class="tag">Node</li>
+              <li class="tag">React</li>
+            </ul>
+
+            <p class="specimen__body">
+              Este párrafo se queda con la tipografía de texto (Schibsted Grotesk). La idea es que
+              los párrafos sigan siendo cómodos de leer y que el carácter venga de títulos, navegación
+              y controles.
+            </p>
+          </div>
+        </section>
+      ))
+    }
+
+    <footer class="wrap foot">
+      <p class="label">Vuelve a la portada para comparar en contexto: <a href="/es">/es</a></p>
+    </footer>
+
+    <style is:global>
+      body {
+        padding-bottom: var(--s-24);
+      }
+    </style>
+
+    <style>
+      .top {
+        padding-block: var(--s-16) var(--s-8);
+      }
+
+      .top .lede {
+        max-width: 60ch;
+        margin-top: var(--s-4);
+      }
+
+      .demo {
+        padding-block: var(--s-10);
+        border-top: 1px solid var(--line);
+        display: grid;
+        gap: var(--s-6);
+      }
+
+      .demo__head {
+        display: grid;
+        gap: var(--s-2);
+      }
+
+      .demo__name {
+        font-family: var(--fd);
+        font-size: var(--display-s);
+        font-weight: 600;
+        letter-spacing: var(--tracking-tight);
+      }
+
+      .demo__desc {
+        color: var(--fg-2);
+        max-width: 60ch;
+      }
+
+      .specimen {
+        display: grid;
+        gap: var(--s-5);
+        padding: var(--s-8);
+        border: 1px solid var(--line);
+        border-radius: var(--r-2);
+        background: var(--surface);
+      }
+
+      /* Todo lo que no es párrafo usa la fuente candidata */
+      .specimen .label {
+        font-family: var(--fd);
+        letter-spacing: 0.02em;
+        text-transform: none;
+        font-weight: 600;
+      }
+
+      .specimen__title {
+        font-family: var(--fd);
+        font-weight: 600;
+        font-size: var(--display-m);
+        line-height: 1.02;
+        letter-spacing: -0.02em;
+        text-wrap: balance;
+        max-width: 22ch;
+      }
+
+      .specimen__title--sm {
+        font-size: var(--display-s);
+      }
+
+      .specimen__nav {
+        display: flex;
+        align-items: center;
+        gap: var(--s-5);
+        font-family: var(--fd);
+        font-weight: 600;
+        padding-block: var(--s-2);
+        border-block: 1px solid var(--line);
+      }
+
+      .specimen__navlink.is-active {
+        color: var(--fg);
+        text-decoration: underline;
+        text-decoration-color: var(--accent);
+        text-decoration-thickness: 3px;
+        text-underline-offset: 4px;
+      }
+
+      .specimen__navlink {
+        color: var(--fg-2);
+      }
+
+      .specimen__lang {
+        margin-left: auto;
+        border: 1px solid var(--line-2);
+        border-radius: var(--r-1);
+        padding: 0.15rem 0.5rem;
+        font-size: var(--text-xs);
+      }
+
+      .specimen__btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--s-3);
+      }
+
+      .specimen .btn {
+        font-family: var(--fd);
+        font-weight: 600;
+        letter-spacing: 0;
+      }
+
+      .specimen__tags {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--s-2);
+      }
+
+      .specimen .tag {
+        font-family: var(--fd);
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
+      /* El párrafo se queda en el cuerpo actual */
+      .specimen__body {
+        font-family: var(--font-sans);
+        color: var(--fg-2);
+        max-width: 62ch;
+        line-height: var(--leading-relaxed);
+      }
+
+      .foot {
+        padding-top: var(--s-8);
+        border-top: 1px solid var(--line);
+      }
+
+      .foot a {
+        color: var(--accent-ink);
+        text-decoration: underline;
+      }
+    </style>
+  </body>
+</html>

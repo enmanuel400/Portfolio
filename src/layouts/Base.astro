@@ -1,14 +1,13 @@
 ---
 import '@fontsource-variable/schibsted-grotesk';
-import '@fontsource-variable/newsreader';
-import '@fontsource-variable/newsreader/wght-italic.css';
+import '@fontsource-variable/fredoka';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE, type Lang } from '../site.config';
-import { stripLang } from '../i18n/utils';
+import { stripLang, useTranslations } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -19,6 +18,7 @@ interface Props {
 }
 
 const { title, description, lang } = Astro.props;
+const t = useTranslations(lang);
 const neutralPath = stripLang(Astro.url.pathname).replace(/\/+$/, '') || '/';
 
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
@@ -28,8 +28,21 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="light">
+<html lang={lang} data-theme="dark">
   <head>
+    <script is:inline>
+      // Antes de pintar: activa el modo "con JS" y aplica el tema guardado (oscuro por defecto).
+      (function () {
+        var el = document.documentElement;
+        el.classList.add('js');
+        try {
+          el.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
+        } catch (e) {
+          el.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
@@ -65,23 +78,139 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
           else if (!prefersEs && path === '/es') location.replace('/');
         } catch (e) {}
       })();
-      // Recuerda la elección manual del conmutador.
+
+      // Delegado: recuerda el idioma y alterna el tema.
       document.addEventListener('click', function (e) {
-        var a = e.target && e.target.closest && e.target.closest('[data-lang-switch]');
+        var target = e.target;
+        if (!target || !target.closest) return;
+        var a = target.closest('[data-lang-switch]');
         if (a) {
           try {
             localStorage.setItem('lang', a.getAttribute('data-lang-switch'));
+          } catch (_) {}
+        }
+        var btn = target.closest('[data-theme-toggle]');
+        if (btn) {
+          var root = document.documentElement;
+          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', next);
+          btn.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
+          try {
+            localStorage.setItem('theme', next);
           } catch (_) {}
         }
       });
     </script>
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
+    <div class="cursor-dot" aria-hidden="true"><span></span></div>
+    <a class="skip" href="#main">{t('nav.skip')}</a>
     <Header lang={lang} />
     <main id="main">
       <slot />
     </main>
     <Footer lang={lang} />
+
+    <script is:inline>
+      // Aparición al hacer scroll (una sola vez) + estado inicial del conmutador de tema.
+      (function () {
+        var toggle = document.querySelector('[data-theme-toggle]');
+        if (toggle) {
+          toggle.setAttribute(
+            'aria-pressed',
+            document.documentElement.getAttribute('data-theme') === 'dark' ? 'true' : 'false'
+          );
+        }
+
+        var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+        if (!els.length) return;
+        if (!('IntersectionObserver' in window)) {
+          els.forEach(function (el) {
+            el.classList.add('is-in');
+          });
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-in');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+        );
+        els.forEach(function (el) {
+          io.observe(el);
+        });
+      })();
+    </script>
+    <script is:inline>
+      // Punto guía del cursor: solo en punteros finos y sin reduced-motion.
+      (function () {
+        var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+        var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (!fine.matches || calm.matches) return;
+
+        var dot = document.querySelector('.cursor-dot');
+        if (!dot) return;
+        document.documentElement.classList.add('has-cursor');
+
+        var x = 0,
+          y = 0,
+          tx = 0,
+          ty = 0,
+          raf = null,
+          seeded = false;
+
+        function tick() {
+          x += (tx - x) * 0.18;
+          y += (ty - y) * 0.18;
+          dot.style.transform = 'translate3d(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px,0)';
+          if (Math.abs(tx - x) < 0.1 && Math.abs(ty - y) < 0.1) {
+            raf = null;
+            return;
+          }
+          raf = requestAnimationFrame(tick);
+        }
+
+        document.addEventListener(
+          'mousemove',
+          function (e) {
+            tx = e.clientX;
+            ty = e.clientY;
+            if (!seeded) {
+              x = tx;
+              y = ty;
+              seeded = true;
+            }
+            dot.classList.add('is-visible');
+            if (raf === null) raf = requestAnimationFrame(tick);
+          },
+          { passive: true }
+        );
+
+        document.addEventListener('mouseleave', function () {
+          dot.classList.remove('is-visible');
+        });
+
+        document.addEventListener('mouseover', function (e) {
+          var t = e.target;
+          var hit =
+            t && t.closest
+              ? t.closest('a, button, [role="button"], input, textarea, select, summary, label')
+              : null;
+          dot.classList.toggle('is-active', !!hit);
+        });
+
+        document.addEventListener('mousedown', function () {
+          dot.classList.add('is-press');
+        });
+        document.addEventListener('mouseup', function () {
+          dot.classList.remove('is-press');
+        });
+      })();
+    </script>
   </body>
 </html>

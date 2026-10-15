@@ -52,6 +52,21 @@ const other = otherLang(lang);
       >
         {other.toUpperCase()}
       </a>
+      <button
+        class="nav__theme"
+        type="button"
+        data-theme-toggle
+        aria-pressed="true"
+        aria-label={lang === 'es' ? 'Cambiar entre tema claro y oscuro' : 'Toggle light and dark theme'}
+      >
+        <svg class="ico ico--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4.2"></circle>
+          <path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"></path>
+        </svg>
+        <svg class="ico ico--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"></path>
+        </svg>
+      </button>
     </nav>
   </div>
 </header>
@@ -89,15 +104,17 @@ const other = otherLang(lang);
   }
 
   .brand__name {
+    font-family: var(--font-display);
     font-weight: 600;
     font-size: var(--text-sm);
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
   }
 
   .brand__role {
-    font-family: var(--font-mono);
+    font-family: var(--font-display);
     font-size: 0.6875rem;
-    letter-spacing: 0.04em;
+    font-weight: 500;
+    letter-spacing: 0.02em;
     color: var(--muted);
   }
 
@@ -110,6 +127,8 @@ const other = otherLang(lang);
   .nav__link {
     padding: 0.4rem 0.6rem;
     border-radius: var(--r-1);
+    font-family: var(--font-display);
+    font-weight: 600;
     font-size: var(--text-sm);
     color: var(--fg-2);
     transition: color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
@@ -139,10 +158,10 @@ const other = otherLang(lang);
     padding: 0.4rem 0.6rem;
     border: 1px solid var(--line-2);
     border-radius: var(--r-1);
-    font-family: var(--font-mono);
+    font-family: var(--font-display);
     font-size: var(--text-xs);
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     color: var(--fg-2);
     transition: border-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
   }
@@ -150,6 +169,47 @@ const other = otherLang(lang);
   .nav__lang:hover {
     color: var(--fg);
     border-color: var(--ink);
+  }
+
+  .nav__theme {
+    margin-left: var(--s-1);
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-1);
+    background: transparent;
+    color: var(--fg-2);
+    cursor: pointer;
+    transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease),
+      transform var(--dur-1) var(--ease);
+  }
+
+  .nav__theme:hover {
+    color: var(--fg);
+    border-color: var(--ink);
+  }
+
+  .nav__theme:active {
+    transform: scale(0.94);
+  }
+
+  .ico--sun {
+    display: none;
+  }
+
+  .ico--moon {
+    display: block;
+  }
+
+  [data-theme='dark'] .ico--sun {
+    display: block;
+  }
+
+  [data-theme='dark'] .ico--moon {
+    display: none;
   }
 
   @media (max-width: 560px) {
