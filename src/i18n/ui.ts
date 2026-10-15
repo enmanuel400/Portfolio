@@ -14,6 +14,8 @@ export const ui = {
     'nav.writing': 'Writing',
     'nav.about': 'About',
     'nav.menu': 'Menu',
+    'nav.open': 'Open menu',
+    'nav.close': 'Close menu',
     'nav.skip': 'Skip to content',
 
     'home.hero.eyebrow': 'Frontend developer',
@@ -84,6 +86,8 @@ export const ui = {
     'nav.writing': 'Escritos',
     'nav.about': 'Sobre mí',
     'nav.menu': 'Menú',
+    'nav.open': 'Abrir menú',
+    'nav.close': 'Cerrar menú',
     'nav.skip': 'Saltar al contenido',
 
     'home.hero.eyebrow': 'Desarrollador frontend',

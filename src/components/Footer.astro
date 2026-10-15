@@ -46,6 +46,8 @@ const mailto = `mailto:${SITE.email}`;
     align-items: center;
     gap: var(--s-6);
     padding-block: var(--s-8);
+    /* Deja sitio a la barra de inicio de iOS. */
+    padding-bottom: calc(var(--s-8) + env(safe-area-inset-bottom));
   }
 
   .ftr__brand {
@@ -72,8 +74,10 @@ const mailto = `mailto:${SITE.email}`;
     transition: color var(--dur-1) var(--ease);
   }
 
-  .ftr__links a:hover {
-    color: var(--accent-ink);
+  @media (hover: hover) {
+    .ftr__links a:hover {
+      color: var(--accent-ink);
+    }
   }
 
   .ftr__meta {
@@ -91,8 +95,10 @@ const mailto = `mailto:${SITE.email}`;
     transition: color var(--dur-1) var(--ease);
   }
 
-  .ftr__top:hover {
-    color: var(--fg);
+  @media (hover: hover) {
+    .ftr__top:hover {
+      color: var(--fg);
+    }
   }
 
   @media (max-width: 760px) {

@@ -49,14 +49,22 @@ const minutes = Math.max(1, Math.round(words / 200));
     max-width: 46rem;
   }
 
+  @media (max-width: 620px) {
+    .post__head {
+      padding-block: var(--s-12) var(--s-10);
+    }
+  }
+
   .post__back {
     color: var(--muted);
     width: fit-content;
     transition: color var(--dur-1) var(--ease);
   }
 
-  .post__back:hover {
-    color: var(--fg);
+  @media (hover: hover) {
+    .post__back:hover {
+      color: var(--fg);
+    }
   }
 
   .post__title {

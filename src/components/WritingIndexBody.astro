@@ -45,6 +45,12 @@ const list = await getPosts(lang);
     max-width: 46rem;
   }
 
+  @media (max-width: 620px) {
+    .page-head {
+      padding-block: var(--s-12) var(--s-8);
+    }
+  }
+
   .plist {
     list-style: none;
     margin: 0;
@@ -77,8 +83,10 @@ const list = await getPosts(lang);
     transition: color var(--dur-1) var(--ease);
   }
 
-  .plist__link:hover {
-    color: var(--accent-ink);
+  @media (hover: hover) {
+    .plist__link:hover {
+      color: var(--accent-ink);
+    }
   }
 
   .plist__desc {

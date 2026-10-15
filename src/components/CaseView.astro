@@ -93,14 +93,22 @@ const next = ordered[(idx + 1) % ordered.length];
     max-width: 46rem;
   }
 
+  @media (max-width: 620px) {
+    .case__head {
+      padding-block: var(--s-12) var(--s-10);
+    }
+  }
+
   .case__back {
     color: var(--muted);
     width: fit-content;
     transition: color var(--dur-1) var(--ease);
   }
 
-  .case__back:hover {
-    color: var(--fg);
+  @media (hover: hover) {
+    .case__back:hover {
+      color: var(--fg);
+    }
   }
 
   .case__title {

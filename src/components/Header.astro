@@ -33,7 +33,22 @@ const switchTarget = current === '/404' ? '/' : current;
       </span>
     </a>
 
-    <nav class="nav" aria-label={t('nav.menu')}>
+    <button
+      class="hdr__toggle"
+      type="button"
+      data-nav-toggle
+      aria-expanded="false"
+      aria-controls="site-nav"
+      aria-label={t('nav.open')}
+      data-label-open={t('nav.open')}
+      data-label-close={t('nav.close')}
+    >
+      <span class="hdr__burger" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+
+    <nav class="nav" id="site-nav" aria-label={t('nav.menu')}>
       {
         nav.map((item) => (
           <a
@@ -45,33 +60,82 @@ const switchTarget = current === '/404' ? '/' : current;
           </a>
         ))
       }
-      <a
-        class="nav__lang"
-        href={localizePath(switchTarget, other)}
-        data-lang-switch={other}
-        lang={other}
-        aria-label={other === 'es' ? 'ES — Cambiar a español' : 'EN — Switch to English'}
-      >
-        {other.toUpperCase()}
-      </a>
-      <button
-        class="nav__theme"
-        type="button"
-        data-theme-toggle
-        aria-pressed="true"
-        aria-label={lang === 'es' ? 'Cambiar entre tema claro y oscuro' : 'Toggle light and dark theme'}
-      >
-        <svg class="ico ico--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <circle cx="12" cy="12" r="4.2"></circle>
-          <path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"></path>
-        </svg>
-        <svg class="ico ico--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"></path>
-        </svg>
-      </button>
+      <div class="nav__tools">
+        <a
+          class="nav__lang"
+          href={localizePath(switchTarget, other)}
+          data-lang-switch={other}
+          lang={other}
+          aria-label={other === 'es' ? 'ES — Cambiar a español' : 'EN — Switch to English'}
+        >
+          {other.toUpperCase()}
+        </a>
+        <button
+          class="nav__theme"
+          type="button"
+          data-theme-toggle
+          aria-pressed="true"
+          aria-label={lang === 'es' ? 'Cambiar entre tema claro y oscuro' : 'Toggle light and dark theme'}
+        >
+          <svg class="ico ico--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"></path>
+          </svg>
+          <svg class="ico ico--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"></path>
+          </svg>
+        </button>
+      </div>
     </nav>
   </div>
 </header>
+
+<script>
+  // Menú desplegable solo en pantallas pequeñas.
+  (function () {
+    const btn = document.querySelector('[data-nav-toggle]');
+    const nav = document.getElementById('site-nav');
+    if (!btn || !nav) return;
+
+    const labelOpen = btn.getAttribute('data-label-open') || 'Menu';
+    const labelClose = btn.getAttribute('data-label-close') || 'Close';
+
+    const setOpen = (open) => {
+      nav.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? labelClose : labelOpen);
+    };
+
+    btn.addEventListener('click', () => setOpen(!nav.classList.contains('is-open')));
+
+    // Al elegir un destino, el menú se cierra.
+    nav.addEventListener('click', (e) => {
+      if (e.target instanceof Element && e.target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+        setOpen(false);
+        btn.focus();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!nav.classList.contains('is-open')) return;
+      if (!(e.target instanceof Element)) return;
+      if (e.target.closest('[data-nav-toggle]') || nav.contains(e.target)) return;
+      setOpen(false);
+    });
+
+    // Si la ventana pasa a tamaño de escritorio, el panel se cierra.
+    const desktop = window.matchMedia('(min-width: 701px)');
+    const closeOnDesktop = (event) => {
+      if (event.matches) setOpen(false);
+    };
+    if (desktop.addEventListener) desktop.addEventListener('change', closeOnDesktop);
+    else desktop.addListener(closeOnDesktop);
+  })();
+</script>
 
 <style>
   .hdr {
@@ -114,31 +178,101 @@ const switchTarget = current === '/404' ? '/' : current;
 
   .brand__role {
     font-family: var(--font-display);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
+    font-size: 0.8125rem;
     color: var(--muted);
+  }
+
+  /* — Botón de menú (solo móvil) — */
+  .hdr__toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-1);
+    background: transparent;
+    color: var(--fg);
+    cursor: pointer;
+    transition: border-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+  }
+
+  @media (hover: hover) {
+    .hdr__toggle:hover {
+      border-color: var(--fg);
+    }
+  }
+
+  .hdr__toggle:active {
+    background: var(--surface);
+  }
+
+  .hdr__burger {
+    position: relative;
+    display: block;
+    width: 18px;
+    height: 12px;
+  }
+
+  .hdr__burger span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform var(--dur-2) var(--ease), opacity var(--dur-1) var(--ease);
+  }
+
+  .hdr__burger span:nth-child(1) {
+    top: 0;
+  }
+
+  .hdr__burger span:nth-child(2) {
+    top: 5px;
+  }
+
+  .hdr__burger span:nth-child(3) {
+    top: 10px;
+  }
+
+  .hdr__toggle[aria-expanded='true'] .hdr__burger span:nth-child(1) {
+    transform: translateY(5px) rotate(45deg);
+  }
+
+  .hdr__toggle[aria-expanded='true'] .hdr__burger span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hdr__toggle[aria-expanded='true'] .hdr__burger span:nth-child(3) {
+    transform: translateY(-5px) rotate(-45deg);
   }
 
   .nav {
     display: flex;
     align-items: center;
-    gap: var(--s-1);
+    gap: var(--s-2);
   }
 
   .nav__link {
-    padding: 0.4rem 0.6rem;
+    padding: 0.5rem 0.7rem;
     border-radius: var(--r-1);
     font-family: var(--font-display);
-    font-weight: 600;
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     color: var(--fg-2);
     transition: color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
   }
 
-  .nav__link:hover {
+  @media (hover: hover) {
+    .nav__link:hover {
+      color: var(--fg);
+    }
+  }
+
+  .nav__link:active {
     color: var(--fg);
-    background: var(--surface-2);
+    background: var(--surface);
   }
 
   .nav__link.is-active {
@@ -150,60 +284,65 @@ const switchTarget = current === '/404' ? '/' : current;
     display: block;
     height: 2px;
     margin-top: 2px;
-    margin-inline: 0.6rem;
+    margin-inline: 0.7rem;
     background: var(--accent);
     border-radius: var(--r-pill);
   }
 
+  .nav__tools {
+    display: contents;
+  }
+
   .nav__lang {
     margin-left: var(--s-2);
-    padding: 0.4rem 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 0.4rem 0.7rem;
     border: 1px solid var(--line-2);
     border-radius: var(--r-1);
     font-family: var(--font-display);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-size: var(--text-sm);
+    letter-spacing: 0.03em;
     color: var(--fg-2);
     transition: border-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
   }
 
-  .nav__lang:hover {
-    color: var(--fg);
-    border-color: var(--ink);
+  @media (hover: hover) {
+    .nav__lang:hover {
+      border-color: var(--fg);
+      color: var(--fg);
+    }
   }
 
   .nav__theme {
-    margin-left: var(--s-1);
-    display: inline-grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
     padding: 0;
     border: 1px solid var(--line-2);
     border-radius: var(--r-1);
     background: transparent;
     color: var(--fg-2);
     cursor: pointer;
-    transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease),
-      transform var(--dur-1) var(--ease);
+    transition: border-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
   }
 
-  .nav__theme:hover {
-    color: var(--fg);
-    border-color: var(--ink);
+  @media (hover: hover) {
+    .nav__theme:hover {
+      border-color: var(--fg);
+      color: var(--fg);
+    }
   }
 
   .nav__theme:active {
-    transform: scale(0.94);
+    background: var(--surface);
   }
 
   .ico--sun {
     display: none;
-  }
-
-  .ico--moon {
-    display: block;
   }
 
   [data-theme='dark'] .ico--sun {
@@ -214,7 +353,92 @@ const switchTarget = current === '/404' ? '/' : current;
     display: none;
   }
 
-  @media (max-width: 560px) {
+  /* — Móvil: el menú se convierte en un panel desplegable — */
+  @media (max-width: 700px) {
+    /* Área táctil cómoda (>= 44 px). */
+    .hdr__toggle {
+      display: inline-flex;
+      width: 44px;
+      height: 44px;
+    }
+
+    /* El panel es solo para JS: sin JS la barra queda en línea y se envuelve. */
+    :global(html.js) .nav {
+      position: absolute;
+      inset-inline: 0;
+      top: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      max-height: calc(100dvh - 64px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: var(--s-2) var(--s-4) var(--s-6);
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+      box-shadow: var(--shadow-2);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease),
+        visibility 0s linear var(--dur-2);
+    }
+
+    :global(html.js) .nav.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      pointer-events: auto;
+      transition-delay: 0s;
+    }
+
+    :global(html.js) .nav__link {
+      padding: var(--s-4) var(--s-2);
+      border-bottom: 1px solid var(--line);
+      font-size: var(--text-lg);
+    }
+
+    :global(html.js) .nav__link.is-active {
+      color: var(--accent-ink);
+    }
+
+    :global(html.js) .nav__link.is-active::after {
+      display: none;
+    }
+
+    :global(html.js) .nav__tools {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      margin-top: var(--s-5);
+      padding-top: var(--s-5);
+      border-top: 1px solid var(--line);
+    }
+
+    :global(html.js) .nav__lang {
+      margin-left: 0;
+      min-height: 44px;
+    }
+
+    :global(html.js) .nav__theme {
+      width: 44px;
+      height: 44px;
+    }
+
+    /* Sin JS: la barra se envuelve en una segunda línea en vez de desbordar. */
+    :global(html:not(.js)) .hdr__in {
+      flex-wrap: wrap;
+      padding-block: var(--s-2);
+    }
+
+    :global(html:not(.js)) .nav {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 420px) {
     .brand__role {
       display: none;
     }
