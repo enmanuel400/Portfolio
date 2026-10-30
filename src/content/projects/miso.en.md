@@ -11,10 +11,10 @@ year: "2026"
 status: In continuous improvement
 stack: [Electron, Node/Express, React, Vite, TypeScript, Playwright, hls.js]
 repo: https://github.com/enmanuel400/Miso
-image: ../../assets/projects/miso.png
+image: ../../assets/projects/miso.webp
 order: 1
 star: true
-description: A desktop search for film and series that merges several sources into one grid and plays the video in-app.
+description: A federated desktop search for film and series. Queries several streaming sources at once, unifies results in one grid, and plays inside the app — no tabs, no popups, no ads, no accounts, no tracking. Runs locally with its own Node server.
 ---
 
 ## The problem

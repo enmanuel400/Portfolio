@@ -12,10 +12,11 @@ year: "2026"
 status: En mejora continua
 stack: [Electron, Node/Express, React, Vite, TypeScript, Playwright, hls.js]
 repo: https://github.com/enmanuel400/Miso
-image: ../../assets/projects/miso.png
+image: ../../assets/projects/miso.webp
 order: 1
 star: true
-description: Buscador de escritorio de cine y series que unifica varias fuentes en una rejilla y reproduce el vídeo dentro de la app.
+description: >-
+  Buscador federado de cine y series para escritorio. Consulta varias fuentes a la vez, unifica resultados y reproduce dentro de la app — sin pestañas, sin ventanas, sin anuncios, sin cuentas, sin rastreo. Funciona local con su propio servidor.
 ---
 
 ## El problema
